@@ -1,0 +1,255 @@
+.freelancer-profile {
+  width: 100%;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 8rem;
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 20px;
+    background: #fff;
+
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .oneLine{
+        display: flex;
+        gap: 2rem;
+ .profile-name {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        h2 {
+          font-size: 22px;
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+        .verified-icon {
+          color: #0b7c3e;
+        }
+      }
+
+      .profile-rating {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #555;
+        background-color: #C4DAD2;
+        width: max-content;
+        padding: 0.5rem;
+        border-radius: 20px;
+      }
+
+      .rate {
+        background: var(--green);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        width: fit-content;
+      }
+
+      }
+
+     
+      .profile-meta {
+        font-size: 14px;
+        color: #555;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .profile-tags {
+        display: flex;
+        gap: 10px;
+        margin-top: 4px;
+        span {
+          background: #f2f2f2;
+          border-radius: 20px;
+          padding: 4px 10px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .about-section,
+  .reviews-section,
+  .class-section,
+  .skills-education,
+  .experience-box {
+    border: 1px solid #dcdcdc;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .about-section {
+    p {
+      margin-top: 6px;
+      font-size: 15px;
+      color: #444;
+      line-height: 1.6;
+    }
+  }
+
+  .reviews-section {
+    .reviews {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+
+      .review-card {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .review-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+
+          h4 {
+            margin: 0;
+            font-weight: 600;
+          }
+
+          p {
+            font-size: 13px;
+            color: #666;
+          }
+        }
+
+        .review-meta {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 13px;
+          color: #007a5b;
+        }
+
+        .review-stars {
+          display: flex;
+          gap: 2px;
+        }
+
+        .review-text {
+          font-size: 14px;
+          color: #444;
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+
+  .class-section {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+
+    .class-card {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      img {
+        width: 60px;
+        height: 60px;
+      }
+      h4 {
+        font-weight: 600;
+        font-size: 15px;
+      }
+      p {
+        font-size: 13px;
+        color: #666;
+      }
+      button {
+        margin-top: 8px;
+        padding: 6px 10px;
+        background: #004c3f;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+        &:hover {
+          background: #007a5b;
+        }
+      }
+    }
+  }
+
+  .skills-education {
+    display: flex;
+    gap: 20px;
+
+    .skills-box,
+    .education-box {
+      flex: 1;
+      h3 {
+        margin-bottom: 8px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        span {
+          background: #C4DAD2;
+          padding: 5px 10px;
+          border-radius: 20px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .experience-box {
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+
+      span {
+        background: #C4DAD2;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 13px;
+      }
+    }
+  }
+}

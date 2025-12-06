@@ -1,0 +1,141 @@
+.wallet {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    margin: 10rem 0;
+    gap: 1.5rem;
+
+    .updatekyc {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #C9C9C9;
+        padding: 1rem;
+        border-radius: 5px;
+        width: 450px;
+
+        .upIcon {
+            width: 70px;
+            height: 70px;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .upText {
+            h3 {
+                font-size: 1.3rem;
+                color: var(--green);
+            }
+
+            p {
+                letter-spacing: 1.5px;
+            }
+        }
+
+    }
+
+    .walletTopUp {
+        display: flex;
+        width: 450px;
+        flex-direction: column;
+        gap: 0.7rem;
+        border: 1px solid #C9C9C9;
+        padding: 1rem;
+        border-radius: 5px;
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid #C9C9C9;
+        }
+
+        .topup {
+            font-weight: 700;
+            padding-top: 0.5rem;
+        }
+
+        .amounttt {
+            position: relative;
+            .dollar {
+                position: absolute;
+                margin-left: 1rem;
+                font-size: 1.5rem;
+                color: grey;
+                top: 16px;
+            }
+            .amount {
+                border: 1px solid #C9C9C9;
+                border-radius: 5px;
+                padding: 1rem;
+                padding-left: 3rem;
+width: 100%;
+                &::placeholder {
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                }
+            }
+        }
+
+
+        .reco {
+            color: #C9C9C9;
+            font-size: 0.9rem;
+        }
+
+        .amountBtn {
+            display: flex;
+            justify-content: space-around;
+
+            .btnn {
+                padding: 0.4rem 1rem;
+                border: 1px solid #C9C9C9;
+                background-color: #16423C3B;
+                border-radius: 5px;
+                font-weight: 700;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--green);
+                    color: white;
+                }
+            }
+        }
+
+        .Proceed {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .probtn {
+                padding: 1rem 0;
+                background-color: var(--green);
+                color: white;
+                font-weight: 700;
+                width: 100%;
+                border-radius: 5px;
+                margin-top: 2rem;
+            }
+        }
+
+
+
+    }
+
+    .transactions {
+        width: 450px;
+        display: flex;
+        padding: 1rem;
+        border: 1px solid #C9C9C9;
+        border-radius: 5px;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+}

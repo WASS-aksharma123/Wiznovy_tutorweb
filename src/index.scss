@@ -1,0 +1,91 @@
+@use "tailwindcss";
+
+* {
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  list-style: none;
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+
+select{
+  appearance: none;
+}
+.checkbox-container{
+  pointer-events: all;
+}
+
+#forgot-password-email{
+  margin-bottom: 1rem;
+}
+
+
+body{
+  font-family: 'SplineSans',sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+:root{
+  --green: #113D38;
+  --hover:#3E5F44;
+  --blue :#01004C;
+  --fade:#F2FFFA;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+i,
+button {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 741px) and (min-width: 250px) {
+  .container {
+    width: 95%;
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 1017px) and (min-width: 742px) {
+  .container {
+    width: 95%;
+    margin: auto;
+  }
+
+}
+
+@media screen and (max-width: 1390px) and (min-width: 1018px) {
+  .container {
+    width: 95%;
+    margin: auto;
+  }
+
+}
+
+.main-content {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 70px !important;
+  }
+}

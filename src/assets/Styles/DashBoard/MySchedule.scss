@@ -1,0 +1,439 @@
+.mySchedule {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .schedule-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    box-shadow: 5px 10px 15px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #b7b7b7;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .left-section {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    .collapse {
+      display: none;
+    }
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+    p {
+      color: #333;
+      font-size: 1rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .schedule-tabs{
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      overflow: scroll;
+
+      .tab-btn {
+        padding: 0.4rem 1.7rem;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+        &.active {
+          background-color: #164e41;
+          color: #fff;
+          border-color: #164e41;
+          box-shadow: 0 4px 12px rgba(22, 78, 65, 0.25);
+          transform: translateY(-1px);
+        }
+
+        &:hover:not(.active) {
+          background-color: #e9ecef;
+          border-color: #dee2e6;
+          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+          transform: translateY(-1px);
+        }
+      }
+
+    }
+
+    .events-list {
+      margin-top: 1rem;
+      overflow-x: auto;
+      overflow-y: scroll;
+      height: 47vh;
+      
+      .event-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem;
+        margin-bottom: 0.8rem;
+        border-radius: 8px;
+        border-left: 4px solid;
+        background: #f8f9fa;
+        
+        &.live {
+          border-left-color: #0fa44a;
+        }
+        &.group {
+          border-left-color: #7a4b1a;
+        }
+        &.online {
+          border-left-color: #0d3d34;
+        }
+        
+        .event-info {
+          h4 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+          }
+          p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #666;
+            text-align: left;
+          }
+        }
+        
+        .event-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          
+          &.live {
+            background-color: #0fa44a;
+          }
+          &.group {
+            background-color: #7a4b1a;
+          }
+          &.online {
+            background-color: #0d3d34;
+          }
+        }
+      }
+    }
+  }
+
+  .right-section {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .calendar-container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 100%;
+      text-align: center;
+      overflow: hidden;
+
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        margin-bottom: 1rem;
+
+        .calendar-nav {
+          display: flex;
+          gap: 0.6rem;
+
+          .arrow {
+            cursor: pointer;
+            font-size: 1.2rem;
+            user-select: none;
+          }
+        }
+      }
+
+      .days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        color: #888;
+        font-weight: 500;
+        margin-bottom: 0.8rem;
+      }
+
+      .dates {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.5rem;
+
+        .date {
+          padding: 0.6rem;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          justify-self: center;
+          transition: 0.3s;
+          width: 40px;
+          height: 40px;
+          position: relative;
+          cursor: pointer;
+          
+          &:hover {
+            background-color: #f0f0f0;
+          }
+          
+          &.clickable {
+            cursor: pointer;
+            
+            &:hover {
+              background-color: #164e41;
+              color: white;
+              transform: scale(1.1);
+            }
+          }
+          
+          &.has-event {
+            font-weight: 600;
+            
+            &.live {
+              background-color: #0fa44a;
+              color: white;
+            }
+            &.group {
+              background-color: #7a4b1a;
+              color: white;
+            }
+            &.online {
+              background-color: #0d3d34;
+              color: white;
+            }
+          }
+        }
+        
+        .empty {
+          width: max-content;
+          height: max-content;
+        }
+
+        .highlight {
+          background-color: #164e41;
+          color: #fff;
+        }
+      }
+
+      .legend {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+
+        .item {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-size: 0.9rem;
+          white-space: nowrap;
+        }
+
+        .dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+
+          &.live {
+            background-color: #0fa44a;
+          }
+          &.group {
+            background-color: #7a4b1a;
+          }
+          &.online {
+            background-color: #0d3d34;
+          }
+        }
+      }
+    }
+  }
+}
+
+// For mobile screens
+
+@media screen and (max-width: 741px) and (min-width: 250px) {
+  .mySchedule {
+    .schedule-card {
+      justify-content: center;
+      padding: 0.5rem;
+      flex-direction: column;
+      height: auto;
+      
+      .left-section {
+        position: relative;
+        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 100%;
+        
+        .collapse {
+          position: absolute;
+          display: flex;
+          top: 7px;
+          left: 3px;
+        }
+        h2 {
+          text-align: center;
+          font-size: 1.5rem;
+        }
+        
+        .events-list {
+          .event-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            
+            .event-info {
+              width: 100%;
+              
+              h4 {
+                font-size: 0.9rem;
+              }
+              p {
+                font-size: 0.8rem;
+              }
+            }
+          }
+        }
+      }
+      
+      .right-section {
+        margin-top: 0;
+        width: 100%;
+        max-width: 100%;
+        
+        h2 {
+          font-size: 1.5rem;
+        }
+        
+        .calendar-container {
+          
+          padding: 0;
+          padding-top: 0.5rem;
+          .days{
+            font-size: 0.8rem;
+            text-align: left;
+          }
+          .calendar-header {
+            font-size: 0.9rem;
+            
+            .calendar-nav {
+              .arrow {
+                font-size: 1rem;
+              }
+            }
+          }
+          
+          .dates {
+            gap: 0.2rem;
+            
+            .date {
+              width: 18px;
+              height: 18px;
+              font-size: 0.6rem;
+              justify-self: flex-start;
+            }
+          }
+          
+          .legend {
+            gap: 0.5rem;
+            
+            .item {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// For tablet screens
+
+@media screen and (max-width: 1017px) and (min-width: 742px) {
+  .mySchedule {
+    .schedule-card {
+      justify-content: center;
+      padding: 1rem;
+      flex-direction: column;
+      height: auto;
+      
+      .left-section {
+        position: relative;
+        margin-bottom: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+        
+        .collapse {
+          position: absolute;
+          display: flex;
+          top: 7px;
+          left: 3px;
+        }
+        h2 {
+          text-align: center;
+          font-size: 1.6rem;
+        }
+        
+        .events-list {
+          .event-item {
+            padding: 1rem;
+            
+            .event-info {
+              h4 {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+      }
+      
+      .right-section {
+        margin-top: 0;
+        width: 100%;
+        max-width: 100%;
+        
+        h2 {
+          font-size: 1.6rem;
+        }
+        
+        .calendar-container {
+          .dates {
+            gap: 0.3rem;
+            
+            .date {
+              width: 38px;
+              height: 38px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

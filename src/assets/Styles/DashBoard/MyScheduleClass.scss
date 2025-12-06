@@ -1,0 +1,38 @@
+.mysch {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #B7B7B7;
+  border-radius: 5px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  box-shadow: 5px 10px 15px 5px rgba(0, 0, 0, 0.1);
+  font-family: "Inter", sans-serif;
+  h2{
+    font: 0.9rem;
+    font-weight: 600;
+    color: var(--green);
+    display: flex;
+    align-self: flex-start;
+  }
+  .profile-details {
+    width: 100%;
+    margin-top: 14px;
+    border: 1px dashed #dcdcdc;
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #00000050;
+    }
+  }
+}

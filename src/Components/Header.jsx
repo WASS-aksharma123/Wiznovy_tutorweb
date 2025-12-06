@@ -1,0 +1,279 @@
+import React, { useState, useEffect } from "react";
+import wizlogo from '../assets/Images/wiznovylogo.svg'
+import { IoIosArrowDown } from "react-icons/io";
+import "../assets/Styles/Header.scss";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { ImCross } from "react-icons/im";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { HiOutlineUserCircle } from "react-icons/hi2";
+import { PiWalletBold } from "react-icons/pi";
+import { FaChalkboardTeacher, FaBriefcase, FaStore, FaGraduationCap, FaUsers, FaCertificate, FaBookOpen, FaLaptopCode, FaRocket, FaBell } from "react-icons/fa";
+import { useSelector, useDispatch } from 'react-redux';
+import { getTutorProfile } from '../store/profileSlice.js';
+import { fetchNotificationsAsync, markAsReadAsync } from '../store/notificationSlice.js';
+
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { profile } = useSelector((state) => state.profile);
+  const { notifications, unreadCount } = useSelector((state) => state.notifications);
+  
+  // Check if user is in onboarding process or has pending status
+  const isOnboarding = location.pathname === '/onboarding';
+  const isPending = user?.status === 'PENDING' || profile?.status === 'PENDING';
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(getTutorProfile());
+      dispatch(fetchNotificationsAsync());
+    } else {
+      setUserProfile(null);
+    }
+  }, [dispatch, isAuthenticated]);
+
+  useEffect(() => {
+    if (user) {
+      setUserProfile(null);
+      dispatch(getTutorProfile());
+    }
+  }, [user, dispatch]);
+  
+  const handleNotificationClick = (notification) => {
+    if (!notification.read) {
+      dispatch(markAsReadAsync(notification.id));
+    }
+    setShowNotifications(false);
+  };
+
+  const formatTimeAgo = (dateString) => {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    return `${Math.floor(diffInHours / 24)}d ago`;
+  };
+
+  const getUserInitials = () => {
+    // Try profile first (from Redux)
+    if (profile?.tutorDetail?.name) {
+      return profile.tutorDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+    // Try userProfile (from API)
+    if (userProfile?.tutorDetail?.name) {
+      return userProfile.tutorDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+    // Fallback to Redux user data
+    if (user?.userDetail?.name) {
+      return user.userDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+    if (user?.name) {
+      return user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+    return 'TN';
+  };
+
+  const menuItems = {
+    "Find a tutor": [
+      { icon: <FaChalkboardTeacher />, heading: "Math Tutors", subheading: "Expert math guidance" },
+      { icon: <FaGraduationCap />, heading: "Science Tutors", subheading: "Physics, Chemistry, Biology" },
+      { icon: <FaBookOpen />, heading: "Language Tutors", subheading: "Learn new languages" },
+      { icon: <FaLaptopCode />, heading: "Programming", subheading: "Code with experts" },
+      { icon: <FaCertificate />, heading: "Test Prep", subheading: "SAT, GRE, GMAT prep" },
+      { icon: <FaUsers />, heading: "Group Classes", subheading: "Learn with peers" },
+      { icon: <FaRocket />, heading: "Advanced Topics", subheading: "Specialized subjects" },
+      { icon: <FaStore />, heading: "All Subjects", subheading: "Browse all categories" },
+      { icon: <FaBriefcase />, heading: "Professional", subheading: "Career development" }
+    ],
+    "Find work": [
+      { icon: <FaChalkboardTeacher />, heading: "Become Tutor", subheading: "Start teaching today" },
+      { icon: <FaBriefcase />, heading: "Freelance Jobs", subheading: "Find project work" },
+      { icon: <FaLaptopCode />, heading: "Tech Jobs", subheading: "Programming roles" },
+      { icon: <FaUsers />, heading: "Part-time", subheading: "Flexible schedules" },
+      { icon: <FaCertificate />, heading: "Certified Roles", subheading: "Professional positions" },
+      { icon: <FaGraduationCap />, heading: "Academic Jobs", subheading: "University positions" },
+      { icon: <FaBookOpen />, heading: "Content Writing", subheading: "Educational content" },
+      { icon: <FaRocket />, heading: "Remote Work", subheading: "Work from anywhere" },
+      { icon: <FaStore />, heading: "All Opportunities", subheading: "Browse all jobs" }
+    ],
+    "Market place": [
+      { icon: <FaBookOpen />, heading: "Course Materials", subheading: "Study resources" },
+      { icon: <FaLaptopCode />, heading: "Software Tools", subheading: "Learning applications" },
+      { icon: <FaCertificate />, heading: "Certificates", subheading: "Skill certifications" },
+      { icon: <FaChalkboardTeacher />, heading: "Live Sessions", subheading: "Interactive classes" },
+      { icon: <FaUsers />, heading: "Study Groups", subheading: "Collaborative learning" },
+      { icon: <FaGraduationCap />, heading: "Degree Programs", subheading: "Full courses" },
+      { icon: <FaBriefcase />, heading: "Career Services", subheading: "Professional guidance" },
+      { icon: <FaRocket />, heading: "Premium Content", subheading: "Exclusive materials" },
+      { icon: <FaStore />, heading: "All Products", subheading: "Browse marketplace" }
+    ]
+  };
+
+
+
+  return (
+    <div className="header">
+      <div className="container">
+        <div className="Logo_section" onClick={() => navigate("/")}>
+          <img src={wizlogo} alt="Wiznovy" />
+        </div>
+
+        <div className="menu_section">
+          <ul className={isMenuOpen ? "menu-open" : "menu-close"}>
+            <ImCross
+              className="hamburger"
+              style={{ color: "white", width: "1rem", height: "1rem" }}
+              onClick={() => {
+                setIsMenuOpen(!isMenuOpen);
+              }}
+            />
+            <li className="dropdown-item">
+              <p className="linksss">What's New <IoIosArrowDown /></p>
+              <div className="dropdown-menu">
+                <div className="menu-grid">
+                  {menuItems["Find a tutor"].map((item) => (
+                    <div key={item.heading} className="menu-item">
+                      <div className="item-header">
+                        <span className="item-icon">{item.icon}</span>
+                        <span className="item-heading">{item.heading}</span>
+                      </div>
+                      <span className="item-subheading">{item.subheading}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+            <li className="dropdown-item">
+              <p className="linksss">Find Work <IoIosArrowDown /></p>
+              <div className="dropdown-menu">
+                <div className="menu-grid">
+                  {menuItems["Find work"].map((item) => (
+                    <div key={item.heading} className="menu-item">
+                      <div className="item-header">
+                        <span className="item-icon">{item.icon}</span>
+                        <span className="item-heading">{item.heading}</span>
+                      </div>
+                      <span className="item-subheading">{item.subheading}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+            <li className="dropdown-item">
+              <p className="linksss">Market Place <IoIosArrowDown /></p>
+              <div className="dropdown-menu">
+                <div className="menu-grid">
+                  {menuItems["Market place"].map((item) => (
+                    <div key={item.heading} className="menu-item">
+                      <div className="item-header">
+                        <span className="item-icon">{item.icon}</span>
+                        <span className="item-heading">{item.heading}</span>
+                      </div>
+                      <span className="item-subheading">{item.subheading}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+            {isAuthenticated && (
+              <li className="notification-item">
+                <div className="notification-bell" onClick={() => setShowNotifications(!showNotifications)}>
+                  <FaBell className="linksss" style={{ fontSize: "1.2rem", cursor: "pointer" }} />
+                  {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
+                </div>
+                {showNotifications && (
+                  <div className="notification-dropdown">
+                    <div className="notification-header">
+                      <h4>Notifications</h4>
+                    </div>
+                    <div className="notification-list">
+                      {notifications.length > 0 ? (
+                        notifications.slice(0, 5).map((notification) => (
+                          <div 
+                            key={notification.id} 
+                            className={`notification-item ${notification.read ? '' : 'unread'}`}
+                            onClick={() => handleNotificationClick(notification)}
+                          >
+                            <div className="notification-content">
+                              <h5>{notification.title}</h5>
+                              <p>{notification.desc}</p>
+                              <span className="notification-time">{formatTimeAgo(notification.createdAt)}</span>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="no-notifications">No notifications</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </li>
+            )}
+          </ul>
+        </div>
+        {!isAuthenticated ? (
+          <div className="Sign_btns">
+            <Link to="/">
+              <button>Sign In</button>
+            </Link>
+            <Link to="/signup">
+              <button>Sign up</button>
+            </Link>
+          </div>
+        ) : (
+          <div className="Sign_btns">
+            {!isOnboarding && !isPending && (
+              <Link to="/wallet">
+                <button
+                  style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}
+                >
+                  <PiWalletBold />| $00
+                </button>
+              </Link>
+            )}
+            {!isOnboarding && !isPending && (
+              <Link to="/dashboard">
+                <button
+                  style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}
+                >
+                  <HiOutlineUserCircle /> {getUserInitials()}
+                </button>
+              </Link>
+            )}
+            {(isOnboarding || isPending) && (
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ fontSize: "0.9rem", color: "#666" }}>
+                  {isOnboarding ? "Completing Setup..." : "Account Pending..."}
+                </span>
+                <button
+                  style={{ display: "flex", alignItems: "center", gap: "0.3rem", cursor: "default", opacity: "0.7" }}
+                  disabled
+                >
+                  <HiOutlineUserCircle /> {getUserInitials()}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {!isMenuOpen && (
+          <div
+            className="hamburger"
+            onClick={() => {
+              setIsMenuOpen(!isMenuOpen);
+            }}
+          >
+            <RxHamburgerMenu style={{ width: "1.7rem", height: "1.7rem" }} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Header;

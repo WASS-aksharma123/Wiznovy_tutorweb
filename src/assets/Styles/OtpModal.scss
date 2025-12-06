@@ -1,0 +1,96 @@
+.otp-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+
+  &__container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 550px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  &__description {
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+  }
+
+  &__inputs {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  &__input {
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    &:focus {
+      border-color: #047857;
+      outline: none;
+    }
+  }
+
+  &__timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: #374151;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__resend-button {
+    color: #047857;
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__verify-button {
+    background-color: var(--green);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+    margin-right: 2rem;
+    &:hover {
+      background-color: #14532d;
+    }
+  }
+}
+
+@media screen and (max-width: 741px) and (min-width: 250px) {
+.otp-modal__container{
+  width: 361px;
+}
+}

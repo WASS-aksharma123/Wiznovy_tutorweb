@@ -1,0 +1,74 @@
+.share-card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #B7B7B7;
+  border-radius: 5px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  box-shadow: 5px 10px 15px 5px rgba(0, 0, 0, 0.1);
+  font-family: "Inter", sans-serif;
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1b4332;
+    display: flex;
+    align-self: flex-start;
+  }
+
+  p {
+    font-size: 12px;
+    color: #00000050;
+    line-height: 1.4;
+  }
+
+  .share-box {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+    border: 1px dashed #cfcfcf;
+    border-radius: 8px;
+    padding: 6px;
+    background: #fafafa;
+
+    .share-input {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 8px;
+
+      .share-icon {
+        color: #6b9080;
+      }
+
+      input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
+        font-size: 13px;
+        color: #555;
+        font-family: inherit;
+      }
+    }
+
+    .share-btn {
+      background: #1b4332;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: #2d6a4f;
+      }
+    }
+  }
+}

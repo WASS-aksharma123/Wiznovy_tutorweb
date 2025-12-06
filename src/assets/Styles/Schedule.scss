@@ -1,0 +1,181 @@
+.schedule-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 160px);
+  background-color: #fff;
+  position: relative;
+  z-index: 1;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--green);
+    text-align: center;
+  }
+
+  .schedule-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+
+    .tab-button {
+      padding: 12px 24px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: #333;
+        background-color: #f5f5f5;
+      }
+
+      &.active {
+        color: var(--green);
+        border-bottom-color: var(--green);
+        background-color: #f8f9fa;
+      }
+    }
+  }
+
+  .date-selector {
+    margin-bottom: 20px;
+
+    select {
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      min-width: 200px;
+      background-color: white;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--green);
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+      }
+    }
+  }
+
+  .sessions-content {
+    .loading, .error, .no-sessions {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 16px;
+    }
+
+    .loading {
+      color: #666;
+    }
+
+    .error {
+      color: #dc3545;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      border-radius: 5px;
+    }
+
+    .no-sessions {
+      color: #6c757d;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+    }
+
+    .sessions-list {
+      display: grid;
+      gap: 15px;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+
+      .session-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+
+        &:hover {
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .session-info {
+          h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+          }
+
+          p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+
+            &:first-of-type {
+              font-weight: 500;
+              color: var(--green);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-container {
+    padding: 16px;
+    margin-top: 10px;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .schedule-tabs {
+      flex-direction: column;
+      gap: 8px;
+      border-bottom: none;
+      background: #f8f9fa;
+      padding: 8px;
+      border-radius: 8px;
+
+      .tab-button {
+        padding: 12px 16px;
+        text-align: center;
+        border-radius: 6px;
+        
+        &.active {
+          background: var(--green);
+          color: white;
+          border-bottom: none;
+        }
+      }
+    }
+
+    .date-selector {
+      text-align: center;
+      
+      select {
+        min-width: 100%;
+        padding: 12px 16px;
+      }
+    }
+
+    .sessions-content .sessions-list {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      
+      .session-card {
+        padding: 16px;
+      }
+    }
+  }
+}

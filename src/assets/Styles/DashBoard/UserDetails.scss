@@ -1,0 +1,272 @@
+.user-card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #b7b7b7;
+  border-radius: 5px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  box-shadow: 5px 10px 15px 5px rgba(0, 0, 0, 0.1);
+  font-family: "Inter", sans-serif;
+
+  .edit-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    button {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #2d6a4f;
+      }
+    }
+  }
+
+  .profileback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: #c4dad2;
+    
+    .profile-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid var(--green);
+      background: url("https://cdn-icons-png.flaticon.com/512/847/847969.png")
+        no-repeat center/cover;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+        
+        .image-upload-btn {
+          opacity: 1;
+          pointer-events: all;
+        }
+      }
+      
+      .image-upload-btn {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: var(--green);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0.8;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        
+        &:hover {
+          background: #2d6a4f;
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  .user-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    h2 {
+      font-size: 1.7rem;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .verified {
+      margin-top: 12px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .profile-details {
+    width: 100%;
+    margin-top: 14px;
+    border: 1px dashed #dcdcdc;
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #00000050;
+      overflow: hidden;
+    }
+    span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        flex: 1;
+      }
+  }
+
+  .headline {
+    width: 100%;
+    margin-top: 14px;
+    border: 1px dashed #dcdcdc;
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .headline-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #00000050;
+      cursor: pointer;
+    }
+  }
+
+  .add-btn {
+    margin-top: 16px;
+    width: 100%;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    &:hover {
+      background: #2d6a4f;
+    }
+  }
+}
+
+
+@media screen and (max-width: 741px) and (min-width: 250px) {
+  .user-card {
+  .user-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    h2 {
+      font-size: 1.2rem;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .verified {
+      margin-top: 12px;
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+} 
+  
+  .edit-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    button {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 10px;
+      padding: 0.3rem 0.5rem !important;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #2d6a4f;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1390px) and (min-width: 1018px) {
+
+.user-card {
+  .user-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    h2 {
+      font-size: 1.2rem;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .verified {
+      margin-top: 12px;
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+}
+  .edit-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    button {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 10px;
+      padding: 0.3rem 0.5rem !important;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #2d6a4f;
+      }
+    }
+  }
+}

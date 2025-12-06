@@ -1,0 +1,830 @@
+.header {
+  width: 100vw;
+  height: auto;
+  background-color: var(--green);
+  border-radius: 0 0 8px 8px;
+  padding: 1rem 0;
+  position: fixed;
+  top: 0;
+  z-index: 2000;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .Logo_section {
+    padding: 0.5rem 0;
+    width: 250px;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+  }
+
+  .menu_section {
+    display: flex;
+    align-items: center;
+
+    ul {
+      width: 600px;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      cursor: pointer;
+
+      li {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        gap: 0.4rem;
+        position: relative;
+
+        &:hover {
+          background-color: var(--hover);
+        }
+
+        &.dropdown-item {
+          cursor: pointer;
+
+          .linksss {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+          }
+
+          &:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            top: 100%;
+            pointer-events: auto;
+          }
+        }
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        padding: 1.5rem;
+        z-index: 1000;
+        width: max-content;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        pointer-events: none;
+
+
+
+        .menu-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: repeat(3, 1fr);
+          gap: 1rem;
+          width: 900px;
+          margin: 0 auto;
+
+          .menu-item {
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+
+            &:hover {
+              background-color: var(--hover);
+              border-color: var(--green);
+
+              .item-subheading {
+                color: white;
+              }
+
+              .item-header {
+
+
+                .item-icon {
+                  color: white;
+                }
+
+                .item-heading {
+                  font-weight: 600;
+                  color: white;
+                  font-size: 0.9rem;
+                }
+              }
+            }
+
+            .item-header {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              margin-bottom: 0.5rem;
+
+              .item-icon {
+                color: var(--green);
+                font-size: 1.2rem;
+              }
+
+              .item-heading {
+                font-weight: 600;
+                color: #333;
+                font-size: 0.9rem;
+              }
+            }
+
+            .item-subheading {
+              color: #666;
+              font-size: 0.8rem;
+              line-height: 1.3;
+            }
+          }
+        }
+      }
+
+      .notification-item {
+        position: relative;
+
+        .notification-bell {
+          position: relative;
+          display: flex;
+          align-items: center;
+
+          .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+          }
+        }
+
+        .notification-dropdown {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+          padding: 0;
+          z-index: 1000;
+          width: 660px;
+          max-height: 400px;
+          overflow-y: auto;
+
+          .notification-header {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+
+            h4 {
+              margin: 0;
+              color: #333;
+              font-size: 1rem;
+              font-weight: 600;
+            }
+          }
+
+          .notification-list {
+            .notification-item {
+              padding: 1rem;
+              border-bottom: 1px solid #f0f0f0;
+              cursor: pointer;
+              transition: background-color 0.2s;
+
+              &:hover {
+                background-color: #f8f9fa;
+              }
+
+              &.unread {
+                background-color: rgba(255, 255, 255, 0.15) !important;
+                border-left: 3px solid var(--hover);
+              }
+
+              .notification-content {
+                h5 {
+                  margin: 0 0 0.5rem 0;
+                  color: #333;
+                  font-size: 0.9rem;
+                  font-weight: 600;
+                }
+
+                p {
+                  margin: 0 0 0.5rem 0;
+                  color: #666;
+                  font-size: 0.8rem;
+                  line-height: 1.4;
+                }
+
+                .notification-time {
+                  color: #999;
+                  font-size: 0.7rem;
+                }
+              }
+            }
+
+            .no-notifications {
+              padding: 2rem;
+              text-align: center;
+              color: #666;
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .Sign_btns {
+    width: 240px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+
+    // gap: 1rem;
+    button {
+      padding: 0.5rem 1.5rem;
+      border: 1px solid white;
+      border-radius: 5px;
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: white;
+        color: var(--green);
+      }
+    }
+  }
+
+  .hamburger {
+    display: none;
+  }
+}
+
+// for mobile screen sizes 
+
+@media screen and (max-width: 741px) and (min-width: 250px) {
+  .header {
+    .Logo_section {
+      width: 40%;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .menu_section {
+      align-items: center;
+      position: relative;
+
+      ul {
+        top: 0;
+        right: -100%;
+        position: fixed;
+        gap: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        background: var(--green);
+        border: none;
+        border-radius: 0;
+        padding: 4rem 2rem 2rem;
+        width: 100%;
+        height: 100vh;
+        transition: right 0.3s ease-in-out;
+        z-index: 3000;
+        overflow-y: auto;
+
+        &.menu-open {
+          right: 0;
+        }
+
+        >.hamburger {
+          position: absolute;
+          top: 1.5rem;
+          right: 2rem;
+          z-index: 3001;
+          color: white;
+          display: block !important;
+        }
+
+        li {
+          width: 100%;
+          padding: 1rem 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+          &:hover {
+            background-color: var(--green);
+            width: 100%;
+          }
+
+          &.dropdown-item {
+            position: relative;
+            flex-direction: column;
+            align-items: flex-start;
+
+            .linksss {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+            }
+
+            &:hover {
+              // background-color: var(--hover);
+              padding-left: 1rem;
+              margin-left: -1rem;
+              margin-right: -1rem;
+              padding-right: 1rem;
+
+              .dropdown-menu {
+                display: block;
+              }
+            }
+
+            .dropdown-menu {
+              display: none;
+              position: static;
+              margin-top: 1rem;
+              width: calc(100% + 2rem);
+              margin-left: -1rem;
+              margin-right: -1rem;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 8px;
+              padding: 1rem;
+              transform: none;
+              opacity: 1;
+              visibility: visible;
+
+              .menu-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+
+                .menu-item {
+                  padding: 0.8rem;
+                  background: rgba(255, 255, 255, 0.1);
+                  border: 1px solid rgba(255, 255, 255, 0.2);
+                  border-radius: 6px;
+                  cursor: pointer;
+
+                  &:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                  }
+
+                  .item-header {
+                    .item-icon {
+                      color: white;
+                    }
+
+                    .item-heading {
+                      color: white;
+                    }
+                  }
+
+                  .item-subheading {
+                    color: rgba(255, 255, 255, 0.8);
+                  }
+                }
+              }
+            }
+          }
+
+          &.notification-item {
+            position: relative;
+            flex-direction: column;
+            align-items: flex-start;
+
+            .notification-bell {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 0.5rem;
+
+              .notification-badge {
+                position: static;
+                margin-left: 0.5rem;
+              }
+            }
+
+            .notification-dropdown {
+              position: static;
+              width: calc(100% + 2rem);
+              margin-left: -1rem;
+              margin-right: -1rem;
+              margin-top: 1rem;
+              background: rgba(255, 255, 255, 0.95);
+              border-radius: 8px;
+              max-height: 300px;
+
+              .notification-header {
+                h4 {
+                  color: #333;
+                }
+              }
+
+              .notification-list {
+                .notification-item {
+                  border-bottom: 1px solid #f0f0f0;
+
+                  &:hover {
+                    background-color: #f8f9fa;
+                    padding-left: 1rem;
+                    margin-left: 0;
+                    margin-right: 0;
+                    padding-right: 1rem;
+                  }
+
+                  .notification-content {
+
+                    h5,
+                    p {
+                      color: #333;
+                    }
+
+                    .notification-time {
+                      color: #666;
+                    }
+                  }
+                }
+
+                .no-notifications {
+                  color: #666;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .Sign_btns {
+      width: 124px;
+
+      button {
+        padding: 0.5rem;
+        border: 1px solid white;
+        border-radius: 5px;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.7rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: white;
+          color: var(--green);
+        }
+      }
+    }
+
+    .hamburger {
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      z-index: 3001;
+      position: relative;
+    }
+  }
+}
+
+// For tablet screen sizes
+
+@media screen and (max-width: 1017px) and (min-width: 742px) {
+  .header {
+    .Logo_section {
+      width: 40%;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .menu_section {
+      align-items: center;
+      position: relative;
+
+      ul {
+        top: 0;
+        right: -100%;
+        position: fixed;
+        gap: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        background: var(--green);
+        border: none;
+        border-radius: 0;
+        padding: 4rem 2rem 2rem;
+        width: 100%;
+        height: 100vh;
+        transition: right 0.3s ease-in-out;
+        z-index: 3000;
+        overflow-y: auto;
+
+        &.menu-open {
+          right: 0;
+        }
+
+        >.hamburger {
+          position: absolute;
+          top: 1.5rem;
+          right: 2rem;
+          z-index: 3001;
+          color: white;
+          display: block !important;
+        }
+
+        li {
+          width: 100%;
+          padding: 1rem 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+          &:hover {
+            background-color: var(--green);
+            padding-left: 1rem;
+            margin-left: -1rem;
+            margin-right: -1rem;
+            padding-right: 1rem;
+          }
+
+          &.dropdown-item {
+            position: relative;
+            flex-direction: column;
+            align-items: flex-start;
+
+            .linksss {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+            }
+
+            &:hover {
+              // background-color: var(--hover);
+              padding-left: 1rem;
+              margin-left: -1rem;
+              margin-right: -1rem;
+              padding-right: 1rem;
+
+              .dropdown-menu {
+                display: block;
+              }
+            }
+
+            .dropdown-menu {
+              display: none;
+              position: static;
+              margin-top: 1rem;
+              width: calc(100% + 2rem);
+              margin-left: -1rem;
+              margin-right: -1rem;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 8px;
+              padding: 1rem;
+              transform: none;
+              opacity: 1;
+              visibility: visible;
+
+              .menu-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+
+                .menu-item {
+                  padding: 0.8rem;
+                  background: rgba(255, 255, 255, 0.1);
+                  border: 1px solid rgba(255, 255, 255, 0.2);
+                  border-radius: 6px;
+                  cursor: pointer;
+
+                  &:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                  }
+
+                  .item-header {
+                    .item-icon {
+                      color: white;
+                    }
+
+                    .item-heading {
+                      color: white;
+                    }
+                  }
+
+                  .item-subheading {
+                    color: rgba(255, 255, 255, 0.8);
+                  }
+                }
+              }
+            }
+          }
+
+          &.notification-item {
+            position: relative;
+            flex-direction: column;
+            align-items: flex-start;
+
+            .notification-bell {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 0.5rem;
+
+              .notification-badge {
+                position: static;
+                margin-left: 0.5rem;
+              }
+            }
+
+            .notification-dropdown {
+              position: static;
+              width: calc(100% + 2rem);
+              margin-left: -1rem;
+              margin-right: -1rem;
+              margin-top: 1rem;
+              background: rgba(255, 255, 255, 0.95);
+              border-radius: 8px;
+              max-height: 300px;
+
+              .notification-header {
+                h4 {
+                  color: #333;
+                }
+              }
+
+              .notification-list {
+                .notification-item {
+                  border-bottom: 1px solid #f0f0f0;
+
+                  &:hover {
+                    background-color: #f8f9fa;
+                    padding-left: 1rem;
+                    margin-left: 0;
+                    margin-right: 0;
+                    padding-right: 1rem;
+                  }
+
+                  .notification-content {
+
+                    h5,
+                    p {
+                      color: #333;
+                    }
+
+                    .notification-time {
+                      color: #666;
+                    }
+                  }
+                }
+
+                .no-notifications {
+                  color: #666;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .Sign_btns {
+      width: 170px;
+
+      button {
+        width: max-content;
+        padding: 0.5rem 1rem;
+        border: 1px solid white;
+        border-radius: 5px;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: white;
+          color: var(--green);
+        }
+      }
+    }
+
+    .hamburger {
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      z-index: 3001;
+      position: relative;
+    }
+  }
+}
+
+@media screen and (max-width: 1390px) and (min-width: 1018px) {
+  .header {
+    width: 100vw;
+    height: auto;
+    background-color: var(--green);
+    border-radius: 0 0 8px 8px;
+    padding: 1rem 0;
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .Logo_section {
+      padding: 0.5rem 0;
+    }
+
+    .menu_section {
+      display: flex;
+      align-items: center;
+
+      ul {
+        width: 465px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+        cursor: pointer;
+
+
+
+        li {
+          display: flex;
+          align-items: center;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          gap: 0.4rem;
+
+          &:hover {
+            background-color: var(--hover);
+          }
+
+          .linksss {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+
+    .Sign_btns {
+      width: 240px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+
+      // gap: 1rem;
+      button {
+        padding: 0.5rem 1.5rem;
+        border: 1px solid white;
+        border-radius: 5px;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: white;
+          color: var(--green);
+        }
+      }
+    }
+
+    .hamburger {
+      display: none;
+    }
+  }
+}
