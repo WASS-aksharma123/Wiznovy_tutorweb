@@ -33,6 +33,7 @@ const StudyMaterialList = ({ unitId }) => {
         setError(result.message);
       }
     } catch (err) {
+      console.error('Error fetching study materials:', err);
       setError('Failed to load study materials');
     } finally {
       setLoading(false);
@@ -54,6 +55,7 @@ const StudyMaterialList = ({ unitId }) => {
           setError(result.message);
         }
       } catch (err) {
+        console.error('Error deleting study material:', err);
         setError('Failed to delete study material');
       }
     }

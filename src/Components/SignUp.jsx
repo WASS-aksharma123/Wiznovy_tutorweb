@@ -405,54 +405,7 @@ export default function SignUp() {
           }}
         />
 
-        {/* <Modal
-        isOpen={showRegistrationModal}
-        onClose={() => setShowRegistrationModal(false)}
-        heading="Register Now – Get Matched With Clients"
-      >
-        <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-          <div
-            className="tabss"
-            style={{
-              flex: 1,
-              textAlign: "center",
-              cursor: "pointer",
-              padding: "20px",
-              border: "1px solid #C4DAD2",
-              borderRadius: "8px",
-            }}
-            onClick={() => {
-              setShowRegistrationModal(false);
-              navigate("/onboarding");
-            }}
-          >
-            <div className="usericon">
-              <img src={usericon} alt="wiznovy" />
-            </div>
-            <h4>User</h4>
-          </div>
-          <div
-            className="tabss"
-            style={{
-              flex: 1,
-              textAlign: "center",
-              cursor: "pointer",
-              padding: "20px",
-              border: "1px solid #C4DAD2",
-              borderRadius: "8px",
-            }}
-            onClick={() => {
-              setShowRegistrationModal(false);
-              navigate("/");
-            }}
-          >
-            <div className="usericon ">
-              <img src={careericon} alt="wiznovy" />
-            </div>
-            <h4>Start Your Career</h4>
-          </div>
-        </div>
-      </Modal> */}
+       
 
         <TermsModal
           isOpen={showTermsModal}

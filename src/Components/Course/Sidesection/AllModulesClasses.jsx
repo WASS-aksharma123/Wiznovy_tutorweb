@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import "../../../assets/Styles/Course/Sidesection/AllModulesClasses.scss";
 import { CirclePlus, CircleAlert, SquarePen } from "lucide-react";
@@ -55,38 +56,37 @@ const AllModulesClasses = ({ courseId, selectedUnit, onUnitSelect }) => {
       />
 
       <div className="Unitsss">
-        {unitsLoading ? (
+        {unitsLoading && (
           <div className="loader-container">
             <div className="spinner"></div>
             <p>Loading units...</p>
           </div>
-        ) : units.length === 0 ? (
+        )}
+        {!unitsLoading && units.length === 0 && (
           <div className="no-units"><CircleAlert size={50} />No unit to show</div>
-        ) : (
+        )}
+        {!unitsLoading && units.length > 0 && (
           [...units]
             .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
             .map((unit) => (
               <div 
                 key={unit.id} 
                 className={`unit-item ${selectedUnit?.id === unit.id ? 'selected' : ''}`}
-                onClick={() => onUnitSelect(unit)}
               >
                 <div className="overlay">
                         <button 
                           className="btn" 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            
+                          onClick={() => {
                             setEditingUnit(unit);
                             setIsEditModalOpen(true);
-                            
                           }}
                         >
                           <SquarePen size={14} />Edit
                         </button>
                     </div>
-                <img src={unit.imgUrl} alt={unit.name} />
+                <button className="unit-image-btn" onClick={() => onUnitSelect(unit)}>
+                  <img src={unit.imgUrl} alt={unit.name} />
+                </button>
                 <div className="unit-info">
                   <h4>{unit.name}</h4>
                   <p>{unit.description}</p>
@@ -98,6 +98,12 @@ const AllModulesClasses = ({ courseId, selectedUnit, onUnitSelect }) => {
       </div>
     </div>
   );
+};
+
+AllModulesClasses.propTypes = {
+  courseId: PropTypes.string.isRequired,
+  selectedUnit: PropTypes.object,
+  onUnitSelect: PropTypes.func.isRequired
 };
 
 export default AllModulesClasses;

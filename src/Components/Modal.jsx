@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 import "../assets/Styles/Modal.scss";
 
 export default function Modal({ isOpen, onClose, image, heading, subheading, buttonText = "OK", onButtonClick, children }) {
@@ -21,13 +22,8 @@ export default function Modal({ isOpen, onClose, image, heading, subheading, but
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="modal-overlay" 
-      onClick={onClose}
-      onKeyDown={(e) => e.key === 'Enter' && onClose()}
-      tabIndex={-1}
-    >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content">
         {image && <img src={image} alt="Wiznovy" className="modal-image" />}
         <h3 className="modal-heading">{heading}</h3>
         {subheading && <p className="modal-subheading">{subheading}</p>}
@@ -40,3 +36,14 @@ export default function Modal({ isOpen, onClose, image, heading, subheading, but
     </div>
   );
 }
+
+Modal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  image: PropTypes.string,
+  heading: PropTypes.string.isRequired,
+  subheading: PropTypes.string,
+  buttonText: PropTypes.string,
+  onButtonClick: PropTypes.func,
+  children: PropTypes.node
+};

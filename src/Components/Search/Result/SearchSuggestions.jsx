@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { API_BASE_URL } from '../../../config/api'
 
 const SearchSuggestions = ({ searchKeyword, onSuggestionClick, isVisible }) => {
@@ -89,6 +90,12 @@ const SearchSuggestions = ({ searchKeyword, onSuggestionClick, isVisible }) => {
             {renderContent()}
         </div>
     )
+}
+
+SearchSuggestions.propTypes = {
+    searchKeyword: PropTypes.string.isRequired,
+    onSuggestionClick: PropTypes.func.isRequired,
+    isVisible: PropTypes.bool.isRequired
 }
 
 export default SearchSuggestions

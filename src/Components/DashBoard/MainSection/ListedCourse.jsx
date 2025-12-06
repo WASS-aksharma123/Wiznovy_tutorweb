@@ -37,13 +37,10 @@ const ListedCourse = () => {
         </div>
 
         <div className="course-list">
-          {loading ? (
-            <p>Loading courses...</p>
-          ) : (
-            myCourses.slice(0, screenWidth <= 1024 ? 2 : 3).map((courseItem) => (
-              <CourseCard key={courseItem.id} course={courseItem} onEdit={handleEditCourse} />
-            ))
-          )}
+          {loading && <p>Loading courses...</p>}
+          {!loading && myCourses.slice(0, screenWidth <= 1024 ? 2 : 3).map((courseItem) => (
+            <CourseCard key={courseItem.id} course={courseItem} onEdit={handleEditCourse} />
+          ))}
         </div>
       </div>
       

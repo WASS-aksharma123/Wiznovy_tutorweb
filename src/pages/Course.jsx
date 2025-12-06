@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "../assets/Styles/Pages/Course.scss";
-import { FaClock, FaUsers, FaStar, FaPlay } from "react-icons/fa";
+import { FaClock, FaUsers, FaStar } from "react-icons/fa";
 import Share from "../Components/DashBoard/SideBar/Share";
 import AllModulesClasses from "../Components/Course/Sidesection/AllModulesClasses";
 import { fetchMyCoursesAsync } from "../store/courseSlice";

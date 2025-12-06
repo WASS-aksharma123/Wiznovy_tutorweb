@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { X, Upload, Calendar } from 'lucide-react';
+import { X, Upload } from 'lucide-react';
 import '../assets/Styles/NewCourse.scss';
 import { createCourseAsync, fetchSubjectsAsync, fetchLanguagesAsync } from '../store/courseSlice';
 
 const NewCourse = ({ isOpen, onClose }) => {
+  NewCourse.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired
+  };
   const [formData, setFormData] = useState({
     courseName: '',
     accessType: 'free',
@@ -25,7 +30,7 @@ const NewCourse = ({ isOpen, onClose }) => {
   const [validationErrors, setValidationErrors] = useState({});
 
   const dispatch = useDispatch();
-  const { subjects, languages, loading } = useSelector((state) => state.course);
+  const { subjects, languages } = useSelector((state) => state.course);
 
   useEffect(() => {
     dispatch(fetchSubjectsAsync());
@@ -98,7 +103,7 @@ const NewCourse = ({ isOpen, onClose }) => {
     return true;
   };
 
-  const handleSave = async (e) => {
+  const handleSave = (e) => {
     if (e) e.preventDefault();
     
     if (!validateForm()) {
@@ -113,10 +118,10 @@ const NewCourse = ({ isOpen, onClose }) => {
     formDataToSend.append('description', formData.courseDescription.trim());
     formDataToSend.append('price', formData.accessType === 'paid' ? formData.price : '0');
     formDataToSend.append('discountPrice', formData.accessType === 'paid' ? (formData.discountedPrice || '0') : '0');
-    formDataToSend.append('validityDays', parseInt(formData.validityDays));
+    formDataToSend.append('validityDays', Number.parseInt(formData.validityDays, 10));
     formDataToSend.append('accessType', formData.accessType.toUpperCase());
-    formDataToSend.append('totalDuration', parseFloat(formData.totalDuration));
-    formDataToSend.append('totalLectures', parseInt(formData.totalLectures));
+    formDataToSend.append('totalDuration', Number.parseFloat(formData.totalDuration));
+    formDataToSend.append('totalLectures', Number.parseInt(formData.totalLectures, 10));
     formDataToSend.append('authorMessage', formData.authorMessage.trim());
     formDataToSend.append('startDate', new Date(formData.startDate).toISOString());
     formDataToSend.append('endDate', new Date(formData.endDate).toISOString());
@@ -124,7 +129,7 @@ const NewCourse = ({ isOpen, onClose }) => {
     formDataToSend.append('languageId', selectedLanguage?.id);
     formDataToSend.append('thumbnail', formData.thumbnail);
 
-    const result = await dispatch(createCourseAsync(formDataToSend));
+    const result = dispatch(createCourseAsync(formDataToSend));
     if (result.type === 'course/createCourse/fulfilled') {
       onClose();
     }
@@ -164,9 +169,10 @@ const NewCourse = ({ isOpen, onClose }) => {
 
         <form className="course-form" onSubmit={handleSave}>
           <div className="form-group">
-            <label>Course Name</label>
+            <label htmlFor="courseName">Course Name</label>
             <input
               type="text"
+              id="courseName"
               value={formData.courseName}
               onChange={(e) => handleInputChange('courseName', e.target.value)}
               placeholder="Enter course name"
@@ -185,8 +191,8 @@ const NewCourse = ({ isOpen, onClose }) => {
           </div>
 
           <div className="form-group">
-            <label id="access-type-label" htmlFor="access-type-group">Access Type</label>
-            <div className="access-buttons" id="access-type-group" role="group" aria-labelledby="access-type-label">
+            <span id="access-type-label">Access Type</span>
+            <div className="access-buttons" aria-labelledby="access-type-label">
               <button
                 type="button"
                 className={formData.accessType === 'free' ? 'active' : ''}
@@ -206,7 +212,7 @@ const NewCourse = ({ isOpen, onClose }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Subject</label>
+              <span>Subject</span>
               <select
                 value={formData.subject}
                 onChange={(e) => handleInputChange('subject', e.target.value)}
@@ -229,7 +235,7 @@ const NewCourse = ({ isOpen, onClose }) => {
             </div>
 
             <div className="form-group">
-              <label>Language</label>
+              <span>Language</span>
               <select
                 value={formData.language}
                 onChange={(e) => handleInputChange('language', e.target.value)}
@@ -254,7 +260,7 @@ const NewCourse = ({ isOpen, onClose }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Total Duration (hours)</label>
+              <span>Total Duration (hours)</span>
               <input
                 type="number"
                 value={formData.totalDuration}
@@ -275,7 +281,7 @@ const NewCourse = ({ isOpen, onClose }) => {
             </div>
 
             <div className="form-group">
-              <label>Total Lectures</label>
+              <span>Total Lectures</span>
               <input
                 type="number"
                 value={formData.totalLectures}
@@ -296,7 +302,7 @@ const NewCourse = ({ isOpen, onClose }) => {
             </div>
 
             <div className="form-group">
-              <label>Validity Days</label>
+              <span>Validity Days</span>
               <input
                 type="number"
                 value={formData.validityDays}
@@ -319,7 +325,7 @@ const NewCourse = ({ isOpen, onClose }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Start Date</label>
+              <span>Start Date</span>
               <input
                 type="date"
                 value={formData.startDate}
@@ -338,7 +344,7 @@ const NewCourse = ({ isOpen, onClose }) => {
             </div>
 
             <div className="form-group">
-              <label>End Date</label>
+              <span>End Date</span>
               <input
                 type="date"
                 value={formData.endDate}
@@ -360,7 +366,7 @@ const NewCourse = ({ isOpen, onClose }) => {
           {formData.accessType === 'paid' && (
             <div className="form-row">
               <div className="form-group">
-                <label>Price</label>
+                <span>Price</span>
                 <input
                   type="number"
                   value={formData.price}
@@ -382,7 +388,7 @@ const NewCourse = ({ isOpen, onClose }) => {
               </div>
 
               <div className="form-group">
-                <label>Discounted Price</label>
+                <span>Discounted Price</span>
                 <input
                   type="number"
                   value={formData.discountedPrice}
@@ -394,7 +400,7 @@ const NewCourse = ({ isOpen, onClose }) => {
           )}
 
           <div className="form-group">
-            <label>Course Description</label>
+            <span>Course Description</span>
             <textarea
               value={formData.courseDescription}
               onChange={(e) => handleInputChange('courseDescription', e.target.value)}
@@ -415,7 +421,7 @@ const NewCourse = ({ isOpen, onClose }) => {
           </div>
 
           <div className="form-group">
-            <label>Author Message</label>
+            <span>Author Message</span>
             <textarea
               value={formData.authorMessage}
               onChange={(e) => handleInputChange('authorMessage', e.target.value)}
@@ -437,7 +443,7 @@ const NewCourse = ({ isOpen, onClose }) => {
           </div>
 
           <div className="form-group">
-            <label>Course Thumbnail</label>
+            <span>Course Thumbnail</span>
             <div className="upload-area">
               <Upload size={24} />
               <p>Upload course image</p>

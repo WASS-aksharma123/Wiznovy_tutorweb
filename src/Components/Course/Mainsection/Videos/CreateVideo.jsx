@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { X, Upload, Video } from 'lucide-react';
 import { createVideoLecture } from '../../../../services/courseService';
 import './CreateVideo.scss';
@@ -40,7 +41,7 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
       formDataToSend.append('title', formData.title);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('unitId', unitId);
-      formDataToSend.append('duration', parseInt(formData.duration));
+      formDataToSend.append('duration', Number.parseInt(formData.duration, 10));
       
       if (formData.videoFile) {
         formDataToSend.append('video', formData.videoFile);
@@ -65,6 +66,7 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
         setError(result.message);
       }
     } catch (error) {
+      console.error('Error creating video lecture:', error);
       setError('Network error occurred');
     } finally {
       setLoading(false);
@@ -74,8 +76,8 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content create-video-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content create-video-modal">
         <div className="modal-header">
           <h3>Create New Video</h3>
           <button className="close-btn" onClick={onClose}>
@@ -173,6 +175,13 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
       </div>
     </div>
   );
+};
+
+CreateVideo.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  unitId: PropTypes.string.isRequired,
+  onVideoCreated: PropTypes.func
 };
 
 export default CreateVideo;

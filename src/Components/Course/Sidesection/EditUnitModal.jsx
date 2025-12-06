@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { X, Upload } from "lucide-react";
-import { updateUnitAsync, updateUnitImageAsync, fetchUnitsByCourseAsync } from "../../../store/courseSlice";
+import { updateUnitAsync, updateUnitImageAsync } from "../../../store/courseSlice";
 import "../../../assets/Styles/Course/Sidesection/CreateUnitModal.scss";
 
 const EditUnitModal = ({ isOpen, onClose, unit, courseId }) => {
@@ -64,8 +65,8 @@ const EditUnitModal = ({ isOpen, onClose, unit, courseId }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content create-unit-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content create-unit-modal">
         <div className="modal-header">
           <h3>Edit Unit</h3>
           <button className="close-btn" onClick={onClose}>
@@ -129,6 +130,13 @@ const EditUnitModal = ({ isOpen, onClose, unit, courseId }) => {
       </div>
     </div>
   );
+};
+
+EditUnitModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  unit: PropTypes.object,
+  courseId: PropTypes.string.isRequired
 };
 
 export default EditUnitModal;

@@ -45,7 +45,7 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
       const result = await createStudyMaterial(submitData);
 
       if (result.success) {
-        onSuccess && onSuccess(result.data);
+        onSuccess?.(result.data);
         onClose();
         setFormData({
           title: '',
@@ -57,6 +57,7 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
         setError(result.message);
       }
     } catch (err) {
+      console.error('Error creating study material:', err);
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -66,8 +67,8 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content create-study-material-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content create-study-material-modal">
         <div className="modal-header">
           <h3>Create Study Material</h3>
           <button className="close-btn" onClick={onClose}>

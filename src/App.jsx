@@ -1,6 +1,6 @@
 import { Suspense, lazy, memo } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Provider } from 'react-redux'
+import { Provider,useSelector  } from 'react-redux'
 import store from './store/store.js'
 import './App.scss'
 import Footer from './Components/Footer'
@@ -14,7 +14,7 @@ import SignIn from './Components/SignIn'
 import SignUp from './Components/SignUp'
 import AuthRedirect from './Components/AuthRedirect'
 import RouteLoader from './Components/RouteLoader'
-import { useSelector } from 'react-redux'
+
 import Course from './pages/Course.jsx'
 
 // Lazy load components with error handling and preloading

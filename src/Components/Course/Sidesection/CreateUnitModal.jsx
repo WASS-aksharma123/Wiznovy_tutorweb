@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { X, Upload } from "lucide-react";
 import { createUnitAsync } from "../../../store/courseSlice";
@@ -52,8 +53,8 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content create-unit-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content create-unit-modal">
         <div className="modal-header">
           <h3>Create New Unit</h3>
           <button className="close-btn" onClick={onClose}>
@@ -117,6 +118,12 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
       </div>
     </div>
   );
+};
+
+CreateUnitModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  courseId: PropTypes.string.isRequired
 };
 
 export default CreateUnitModal;

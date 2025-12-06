@@ -54,11 +54,12 @@ export default function Contact() {
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                <label className="form-label">First name</label>
+                <label htmlFor="firstName" className="form-label">First name</label>
                 <div className="input-container">
                   <User className="input-icon" size={18} />
                   <input
                     type="text"
+                    id="firstName"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
@@ -69,11 +70,12 @@ export default function Contact() {
                 </div>
               </div>
               <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                <label className="form-label">Last name</label>
+                <label htmlFor="lastName" className="form-label">Last name</label>
                 <div className="input-container">
                   <User className="input-icon" size={18} />
                   <input
                     type="text"
+                    id="lastName"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
@@ -86,11 +88,12 @@ export default function Contact() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label htmlFor="email" className="form-label">Email</label>
               <div className="input-container">
                 <Mail className="input-icon" size={18} />
                 <input
                   type="email"
+                  id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
@@ -102,11 +105,12 @@ export default function Contact() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Phone number</label>
+              <label htmlFor="phone" className="form-label">Phone number</label>
               <div className="input-container">
                 <Phone className="input-icon" size={18} />
                 <input
                   type="tel"
+                  id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
@@ -118,10 +122,11 @@ export default function Contact() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Message</label>
+              <label htmlFor="message" className="form-label">Message</label>
               <div className="input-container">
                 <MessageSquare className="input-icon" size={18} style={{ top: '0.75rem' }} />
                 <textarea
+                  id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}

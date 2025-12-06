@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   Mail,
   Phone,
-  MapPin,
   Edit,
   BookOpen,
   Library,
@@ -24,7 +23,7 @@ const UserDetails = () => {
   const [isNewCourseOpen, setIsNewCourseOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { profile, loading } = useSelector((state) => state.profile);
+  const { profile } = useSelector((state) => state.profile);
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   const handleImageUpload = async (e) => {
@@ -63,7 +62,7 @@ const UserDetails = () => {
     email: profile?.email || "Not available",
     phone: profile?.phoneNumber || profile?.tutorDetail?.phoneNumber || "Not provided",
     profileImage: profile?.tutorDetail?.profileImage 
-      ? profile.tutorDetail.profileImage.replace(/\\/g, '/').replace('http:/', 'http://') 
+      ? profile.tutorDetail.profileImage.replaceAll('\\', '/').replace('http:/', 'http://') 
       : ""
   };
 
@@ -124,7 +123,7 @@ const UserDetails = () => {
       <div className="headline">
         <div className="headline-item">
           <BookOpen size={16} />
-          <span onClick={() => navigate('/all-courses')}>Courses</span>
+          <button onClick={() => navigate('/all-courses')}>Courses</button>
         </div>
         <div className="headline-item">
           <Library size={16} />

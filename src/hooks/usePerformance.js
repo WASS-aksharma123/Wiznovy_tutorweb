@@ -32,9 +32,9 @@ export const useImagePreloader = (imageSources) => {
     })
     
     return () => {
-      preloadImages.forEach(img => {
+      for (const img of preloadImages) {
         img.src = ''
-      })
+      }
     }
   }, [imageSources])
 }

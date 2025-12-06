@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "../../../assets/Styles/Search/Details.scss";
-import { Star, CheckCircle, Globe, BadgeCheck, Calendar } from "lucide-react";
+import { Star, CheckCircle, BadgeCheck } from "lucide-react";
 import Loader from "../../Loader";
 
 const Details = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
     // Simulate API call to fetch profile details
@@ -13,19 +12,6 @@ const Details = () => {
       try {
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1200));
-        
-        // Mock profile data
-        const data = {
-          name: "Maria Eugenia L",
-          rating: 4.9,
-          jobs: 40,
-          rate: 75,
-          location: "Villa Rosa, Argentina",
-          time: "7:38 am local time",
-          verified: true
-        };
-        
-        setProfileData(data);
       } catch (error) {
         console.error('Error fetching profile:', error);
       } finally {
@@ -108,7 +94,7 @@ const Details = () => {
                 <span>Verified User</span>
               </div>
               <div className="review-stars">
-                {[...Array(5)].map((_, i) => (
+                {Array.from({ length: 5 }, (_, i) => (
                   <Star key={i} size={14} fill="#f5c518" stroke="none" />
                 ))}
               </div>
@@ -129,8 +115,8 @@ const Details = () => {
           { title: "One - One Class" },
           { title: "Group Tuition" },
           { title: "Hire Hourly Basis" },
-        ].map((c, i) => (
-          <div className="class-card" key={i}>
+        ].map((c) => (
+          <div className="class-card" key={c.title}>
             <img
               src="https://cdn-icons-png.flaticon.com/512/1048/1048941.png"
               alt="Class"
@@ -159,8 +145,8 @@ const Details = () => {
               "Teaching Spanish",
               "Academic Translation",
               "Literary Translation",
-            ].map((skill, i) => (
-              <span key={i}>{skill}</span>
+            ].map((skill) => (
+              <span key={skill}>{skill}</span>
             ))}
           </div>
         </div>

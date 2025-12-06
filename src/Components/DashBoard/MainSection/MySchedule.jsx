@@ -1,6 +1,7 @@
 // Updated MySchedule.jsx integrating Schedule.jsx functionality while keeping design
 
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTutorSessions, clearSessions } from "../../../store/scheduleSlice";
 import "../../../assets/Styles/DashBoard/MySchedule.scss";
@@ -20,42 +21,6 @@ const MySchedule = ({ toggleSidebar }) => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  };
-
-  const getDateOptions = (type) => {
-    const dates = [];
-    const today = new Date();
-
-    if (type === "upcoming") {
-      for (let i = 1; i <= 7; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() + i);
-        dates.push({
-          value: formatDate(date),
-          label: date.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "short",
-            day: "numeric",
-          }),
-        });
-      }
-    }
-
-    if (type === "past") {
-      for (let i = 1; i <= 7; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() - i);
-        dates.push({
-          value: formatDate(date),
-          label: date.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "short",
-            day: "numeric",
-          }),
-        });
-      }
-    }
-    return dates;
   };
 
   useEffect(() => {
@@ -153,13 +118,13 @@ const MySchedule = ({ toggleSidebar }) => {
 
     for (let day = 1; day <= daysInMonth; day++) {
       dates.push(
-        <span 
+        <button 
           key={day} 
           className="date clickable" 
           onClick={() => handleDateClick(day)}
         >
           {day}
-        </span>
+        </button>
       );
     }
 
@@ -171,9 +136,9 @@ const MySchedule = ({ toggleSidebar }) => {
       <div className="schedule-card">
         {/* Left Side */}
         <div className="left-section">
-          <div className="collapse" onClick={toggleSidebar}>
+          <button className="collapse" onClick={toggleSidebar}>
             <GoSidebarCollapse style={{ width: "1.8rem", height: "1.8rem" }} />
-          </div>
+          </button>
 
           <h2>My Schedule</h2>
 
@@ -248,6 +213,10 @@ const MySchedule = ({ toggleSidebar }) => {
       </div>
     </div>
   );
+};
+
+MySchedule.propTypes = {
+  toggleSidebar: PropTypes.func.isRequired
 };
 
 export default MySchedule;

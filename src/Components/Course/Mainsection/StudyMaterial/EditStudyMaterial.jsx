@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, FileText } from 'lucide-react';
+import PropTypes from 'prop-types';
+import { X } from 'lucide-react';
 import { updateStudyMaterialByTutorWithId } from '../../../../services/studyMaterialService';
 import './CreateStudyMaterial.scss';
 
@@ -42,12 +43,13 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
       const result = await updateStudyMaterialByTutorWithId(studyMaterial.id, submitData);
 
       if (result.success) {
-        onSuccess && onSuccess(result.data);
+        onSuccess?.(result.data);
         onClose();
       } else {
         setError(result.message);
       }
     } catch (err) {
+      console.error('Error updating study material:', err);
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -57,8 +59,8 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
   if (!isOpen || !studyMaterial) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content create-study-material-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content create-study-material-modal">
         <div className="modal-header">
           <h3>Edit Study Material</h3>
           <button className="close-btn" onClick={onClose}>
@@ -97,7 +99,7 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
 
           {studyMaterial.fileName && (
             <div className="form-group">
-              <label>Current File</label>
+              <span>Current File</span>
               <p className="current-file">📄 {studyMaterial.fileName}</p>
             </div>
           )}
@@ -114,6 +116,13 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
       </div>
     </div>
   );
+};
+
+EditStudyMaterial.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  studyMaterial: PropTypes.object,
+  onSuccess: PropTypes.func
 };
 
 export default EditStudyMaterial;

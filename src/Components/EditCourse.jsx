@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
 import '../assets/Styles/NewCourse.scss';
@@ -6,7 +7,6 @@ import '../assets/Styles/EditCourse.scss';
 import { fetchSubjectsAsync, fetchLanguagesAsync, updateCourseAsync } from '../store/courseSlice';
 
 const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
-  if (!isOpen) return null;
   const [formData, setFormData] = useState({
     courseName: '',
     accessType: 'free',
@@ -25,7 +25,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
   });
 
   const dispatch = useDispatch();
-  const { subjects, languages, loading } = useSelector((state) => state.course);
+  const { subjects, languages } = useSelector((state) => state.course);
 
   useEffect(() => {
     dispatch(fetchSubjectsAsync());
@@ -53,6 +53,8 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
     }
   }, [courseData]);
 
+  if (!isOpen) return null;
+
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -75,12 +77,12 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
       const updateData = {
         name: formData.courseName,
         description: formData.courseDescription,
-        price: parseFloat(formData.price) || 0,
-        discountPrice: parseFloat(formData.discountedPrice) || 0,
-        validityDays: parseInt(formData.validityDays) || 0,
+        price: Number.parseFloat(formData.price) || 0,
+        discountPrice: Number.parseFloat(formData.discountedPrice) || 0,
+        validityDays: Number.parseInt(formData.validityDays, 10) || 0,
         accessType: formData.accessType.toUpperCase(),
         totalDuration: formData.totalDuration,
-        totalLectures: parseInt(formData.totalLectures) || 0,
+        totalLectures: Number.parseInt(formData.totalLectures, 10) || 0,
         authorMessage: formData.authorMessage,
         startDate: formData.startDate,
         endDate: formData.endDate,
@@ -309,6 +311,13 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
       </div>
     </div>
   );
+};
+
+EditCourse.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  courseData: PropTypes.object,
+  onSave: PropTypes.func
 };
 
 export default EditCourse;
