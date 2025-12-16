@@ -29,9 +29,9 @@
 
 .form-label {
   display: flex;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--green);
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--green) !important;
   margin-bottom: 0.25rem;
   pointer-events: none;
 }

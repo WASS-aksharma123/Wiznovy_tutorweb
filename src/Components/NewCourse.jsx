@@ -103,7 +103,7 @@ const NewCourse = ({ isOpen, onClose }) => {
     return true;
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     if (e) e.preventDefault();
     
     if (!validateForm()) {
@@ -129,9 +129,12 @@ const NewCourse = ({ isOpen, onClose }) => {
     formDataToSend.append('languageId', selectedLanguage?.id);
     formDataToSend.append('thumbnail', formData.thumbnail);
 
-    const result = dispatch(createCourseAsync(formDataToSend));
-    if (result.type === 'course/createCourse/fulfilled') {
+    try {
+      const result = await dispatch(createCourseAsync(formDataToSend)).unwrap();
       onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to create course:', error);
     }
   };
 

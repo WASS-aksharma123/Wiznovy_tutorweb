@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { Lock, Eye, EyeOff } from "lucide-react";
+import { Lock, Eye, EyeOff, X } from "lucide-react";
 import { resetPasswordUser } from "../store/authSlice.js";
 import "../assets/Styles/SignIn.scss";
 
@@ -42,11 +42,11 @@ export default function ResetPasswordModal({ isOpen, onClose, email, onSuccess }
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content">
         <div className="modal-header">
           <h2 className="modal-title">Reset Password</h2>
-          <button className="modal-close" onClick={onClose}>×</button>
+          <button className="modal-close" onClick={onClose}><X size={20} /></button>
         </div>
 
         <form onSubmit={handleResetPassword}>
@@ -62,8 +62,8 @@ export default function ResetPasswordModal({ isOpen, onClose, email, onSuccess }
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter new password"
                 className="form-input"
-                minLength={6}
-                maxLength={10}
+                minLength={8}
+                maxLength={16}
                 required
               />
               <button
@@ -88,8 +88,8 @@ export default function ResetPasswordModal({ isOpen, onClose, email, onSuccess }
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm new password"
                 className="form-input"
-                minLength={6}
-                maxLength={10}
+                minLength={8}
+                maxLength={16}
                 required
               />
               <button
@@ -108,7 +108,7 @@ export default function ResetPasswordModal({ isOpen, onClose, email, onSuccess }
             </div>
           )}
 
-          <button type="submit" className="signin-button" disabled={loading}>
+          <button type="submit" className="signin-button" disabled={loading} style={{marginTop:"1.5rem"}}>
             {loading ? 'Resetting...' : 'Reset Password'}
           </button>
         </form>

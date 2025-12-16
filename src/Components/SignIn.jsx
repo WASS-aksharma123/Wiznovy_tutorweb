@@ -98,12 +98,13 @@ export default function SignIn() {
               </div>
             </div>
             {validationErrors.email && (
-              <div
-                style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+              <button
+                type="button"
+                style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                 onClick={() => document.getElementById("email").focus()}
               >
                 {validationErrors.email}
-              </div>
+              </button>
             )}
 
             {/* Password Field */}
@@ -115,7 +116,7 @@ export default function SignIn() {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value.replace(/\s/g, ''))}
+                  onChange={(e) => setPassword(e.target.value.replaceAll(/\s/g, ''))}
                   placeholder="Enter your Password"
                   className="form-input"
                   maxLength="16"
@@ -136,12 +137,13 @@ export default function SignIn() {
               </div>
             </div>
             {validationErrors.password && (
-              <div
-                style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+              <button
+                type="button"
+                style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                 onClick={() => document.getElementById("password").focus()}
               >
                 {validationErrors.password}
-              </div>
+              </button>
             )}
 
             {/* Options */}
@@ -160,8 +162,9 @@ export default function SignIn() {
             </div>
 
             {error && (
-              <div
-                style={{ color: "red", fontSize: "14px", marginBottom: "10px", cursor: "pointer" }}
+              <button
+                type="button"
+                style={{ color: "red", fontSize: "14px", marginBottom: "10px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                 onClick={() => {
                   if (error.includes("email") || error.includes("Email")) {
                     document.getElementById("email").focus();
@@ -171,7 +174,7 @@ export default function SignIn() {
                 }}
               >
                 {error}
-              </div>
+              </button>
             )}
 
             {/* Sign In Button */}
@@ -240,6 +243,7 @@ export default function SignIn() {
                   placeholder="Enter your email"
                   className="form-input"
                   required
+                  maxLength={50}
                 />
               </div>
             </div>

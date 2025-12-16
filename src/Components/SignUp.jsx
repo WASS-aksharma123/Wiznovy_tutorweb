@@ -103,12 +103,13 @@ export default function SignUp() {
                 />
               </div>
               {validationErrors.name && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => document.getElementById("name").focus()}
                 >
                   {validationErrors.name}
-                </div>
+                </button>
               )}
             </div>
 
@@ -139,12 +140,13 @@ export default function SignUp() {
                 />
               </div>
               {validationErrors.email && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => document.getElementById("email").focus()}
                 >
                   {validationErrors.email}
-                </div>
+                </button>
               )}
             </div>
 
@@ -157,7 +159,7 @@ export default function SignUp() {
                   type="tel"
                   id="phone"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                  onChange={(e) => setPhone(e.target.value.replaceAll(/\D/g, ''))}
                   placeholder="Enter your phone number"
                   className="form-input"
                   minLength={10}
@@ -171,12 +173,13 @@ export default function SignUp() {
                 />
               </div>
               {validationErrors.phone && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => document.getElementById("phone").focus()}
                 >
                   {validationErrors.phone}
-                </div>
+                </button>
               )}
             </div>
 
@@ -189,7 +192,7 @@ export default function SignUp() {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value.replaceAll(/\s/g, ''))}
                   placeholder="Create a password"
                   className="form-input"
                   maxLength="16"
@@ -209,12 +212,13 @@ export default function SignUp() {
                 </button>
               </div>
               {validationErrors.password && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => document.getElementById("password").focus()}
                 >
                   {validationErrors.password}
-                </div>
+                </button>
               )}
             </div>
 
@@ -228,7 +232,7 @@ export default function SignUp() {
                   id="confirm-password"
                   value={confirmPassword}
                   onChange={(e) => {
-                    setConfirmPassword(e.target.value);
+                    setConfirmPassword(e.target.value.replaceAll(/\s/g, ''));
                     if (passwordError) setPasswordError("");
                   }}
                   placeholder="Confirm your password"
@@ -249,16 +253,18 @@ export default function SignUp() {
                 </button>
               </div>
               {validationErrors.confirmPassword && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => document.getElementById("confirm-password").focus()}
                 >
                   {validationErrors.confirmPassword}
-                </div>
+                </button>
               )}
               {passwordError && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => {
                     if (passwordError.includes("Password must be at least")) {
                       document.getElementById("password").focus();
@@ -268,11 +274,12 @@ export default function SignUp() {
                   }}
                 >
                   {passwordError}
-                </div>
+                </button>
               )}
               {error && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => {
                     if (error.includes("name") || error.includes("Name")) {
                       document.getElementById("name").focus();
@@ -286,7 +293,7 @@ export default function SignUp() {
                   }}
                 >
                   {error}
-                </div>
+                </button>
               )}
             </div>
 
@@ -307,12 +314,13 @@ export default function SignUp() {
                 <span>I agree to the <button type="button" className="terms" onClick={() => setShowTermsModal(true)}>Terms & Conditions</button></span>
               </label>
               {validationErrors.terms && (
-                <div
-                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer" }}
+                <button
+                  type="button"
+                  style={{ color: "red", fontSize: "14px", marginTop: "5px", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left" }}
                   onClick={() => document.getElementById("terms-agreement").focus()}
                 >
                   {validationErrors.terms}
-                </div>
+                </button>
               )}
             </div>
 
