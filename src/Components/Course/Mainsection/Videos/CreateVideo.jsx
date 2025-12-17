@@ -122,6 +122,7 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
               name="duration"
               value={formData.duration}
               onChange={handleInputChange}
+              onKeyDown={(e) => e.key === '-' && e.preventDefault()}
               required
               min="1"
             />

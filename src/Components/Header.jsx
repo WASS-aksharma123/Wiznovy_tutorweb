@@ -202,7 +202,7 @@ const Header = () => {
                     <div className="notification-header">
                       <h4>Notifications</h4>
                     </div>
-                    <div className="notification-list">
+                    <div className="notification-list" >
                       {notifications.length > 0 ? (
                         notifications.slice(0, 5).map((notification) => (
                           <button 
@@ -212,7 +212,7 @@ const Header = () => {
                             onClick={() => handleNotificationClick(notification)}
                             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left", width: "100%" }}
                           >
-                            <div className="notification-content">
+                            <div className="notification-content" style={{padding:'1rem'}}>
                               <h5>{notification.title}</h5>
                               <p>{notification.desc}</p>
                               <span className="notification-time">{formatTimeAgo(notification.createdAt)}</span>
