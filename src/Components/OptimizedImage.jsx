@@ -1,4 +1,5 @@
 import React, { useState, memo } from 'react'
+import PropTypes from 'prop-types'
 import Loader from './Loader'
 
 const OptimizedImage = memo(({ 
@@ -50,5 +51,13 @@ const OptimizedImage = memo(({
 })
 
 OptimizedImage.displayName = 'OptimizedImage'
+
+OptimizedImage.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
+  loading: PropTypes.oneOf(['lazy', 'eager'])
+}
 
 export default OptimizedImage
