@@ -138,11 +138,14 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
         // Now process profile data with populated arrays
         if (profileResponse.ok) {
           const data = await profileResponse.json();
-          const profileImageUrl = data.tutorDetail?.profileImage 
-            ? (data.tutorDetail.profileImage.startsWith('http') 
-                ? data.tutorDetail.profileImage 
-                : `${API_BASE_URL}/${data.tutorDetail.profileImage.replaceAll('\\', '/')}`)
-            : null;
+          let profileImageUrl = null;
+          if (data.tutorDetail?.profileImage) {
+            if (data.tutorDetail.profileImage.startsWith('http')) {
+              profileImageUrl = data.tutorDetail.profileImage;
+            } else {
+              profileImageUrl = `${API_BASE_URL}/${data.tutorDetail.profileImage.replaceAll('\\', '/')}`;
+            }
+          }
           
           // Find names by IDs using populated arrays
           const qualificationName = qualificationsData.find(q => q.id === data.tutorDetail?.qualificationId)?.name || "";
@@ -200,38 +203,59 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
     }
   }, [isOpen]);
 
+  const handleSubjectChange = (value, updates) => {
+    const subject = subjects.find(s => s.name === value);
+    updates.subjectId = subject ? subject.id : "";
+  };
+
+  const handleCountryChange = (value, updates) => {
+    const country = countries.find(c => c.name === value);
+    updates.countryId = country ? country.id : "";
+    updates.state = "";
+    updates.stateId = "";
+    if (country) {
+      fetchStates(country.id);
+    } else {
+      setStates([]);
+    }
+  };
+
+  const handleStateChange = (value, updates) => {
+    const state = states.find(s => s.name === value);
+    updates.stateId = state ? state.id : "";
+    updates.city = "";
+    if (state) {
+      fetchCities(state.id);
+    } else {
+      setCities([]);
+    }
+  };
+
+  const handleLanguageChange = (value, updates) => {
+    const language = languages.find(l => l.name === value);
+    updates.languageId = language ? language.id : "";
+  };
+
+  const handleQualificationChange = (value, updates) => {
+    const qualification = qualifications.find(q => q.name === value);
+    updates.qualificationId = qualification ? qualification.id : "";
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    let updates = { [name]: value };
+    const updates = { [name]: value };
     
-    if (name === 'subjects') {
-      const subject = subjects.find(s => s.name === value);
-      updates.subjectId = subject ? subject.id : "";
-    } else if (name === 'country') {
-      const country = countries.find(c => c.name === value);
-      updates.countryId = country ? country.id : "";
-      updates.state = "";
-      updates.stateId = "";
-      if (country) {
-        fetchStates(country.id);
-      } else {
-        setStates([]);
-      }
-    } else if (name === 'state') {
-      const state = states.find(s => s.name === value);
-      updates.stateId = state ? state.id : "";
-      updates.city = "";
-      if (state) {
-        fetchCities(state.id);
-      } else {
-        setCities([]);
-      }
-    } else if (name === 'preferredLanguage') {
-      const language = languages.find(l => l.name === value);
-      updates.languageId = language ? language.id : "";
-    } else if (name === 'qualifications') {
-      const qualification = qualifications.find(q => q.name === value);
-      updates.qualificationId = qualification ? qualification.id : "";
+    const fieldHandlers = {
+      subjects: handleSubjectChange,
+      country: handleCountryChange,
+      state: handleStateChange,
+      preferredLanguage: handleLanguageChange,
+      qualifications: handleQualificationChange
+    };
+    
+    const handler = fieldHandlers[name];
+    if (handler) {
+      handler(value, updates);
     }
     
     setFormData(prev => ({ ...prev, ...updates }));
@@ -626,9 +650,15 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
                 {(() => {
                   const wordCount = formData.bio.trim().split(/\s+/).filter(word => word.length > 0).length;
                   const isValid = wordCount >= 15 && wordCount <= 80;
+                  let message = '';
+                  if (wordCount < 15) {
+                    message = '(min 15)';
+                  } else if (wordCount > 80) {
+                    message = '(max 80)';
+                  }
                   return (
                     <span style={{ color: isValid ? 'green' : 'red' }}>
-                      {wordCount}/80 words {wordCount < 15 ? '(min 15)' : wordCount > 80 ? '(max 80)' : ''}
+                      {wordCount}/80 words {message}
                     </span>
                   );
                 })()} 
@@ -797,7 +827,7 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
                         checked={formData.availableDays.includes(day)}
                         onChange={() => handleDayChange(day)}
                       />
-                      <span onClick={() => handleDayClick(day)}>{day.slice(0, 3)}</span>
+                      <button type="button" onClick={() => handleDayClick(day)}>{day.slice(0, 3)}</button>
                     </label>
                     <div className="day-actions">
                       <button type="button" className="view-btn-small" onClick={() => handleViewTimeSlot(day)}>V</button>
