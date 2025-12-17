@@ -130,7 +130,7 @@ const Course = () => {
                             <button className="sidebar-toggle" onClick={toggleSidebar}>
                                 ☰
                             </button>
-                            <div
+                            <button
                                 className={`tab ${activeTab === 'videos' ? 'active' : ''}`}
                                 onClick={() => {
                                     if (activeTab !== 'videos') {
@@ -143,8 +143,8 @@ const Course = () => {
                                 }}
                             >
                                 <h2>Videos</h2>
-                            </div>
-                            <div
+                            </button>
+                            <button
                                 className={`tab ${activeTab === 'materials' ? 'active' : ''}`}
                                 onClick={() => {
                                     if (activeTab !== 'materials') {
@@ -157,7 +157,7 @@ const Course = () => {
                                 }}
                             >
                                 <h2>Study Materials</h2>
-                            </div>
+                            </button>
                         </div>
 
                         <div className="contentarea">

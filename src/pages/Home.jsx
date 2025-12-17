@@ -1,6 +1,5 @@
-import { Search, Star, CheckCircle, ArrowRight } from "lucide-react";
+import { Star, CheckCircle } from "lucide-react";
 import "../assets/Styles/Pages/Home.scss";
-import herobanner from "../assets/Images/heroBanner.png";
 import englishicon from "../assets/Images/englishtutoricon.png";
 import { PiArrowCircleUpRight } from "react-icons/pi";
 import tutor1 from "../assets/Images/tutor1.png"
@@ -82,8 +81,8 @@ function HomePage() {
           <button className="view-all-btn">View All</button>
         </div>
         <div className="tutors-grid">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="tutor-card">
+          {Array.from({ length: 6 }, (_, i) => (
+            <div key={`tutor-${i}`} className="tutor-card">
               <div className="tutor-icon">
                 <img src={englishicon} alt="" />
               </div>
@@ -114,8 +113,8 @@ function HomePage() {
           <button className="view-all-btn">View All</button>
         </div>
         <div className="tutors-carousel">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="tutor-profile-card">
+          {Array.from({ length: 3 }, (_, i) => (
+            <div key={`progress-${i}`} className="tutor-profile-card">
               <div className="profile-image">
                 <img
                   src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
@@ -172,8 +171,8 @@ function HomePage() {
               color: "",
               img: tutor3,
             },
-          ].map((tutor, i) => (
-            <div key={i} className={`top-tutor-card ${tutor.color}`}>
+          ].map((tutor) => (
+            <div key={tutor.img} className={`top-tutor-card ${tutor.color}`}>
               <div className="tutor-profile-img">
                 <img src={tutor.img} alt="Top Tutor" />
               </div>
@@ -206,20 +205,25 @@ function HomePage() {
         </div>
         <div className="works-grid">
           {[
-            "https://images.pexels.com/photos/927022/pexels-photo-927022.jpeg?auto=compress&cs=tinysrgb&w=400",
-            "https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=400",
-            "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=400",
-          ].map((img, i) => (
-            <div key={i} className="work-card">
+            {
+              img: "https://images.pexels.com/photos/927022/pexels-photo-927022.jpeg?auto=compress&cs=tinysrgb&w=400",
+              title: "Posting jobs is always free"
+            },
+            {
+              img: "https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=400",
+              title: "Lorem Ipsum - All the facts"
+            },
+            {
+              img: "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=400",
+              title: "Lorem Ipsum - All the facts"
+            },
+          ].map((item) => (
+            <div key={item.img} className="work-card">
               <div className="work-image">
-                <img src={img} alt="How it works" />
+                <img src={item.img} alt="How it works" />
               </div>
               <div className="title">
-                <h3>
-                  {i === 0
-                    ? "Posting jobs is always free"
-                    : "Lorem Ipsum - All the facts"}
-                </h3>
+                <h3>{item.title}</h3>
                 <PiArrowCircleUpRight />
               </div>
 
