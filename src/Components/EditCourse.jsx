@@ -114,8 +114,8 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modald-content" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modald-content">
         <div className="modal-header">
           <h2>Edit Course</h2>
           <button onClick={onClose} className="close-btn">
@@ -135,9 +135,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
             />
           </div>
 
-          <div className="form-group">
-            <label id="access-type-label" htmlFor="access-type-group">Access Type</label>
-            <div className="access-buttons" id="access-type-group" role="group" aria-labelledby="access-type-label">
+          <fieldset className="form-group">
+            <legend>Access Type</legend>
+            <div className="access-buttons">
               <button
                 type="button"
                 className={formData.accessType === 'free' ? 'active' : ''}
@@ -153,7 +153,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 Paid
               </button>
             </div>
-          </div>
+          </fieldset>
 
           <div className="form-row">
             <div className="form-group">
@@ -209,8 +209,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>Validity Days</label>
+              <label htmlFor="validity-days-input">Validity Days</label>
               <input
+                id="validity-days-input"
                 type="number"
                 value={formData.validityDays}
                 onChange={(e) => handleInputChange('validityDays', e.target.value)}
@@ -221,8 +222,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Start Date</label>
+              <label htmlFor="start-date-input">Start Date</label>
               <input
+                id="start-date-input"
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => handleInputChange('startDate', e.target.value)}
@@ -230,8 +232,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>End Date</label>
+              <label htmlFor="end-date-input">End Date</label>
               <input
+                id="end-date-input"
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => handleInputChange('endDate', e.target.value)}
@@ -242,8 +245,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
           {formData.accessType === 'paid' && (
             <div className="form-row">
               <div className="form-group">
-                <label>Price</label>
+                <label htmlFor="price-input">Price</label>
                 <input
+                  id="price-input"
                   type="number"
                   value={formData.price}
                   onChange={(e) => handleInputChange('price', e.target.value)}
@@ -252,8 +256,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
               </div>
 
               <div className="form-group">
-                <label>Discounted Price</label>
+                <label htmlFor="discounted-price-input">Discounted Price</label>
                 <input
+                  id="discounted-price-input"
                   type="number"
                   value={formData.discountedPrice}
                   onChange={(e) => handleInputChange('discountedPrice', e.target.value)}
@@ -264,8 +269,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
           )}
 
           <div className="form-group">
-            <label>Course Description</label>
+            <label htmlFor="course-description-input">Course Description</label>
             <textarea
+              id="course-description-input"
               value={formData.courseDescription}
               onChange={(e) => handleInputChange('courseDescription', e.target.value)}
               placeholder="Describe your course..."
@@ -274,8 +280,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
           </div>
 
           <div className="form-group">
-            <label>Author Message</label>
+            <label htmlFor="author-message-input">Author Message</label>
             <textarea
+              id="author-message-input"
               value={formData.authorMessage}
               onChange={(e) => handleInputChange('authorMessage', e.target.value)}
               placeholder="Message from the author..."
@@ -284,15 +291,15 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
           </div>
 
           <div className="form-group">
-            <label>Course Thumbnail</label>
+            <label htmlFor="thumbnail-upload">Course Thumbnail</label>
             <div className="upload-area">
               <Upload size={24} />
               <p>Upload course image</p>
               <input
+                id="thumbnail-upload"
                 type="file"
                 accept="image/*"
                 onChange={handleFileUpload}
-                id="thumbnail-upload"
                 hidden
               />
               <label htmlFor="thumbnail-upload" className="upload-btn">
