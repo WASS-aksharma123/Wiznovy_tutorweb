@@ -24,7 +24,7 @@ const Filter = () => {
             min={priceRange.min} 
             max={priceRange.max} 
             value={priceRange.current}
-            onChange={(e) => setPriceRange({...priceRange, current: parseInt(e.target.value)})}
+            onChange={(e) => setPriceRange({...priceRange, current: Number.parseInt(e.target.value)})}
           />
           <div className="range-values">
             <span>₹{priceRange.min}</span>

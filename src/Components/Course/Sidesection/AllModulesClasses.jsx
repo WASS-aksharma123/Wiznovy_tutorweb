@@ -69,22 +69,23 @@ const AllModulesClasses = ({ courseId, selectedUnit, onUnitSelect }) => {
           [...units]
             .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
             .map((unit) => (
-              <div 
-                key={unit.id} 
+              <div
+                onClick={() => onUnitSelect(unit)}
+                key={unit.id}
                 className={`unit-item ${selectedUnit?.id === unit.id ? 'selected' : ''}`}
               >
                 <div className="overlay">
-                        <button 
-                          className="btn" 
-                          onClick={() => {
-                            setEditingUnit(unit);
-                            setIsEditModalOpen(true);
-                          }}
-                        >
-                          <SquarePen size={14} />Edit
-                        </button>
-                    </div>
-                <button className="unit-image-btn" onClick={() => onUnitSelect(unit)}>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setEditingUnit(unit);
+                      setIsEditModalOpen(true);
+                    }}
+                  >
+                    <SquarePen size={14} />Edit
+                  </button>
+                </div>
+                <button className="unit-image-btn" >
                   <img src={unit.imgUrl} alt={unit.name} />
                 </button>
                 <div className="unit-info">
