@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import '../assets/Styles/ErrorBoundary.scss'
 
 class ErrorBoundary extends React.Component {
@@ -23,7 +24,7 @@ class ErrorBoundary extends React.Component {
             <h2>Oops! Something went wrong</h2>
             <p>We're sorry, but something unexpected happened.</p>
             <button 
-              onClick={() => window.location.reload()}
+              onClick={() => globalThis.location.reload()}
               className="retry-button"
             >
               Reload Page
@@ -35,6 +36,10 @@ class ErrorBoundary extends React.Component {
 
     return this.props.children
   }
+}
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
 export default ErrorBoundary

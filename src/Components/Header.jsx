@@ -120,9 +120,14 @@ const Header = () => {
   return (
     <div className="header">
       <div className="container">
-        <div className="Logo_section" onClick={() => navigate("/")}>
+        <button 
+          type="button"
+          className="Logo_section" 
+          onClick={() => navigate("/")}
+          style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+        >
           <img src={wizlogo} alt="Wiznovy" />
-        </div>
+        </button>
 
         <div className="menu_section">
           <ul className={isMenuOpen ? "menu-open" : "menu-close"}>
@@ -183,10 +188,15 @@ const Header = () => {
             </li>
             {isAuthenticated && (
               <li className="notification-item">
-                <div className="notification-bell" onClick={() => setShowNotifications(!showNotifications)}>
-                  <FaBell className="linksss" style={{ fontSize: "1.2rem", cursor: "pointer" }} />
+                <button 
+                  type="button"
+                  className="notification-bell" 
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                >
+                  <FaBell className="linksss" style={{ fontSize: "1.2rem" }} />
                   {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
-                </div>
+                </button>
                 {showNotifications && (
                   <div className="notification-dropdown">
                     <div className="notification-header">
@@ -195,17 +205,19 @@ const Header = () => {
                     <div className="notification-list">
                       {notifications.length > 0 ? (
                         notifications.slice(0, 5).map((notification) => (
-                          <div 
+                          <button 
                             key={notification.id} 
+                            type="button"
                             className={`notification-item ${notification.read ? '' : 'unread'}`}
                             onClick={() => handleNotificationClick(notification)}
+                            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left", width: "100%" }}
                           >
                             <div className="notification-content">
                               <h5>{notification.title}</h5>
                               <p>{notification.desc}</p>
                               <span className="notification-time">{formatTimeAgo(notification.createdAt)}</span>
                             </div>
-                          </div>
+                          </button>
                         ))
                       ) : (
                         <div className="no-notifications">No notifications</div>
@@ -217,16 +229,7 @@ const Header = () => {
             )}
           </ul>
         </div>
-        {!isAuthenticated ? (
-          <div className="Sign_btns">
-            <Link to="/">
-              <button>Sign In</button>
-            </Link>
-            <Link to="/signup">
-              <button>Sign up</button>
-            </Link>
-          </div>
-        ) : (
+        {isAuthenticated ? (
           <div className="Sign_btns">
             {!isOnboarding && !isPending && (
               <Link to="/wallet">
@@ -260,16 +263,27 @@ const Header = () => {
               </div>
             )}
           </div>
+        ) : (
+          <div className="Sign_btns">
+            <Link to="/">
+              <button>Sign In</button>
+            </Link>
+            <Link to="/signup">
+              <button>Sign up</button>
+            </Link>
+          </div>
         )}
-        {!isMenuOpen && (
-          <div
+        {isMenuOpen ? null : (
+          <button
+            type="button"
             className="hamburger"
             onClick={() => {
               setIsMenuOpen(!isMenuOpen);
             }}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
             <RxHamburgerMenu style={{ width: "1.7rem", height: "1.7rem" }} />
-          </div>
+          </button>
         )}
       </div>
     </div>

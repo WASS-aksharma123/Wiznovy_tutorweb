@@ -125,8 +125,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
 
         <form className="course-form">
           <div className="form-group">
-            <label>Course Name</label>
+            <label htmlFor='course_input'>Course Name</label>
             <input
+            id='course_input'
               type="text"
               value={formData.courseName}
               onChange={(e) => handleInputChange('courseName', e.target.value)}
@@ -156,8 +157,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Subject</label>
+              <label htmlFor="subject-select">Subject</label>
               <select
+                id="subject-select"
                 value={formData.subject}
                 onChange={(e) => handleInputChange('subject', e.target.value)}
               >
@@ -169,8 +171,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>Language</label>
+              <label htmlFor="language-select">Language</label>
               <select
+                id="language-select"
                 value={formData.language}
                 onChange={(e) => handleInputChange('language', e.target.value)}
               >
@@ -184,8 +187,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Total Duration (hours)</label>
+              <label htmlFor="duration-input">Total Duration (hours)</label>
               <input
+                id="duration-input"
                 type="number"
                 value={formData.totalDuration}
                 onChange={(e) => handleInputChange('totalDuration', e.target.value)}
@@ -194,8 +198,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>Total Lectures</label>
+              <label htmlFor="total-lectures-input">Total Lectures</label>
               <input
+                id="total-lectures-input"
                 type="number"
                 value={formData.totalLectures}
                 onChange={(e) => handleInputChange('totalLectures', e.target.value)}
