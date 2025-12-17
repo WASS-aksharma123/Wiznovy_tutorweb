@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { Clock } from "lucide-react";
-import { verifyOtpUser, clearError, verifyOtpPassword, forgotPasswordUser } from "../store/authSlice.js";
+import { verifyOtpUser, verifyOtpPassword, forgotPasswordUser } from "../store/authSlice.js";
 import "../assets/Styles/OtpModal.scss";
 
 export default function OtpModal({ email, onVerify, onResend, onClose, isPasswordReset = false }) {
@@ -10,6 +11,8 @@ export default function OtpModal({ email, onVerify, onResend, onClose, isPasswor
   const [isDisabled, setIsDisabled] = useState(true);
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
+  
+  const otpInputIds = ['otp-0', 'otp-1', 'otp-2', 'otp-3', 'otp-4', 'otp-5'];
 
   useEffect(() => {
     let countdown;
@@ -102,7 +105,7 @@ export default function OtpModal({ email, onVerify, onResend, onClose, isPasswor
         <div className="otp-modal__inputs">
           {otp.map((digit, index) => (
             <input
-              key={index}
+              key={otpInputIds[index]}
               id={`otp-input-${index}`}
               type="text"
               maxLength="1"
@@ -157,3 +160,11 @@ export default function OtpModal({ email, onVerify, onResend, onClose, isPasswor
     
   );
 }
+
+OtpModal.propTypes = {
+  email: PropTypes.string.isRequired,
+  onVerify: PropTypes.func.isRequired,
+  onResend: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  isPasswordReset: PropTypes.bool
+};
