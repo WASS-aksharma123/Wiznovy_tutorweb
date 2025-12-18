@@ -207,7 +207,6 @@ const courseSlice = createSlice({
       })
       .addCase(createUnitAsync.fulfilled, (state, action) => {
         state.loading = false;
-        // Add the new unit to the units array
         if (action.payload) {
           state.units.push(action.payload);
         }

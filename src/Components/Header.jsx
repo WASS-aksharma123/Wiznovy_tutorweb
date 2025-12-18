@@ -23,7 +23,6 @@ const Header = () => {
   const { profile } = useSelector((state) => state.profile);
   const { notifications, unreadCount } = useSelector((state) => state.notifications);
   
-  // Check if user is in onboarding process or has pending status
   const isOnboarding = location.pathname === '/onboarding';
   const isPending = user?.status === 'PENDING' || profile?.status === 'PENDING';
   
@@ -61,15 +60,12 @@ const Header = () => {
   };
 
   const getUserInitials = () => {
-    // Try profile first (from Redux)
     if (profile?.tutorDetail?.name) {
       return profile.tutorDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
     }
-    // Try userProfile (from API)
     if (userProfile?.tutorDetail?.name) {
       return userProfile.tutorDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
     }
-    // Fallback to Redux user data
     if (user?.userDetail?.name) {
       return user.userDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
     }

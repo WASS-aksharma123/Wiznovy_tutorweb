@@ -5,8 +5,8 @@ import '../assets/Styles/TermsModal.scss';
 
 /**
  * @param {Object} props
- * @param {boolean} props.isOpen - Whether the modal is open
- * @param {Function} props.onClose - Function to close the modal
+ * @param {boolean} props.isOpen 
+ * @param {Function} props.onClose
  */
 const TermsModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;

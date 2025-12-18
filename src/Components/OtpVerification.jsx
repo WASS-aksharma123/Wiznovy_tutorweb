@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { verifyOtpUser, clearError } from '../store/authSlice.js';
 
-// eslint-disable-next-line react/prop-types
 const OtpVerification = ({ email, onClose }) => {
   const [otp, setOtp] = useState('');
   const dispatch = useDispatch();
@@ -97,6 +97,11 @@ const OtpVerification = ({ email, onClose }) => {
       </div>
     </div>
   );
+};
+
+OtpVerification.propTypes = {
+  email: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 export default OtpVerification;

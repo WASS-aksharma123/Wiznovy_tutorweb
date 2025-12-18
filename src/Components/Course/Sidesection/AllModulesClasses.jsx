@@ -25,7 +25,6 @@ const AllModulesClasses = ({ courseId, selectedUnit, onUnitSelect }) => {
     }
   }, [courseId]);
 
-  // Auto-select first unit when units are loaded
   useEffect(() => {
     if (units.length > 0 && !selectedUnit) {
       const sortedUnits = [...units].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
@@ -91,7 +90,6 @@ const AllModulesClasses = ({ courseId, selectedUnit, onUnitSelect }) => {
                 <div className="unit-info">
                   <h4>{unit.name}</h4>
                   <p>{unit.description}</p>
-                  {/* <span className="status">{unit.status}</span> */}
                 </div>
               </div>
             ))

@@ -6,7 +6,6 @@ import { API_BASE_URL } from '../config/api';
 import { createAvailability } from '../store/availabilitySlice';
 import { subjectsService } from '../services/subjectsService';
 
-// Reusable function to update tutor details
 export const updateTutorDetails = async (data) => {
   try {
     const token = localStorage.getItem('token');
@@ -29,7 +28,6 @@ export const updateTutorDetails = async (data) => {
   }
 };
 
-// eslint-disable-next-line react/prop-types
 const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
   const dispatch = useDispatch();
   const { loading: availabilityLoading } = useSelector(state => state.availability);
@@ -110,7 +108,6 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
           })
         ]);
         
-        // First set the arrays
         const subjectsData = subjectsResponse.result || [];
         setSubjects(subjectsData);
         
@@ -135,7 +132,6 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
           setQualifications(qualificationsData);
         }
         
-        // Now process profile data with populated arrays
         if (profileResponse.ok) {
           const data = await profileResponse.json();
           let profileImageUrl = null;
@@ -147,20 +143,17 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
             }
           }
           
-          // Find names by IDs using populated arrays
           const qualificationName = qualificationsData.find(q => q.id === data.tutorDetail?.qualificationId)?.name || "";
           const subjectName = subjectsData.find(s => s.id === data.tutorDetail?.subjectId)?.name || "";
           const countryName = countriesData.find(c => c.id === data.tutorDetail?.countryId)?.name || "";
           const languageName = languagesData.find(l => l.id === data.tutorDetail?.languageId)?.name || "";
           
-          // Fetch states if country exists
           let stateName = "";
           if (data.tutorDetail?.countryId) {
             const statesData = await fetchStates(data.tutorDetail.countryId);
             stateName = statesData.find(s => s.id === data.tutorDetail?.stateId)?.name || "";
           }
           
-          // Fetch cities if state exists
           let cityName = "";
           if (data.tutorDetail?.stateId) {
             const citiesData = await fetchCities(data.tutorDetail.stateId);
@@ -297,7 +290,6 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
       const existingAvailability = getDayAvailability(timeSlotPopup.selectedDay);
       
       if (existingAvailability) {
-        // Update existing availability
         const token = localStorage.getItem('token');
         const response = await fetch(`${API_BASE_URL}/tutor-availability/${existingAvailability.id}`, {
           method: 'PATCH',
@@ -313,10 +305,10 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
         });
         
         if (response.ok) {
-          await fetchAvailabilityData(); // Refresh data
+          await fetchAvailabilityData(); 
         }
       } else {
-        // Create new availability
+        
         const availabilityData = {
           dayOfWeek: timeSlotPopup.selectedDay.toUpperCase(),
           startTime: timeSlotPopup.fromTime,
@@ -325,7 +317,7 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
         };
         
         await dispatch(createAvailability(availabilityData)).unwrap();
-        await fetchAvailabilityData(); // Refresh data
+        await fetchAvailabilityData();
       }
       
       console.log(`Time slot saved for ${timeSlotPopup.selectedDay}: ${timeSlotPopup.fromTime} - ${timeSlotPopup.toTime}`);

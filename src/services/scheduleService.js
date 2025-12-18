@@ -3,7 +3,10 @@ import { API_BASE_URL } from '../config/api.js';
 export const getTutorSessions = async (date, limit = 20, offset = 0) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_BASE_URL}/sessions/tutor-sessions?limit=${limit}&offset=${offset}&date=${date}`, {
+    const url = date 
+      ? `${API_BASE_URL}/sessions/tutor-sessions?limit=${limit}&offset=${offset}&date=${date}`
+      : `${API_BASE_URL}/sessions/tutor-sessions?limit=${limit}&offset=${offset}`;
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

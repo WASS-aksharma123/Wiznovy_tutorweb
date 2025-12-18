@@ -44,14 +44,12 @@ const EditUnitModal = ({ isOpen, onClose, unit, courseId }) => {
     e.preventDefault();
     
     try {
-      // Update text fields
       const textData = {
         name: formData.name,
         description: formData.description
       };
       await dispatch(updateUnitAsync({ unitId: unit.id, unitData: textData })).unwrap();
       
-      // Update image if provided
       if (formData.image) {
         await dispatch(updateUnitImageAsync({ unitId: unit.id, imageFile: formData.image })).unwrap();
       }

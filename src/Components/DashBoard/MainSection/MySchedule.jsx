@@ -1,5 +1,3 @@
-// Updated MySchedule.jsx integrating Schedule.jsx functionality while keeping design
-
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +13,7 @@ const MySchedule = ({ toggleSidebar }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(new Date().getDate());
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -30,6 +29,11 @@ const MySchedule = ({ toggleSidebar }) => {
     }
   }, [selectedDate]);
 
+  useEffect(() => {
+    const today = new Date();
+    setSelectedDay(today.getDate());
+  }, []);
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedDate("");
@@ -37,25 +41,44 @@ const MySchedule = ({ toggleSidebar }) => {
     setHasSearched(false);
 
     if (tab === "today") {
-      dispatch(fetchTutorSessions({ date: formatDate(new Date()) }));
+      const today = new Date();
+      setSelectedDay(today.getDate());
+      dispatch(fetchTutorSessions({ date: formatDate(today) }));
       setHasSearched(true);
+    } else if (tab === "all") {
+      setSelectedDay(null);
+      dispatch(fetchTutorSessions({}));
+      setHasSearched(true);
+    } else {
+      setSelectedDay(null);
     }
   };
 
-  const renderSessionCard = (session) => (
-    <div key={session.id} className="event-item live">
-      <div className="event-info">
-        <h4>{session.user?.userDetail?.name || "Unknown User"}</h4>
-        <p>
-          {session.startTime} - {session.endTime} ({session.duration} min)
-        </p>
-        <p>Status: {session.status}</p>
-        <p>Amount: ${session.amount}</p>
-        {session.notes && <p>Notes: {session.notes}</p>}
+  const renderSessionCard = (session) => {
+    if (activeTab === 'all') {
+      console.log('Session object:', session);
+    }
+    
+    const sessionDate = session.date || session.sessionDate || session.createdAt || session.scheduledDate;
+    
+    return (
+      <div key={session.id} className="event-item live">
+        <div className="event-info">
+          <h4>{session.user?.userDetail?.name || "Unknown User"}</h4>
+          {activeTab === 'all' && sessionDate && (
+            <p><strong>Date: {new Date(sessionDate).toLocaleDateString()}</strong></p>
+          )}
+          <p>
+            {session.startTime} - {session.endTime} ({session.duration} min)
+          </p>
+          <p>Status: {session.status}</p>
+          <p>Amount: ${session.amount}</p>
+          {session.notes && <p>Notes: {session.notes}</p>}
+        </div>
+        <span className="event-dot live"></span>
       </div>
-      <span className="event-dot live"></span>
-    </div>
-  );
+    );
+  };
 
   const monthNames = [
     "January",
@@ -79,6 +102,7 @@ const MySchedule = ({ toggleSidebar }) => {
     const newDate = new Date(currentDate);
     newDate.setMonth(currentDate.getMonth() + direction);
     setCurrentDate(newDate);
+    setSelectedDay(null);
   };
 
   const handleDateClick = (day) => {
@@ -86,7 +110,6 @@ const MySchedule = ({ toggleSidebar }) => {
     const today = new Date();
     const formattedDate = formatDate(clickedDate);
     
-    // Auto-switch tab based on date
     if (formatDate(clickedDate) === formatDate(today)) {
       setActiveTab('today');
     } else if (clickedDate > today) {
@@ -96,6 +119,7 @@ const MySchedule = ({ toggleSidebar }) => {
     }
     
     setSelectedDate(formattedDate);
+    setSelectedDay(day);
     dispatch(fetchTutorSessions({ date: formattedDate }));
     setHasSearched(true);
     
@@ -122,6 +146,12 @@ const MySchedule = ({ toggleSidebar }) => {
           key={day} 
           className="date clickable" 
           onClick={() => handleDateClick(day)}
+          style={{
+            backgroundColor: selectedDay === day ? '#F2FFFA' : 'transparent',
+            color: selectedDay === day ? '#113D38' : 'inherit',
+            fontWeight: selectedDay === day ? '600' : 'normal',
+            border: selectedDay === day ? '1px solid #113D38' : '1px solid transparent',
+          }}
         >
           {day}
         </button>
@@ -144,7 +174,7 @@ const MySchedule = ({ toggleSidebar }) => {
 
           {/* Tabs */}
           <div className="schedule-tabs">
-            {['today', 'upcoming', 'past'].map((tab) => (
+            {['all', 'today', 'upcoming', 'past'].map((tab) => (
               <button
                 key={tab}
                 className={`tab-btn ${activeTab === tab ? 'active' : ''}`}

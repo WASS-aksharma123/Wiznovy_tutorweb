@@ -49,14 +49,12 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
     setError('');
 
     try {
-      // Update video lecture details
       const updateResult = await updateVideoLecture(video.id, formData);
       
       if (!updateResult.success) {
         throw new Error(updateResult.message);
       }
 
-      // Update thumbnail if a new file was selected
       if (thumbnailFile) {
         const thumbnailResult = await updateVideoThumbnail(video.id, thumbnailFile);
         if (!thumbnailResult.success) {
@@ -137,19 +135,6 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
               min="1"
             />
           </div>
-
-          {/* <div className="form-group">
-            <label htmlFor="accessTypes">Access Type</label>
-            <select
-              id="accessTypes"
-              name="accessTypes"
-              value={formData.accessTypes}
-              onChange={handleInputChange}
-            >
-              <option value="FREE">Free</option>
-              <option value="PAID">Paid</option>
-            </select>
-          </div> */}
 
           <div className="form-group">
             <label htmlFor="thumbnail-upload">Update Thumbnail (Optional)</label>

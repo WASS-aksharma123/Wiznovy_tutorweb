@@ -5,7 +5,6 @@ import "../assets/Styles/AllCourse.scss";
 import CourseCard from "./CourseCard";
 import EditCourse from "./EditCourse";
 
-// Add loader styles
 const loaderStyles = `
   @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -13,7 +12,6 @@ const loaderStyles = `
   }
 `;
 
-// Inject styles
 if (!document.querySelector('#loader-styles')) {
   const style = document.createElement('style');
   style.id = 'loader-styles';

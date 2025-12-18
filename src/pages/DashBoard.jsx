@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, Suspense, lazy } from "react";
 import "../assets/Styles/Pages/DashBoard.scss";
 import Loader from "../Components/Loader";
 
-// Lazy load dashboard components
 const UserDetails = lazy(() => import("../Components/DashBoard/SideBar/UserDetails"));
 const MyScheduleClass = lazy(() => import("../Components/DashBoard/SideBar/MyScheduleClass"));
 const Share = lazy(() => import("../Components/DashBoard/SideBar/Share"));
@@ -21,7 +20,6 @@ const DashBoard = () => {
   };
 
   useEffect(() => {
-    // Simulate dashboard data loading
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);

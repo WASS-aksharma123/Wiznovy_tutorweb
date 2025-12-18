@@ -153,7 +153,6 @@ export const updateStudyMaterialByTutor = async (studyMaterialId, studyMaterialD
     
     let body;
     if (studyMaterialData instanceof FormData) {
-      // Convert FormData to URLSearchParams
       const params = new URLSearchParams();
       for (let [key, value] of studyMaterialData.entries()) {
         if (value instanceof File) continue;
@@ -161,7 +160,6 @@ export const updateStudyMaterialByTutor = async (studyMaterialId, studyMaterialD
       }
       body = params;
     } else {
-      // Convert object to URLSearchParams
       const params = new URLSearchParams();
       Object.keys(studyMaterialData).forEach(key => {
         params.append(key, studyMaterialData[key]);
@@ -206,11 +204,9 @@ export const updateStudyMaterialByTutorWithId = async (studyMaterialId, studyMat
     
     let body;
     if (studyMaterialData instanceof FormData) {
-      // Convert FormData to URLSearchParams for x-www-form-urlencoded
       const params = new URLSearchParams();
       for (let [key, value] of studyMaterialData.entries()) {
         if (value instanceof File) {
-          // Skip file for now, handle separately if needed
           continue;
         }
         params.append(key, value);
@@ -218,7 +214,6 @@ export const updateStudyMaterialByTutorWithId = async (studyMaterialId, studyMat
       headers['Content-Type'] = 'application/x-www-form-urlencoded';
       body = params;
     } else {
-      // Convert object to URLSearchParams
       const params = new URLSearchParams();
       Object.keys(studyMaterialData).forEach(key => {
         params.append(key, studyMaterialData[key]);

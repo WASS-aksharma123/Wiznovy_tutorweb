@@ -33,12 +33,10 @@ const Videos = ({ unitId, unitName }) => {
 
   const handleVideoCreated = (newVideo) => {
     console.log('Video created:', newVideo);
-    // Refresh the video lectures list
     dispatch(fetchVideoLecturesByUnitAsync(unitId));
   };
 
   const handleVideoUpdated = () => {
-    // Refresh the video lectures list
     dispatch(fetchVideoLecturesByUnitAsync(unitId));
   };
 

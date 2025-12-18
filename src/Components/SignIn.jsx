@@ -26,7 +26,6 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
 
-  // Clear any existing errors when component mounts
   useEffect(() => {
     dispatch(clearError());
   }, [dispatch]);
@@ -209,15 +208,7 @@ export default function SignIn() {
           </p>
         </div>
 
-        {/* <Modal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          image={notlinked}
-          heading="Account is under review"
-          subheading="The email address you entered is not verified yet."
-          buttonText="Back to Sign-In"
-          onButtonClick={() => setShowModal(false)}
-        /> */}
+       
 
         <Modal
           isOpen={showForgotPasswordModal}

@@ -46,7 +46,7 @@ const StudyMaterialList = ({ unitId }) => {
   };
 
   const handleDelete = async (materialId) => {
-    if (window.confirm('Are you sure you want to delete this study material?')) {
+    if (globalThis.confirm('Are you sure you want to delete this study material?')) {
       try {
         const result = await deleteStudyMaterial(materialId);
         if (result.success) {

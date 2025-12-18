@@ -11,7 +11,6 @@ const ProtectedRoute = ({ children, requiredRole = null, fallbackPath = '/' }) =
   const [isValidating, setIsValidating] = useState(true)
   const location = useLocation()
   
-  // Check if user has pending status
   const isPending = user?.status === 'PENDING' || profile?.status === 'PENDING'
 
   useEffect(() => {
@@ -52,7 +51,6 @@ const ProtectedRoute = ({ children, requiredRole = null, fallbackPath = '/' }) =
     return <Navigate to={fallbackPath} state={{ from: location }} replace />
   }
 
-  // Show pending page if trying to access dashboard with pending status
   if (isPending && location.pathname === '/dashboard') {
     return <PendingStatusPage />
   }

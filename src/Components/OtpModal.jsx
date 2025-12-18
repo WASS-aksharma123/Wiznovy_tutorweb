@@ -25,11 +25,10 @@ export default function OtpModal({ email, onVerify, onResend, onClose, isPasswor
   }, [timer]);
 
   const handleChange = (value, index) => {
-    if (!/^\d?$/.test(value)) return; // Only allow digits
+    if (!/^\d?$/.test(value)) return; 
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    // Auto-focus next input
     if (value && index < otp.length - 1) {
       document.getElementById(`otp-input-${index + 1}`).focus();
     }
@@ -37,7 +36,6 @@ export default function OtpModal({ email, onVerify, onResend, onClose, isPasswor
 
   const handleKeyDown = (e, index) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      // Move to previous input and clear it
       const newOtp = [...otp];
       newOtp[index - 1] = '';
       setOtp(newOtp);

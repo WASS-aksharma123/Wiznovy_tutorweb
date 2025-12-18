@@ -7,10 +7,8 @@ const Details = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API call to fetch profile details
     const fetchProfileData = async () => {
       try {
-        // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1200));
       } catch (error) {
         console.error('Error fetching profile:', error);

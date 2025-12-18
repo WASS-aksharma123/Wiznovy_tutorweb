@@ -2,7 +2,6 @@ let API_BASE_URL;
 
 const env = import.meta.env.MODE;
 
-// Environment URL mapping
 const envUrls = {
   dev: import.meta.env.VITE_DEV_API_URL,
   qa: import.meta.env.VITE_QA_API_URL,

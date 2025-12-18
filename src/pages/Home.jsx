@@ -28,9 +28,7 @@ function HomePage() {
               <button className="search-btn" onClick={() => navigate('/search')}>Search</button>
             </div>
           </div>
-          {/* <div className="hero-image">
-            <img src={herobanner} alt="Student learning" />
-          </div> */}
+       
         </div>
         <div className="carousel-dots">
           <span className="dot active"></span>
@@ -127,7 +125,6 @@ function HomePage() {
                 ensures Salesforce runs smoothly, efficiently, and safely!
                 successfully, efficiently, and satisfactorily successfully.
               </p>
-              {/* <div className="leaf-decoration"></div> */}
             </div>
           ))}
         </div>

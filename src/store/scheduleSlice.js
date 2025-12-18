@@ -3,7 +3,7 @@ import { getTutorSessions } from '../services/scheduleService.js';
 
 export const fetchTutorSessions = createAsyncThunk(
   'schedule/fetchTutorSessions',
-  async ({ date, limit = 20, offset = 0 }, { rejectWithValue }) => {
+  async ({ date, limit = 20, offset = 0 } = {}, { rejectWithValue }) => {
     try {
       const result = await getTutorSessions(date, limit, offset);
       if (result.success) {

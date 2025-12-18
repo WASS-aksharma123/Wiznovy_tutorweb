@@ -28,7 +28,6 @@ const OnBoardMain = () => {
   };
 
   useEffect(() => {
-    // Reset onboarding state for fresh start
     dispatch(resetOnboarding());
     dispatch(fetchCountries());
     dispatch(fetchQualifications());
@@ -124,7 +123,6 @@ const OnBoardMain = () => {
   };
 
   const continueStep = async () => {
-    // Age validation for step 2
     if (currentStep === 2) {
       if (!formData.dob) {
         setAgeError('Please select your date of birth');
@@ -137,7 +135,6 @@ const OnBoardMain = () => {
       }
     }
 
-    // Bio validation for step 6
     if (currentStep === 6) {
       const bioWordCount = formData.bio.trim().split(/\s+/).filter(word => word.length > 0).length;
       if (bioWordCount < 15) {
@@ -147,7 +144,6 @@ const OnBoardMain = () => {
 
     const updateData = {};
     
-    // Add relevant data based on current step
     if (currentStep === 1 && formData.gender) updateData.gender = formData.gender;
     if (currentStep === 2 && formData.dob) updateData.dob = formData.dob;
     if (currentStep === 3) {
@@ -162,7 +158,6 @@ const OnBoardMain = () => {
     if (currentStep === 5 && formData.specializationId) updateData.subjectId = formData.specializationId;
     if (currentStep === 6 && formData.bio) updateData.bio = formData.bio;
     
-    // Only make API call if there's data to update
     if (Object.keys(updateData).length > 0) {
       dispatch(updateTutorDetails(updateData));
     }
