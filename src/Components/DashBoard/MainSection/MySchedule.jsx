@@ -32,7 +32,9 @@ const MySchedule = ({ toggleSidebar }) => {
   useEffect(() => {
     const today = new Date();
     setSelectedDay(today.getDate());
-  }, []);
+    dispatch(fetchTutorSessions({ date: formatDate(today) }));
+    setHasSearched(true);
+  }, [dispatch]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

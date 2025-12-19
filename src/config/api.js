@@ -8,11 +8,6 @@ const envUrls = {
   prod: import.meta.env.VITE_PROD_API_URL
 };
 
-console.log('Environment URLs:');
-console.log('DEV:', envUrls.dev);
-console.log('QA:', envUrls.qa);
-console.log('PROD:', envUrls.prod);
-
 if (env === 'development' || env === 'dev') {
   API_BASE_URL = envUrls.dev;
 } else if (env === 'qa') {
@@ -20,8 +15,6 @@ if (env === 'development' || env === 'dev') {
 } else if (env === 'production' || env === 'prod') {
   API_BASE_URL = envUrls.prod;
 }
-
-console.log(`API Base URL set to: ${API_BASE_URL} for environment: ${env}`);
 
 export { API_BASE_URL };
 export default API_BASE_URL;
