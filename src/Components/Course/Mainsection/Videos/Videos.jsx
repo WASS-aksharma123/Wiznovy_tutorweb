@@ -80,7 +80,9 @@ const Videos = ({ unitId, unitName }) => {
             );
           }
           
-          return videoLectures.map((video) => {
+          return [...videoLectures]
+            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            .map((video) => {
             const thumbnailContent = video.thumbnailUrl ? (
               <img src={video.thumbnailUrl} alt={video.title} />
             ) : (

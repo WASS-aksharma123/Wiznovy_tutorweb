@@ -16,11 +16,13 @@ import verified from "../../../assets/Images/verified.png";
 import { getTutorProfile } from '../../../store/profileSlice.js';
 import ProfileUpdate from "../../ProfileUpdate";
 import NewCourse from "../../NewCourse";
+import CreateBook from "../../CreateBook";
 import { API_BASE_URL } from "../../../config/api";
 
 const UserDetails = () => {
   const [isProfileUpdateOpen, setIsProfileUpdateOpen] = useState(false);
   const [isNewCourseOpen, setIsNewCourseOpen] = useState(false);
+  const [isCreateBookOpen, setIsCreateBookOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { profile } = useSelector((state) => state.profile);
@@ -139,9 +141,9 @@ const UserDetails = () => {
         <CirclePlus /> Create New Course
       </button>
 
-      {/* <button className="add-btn" onClick={() => navigate('/schedule')}>
-        <CirclePlus /> My Schedules
-      </button> */}
+      <button className="add-btn" onClick={() => setIsCreateBookOpen(true)}>
+        <CirclePlus /> Create New Book
+      </button>
 
       <ProfileUpdate 
         isOpen={isProfileUpdateOpen}
@@ -153,6 +155,11 @@ const UserDetails = () => {
       <NewCourse 
         isOpen={isNewCourseOpen}
         onClose={() => setIsNewCourseOpen(false)}
+      />
+
+      <CreateBook 
+        isOpen={isCreateBookOpen}
+        onClose={() => setIsCreateBookOpen(false)}
       />
     </div>
   );

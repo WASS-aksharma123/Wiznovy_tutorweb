@@ -132,6 +132,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
               value={formData.courseName}
               onChange={(e) => handleInputChange('courseName', e.target.value)}
               placeholder="Enter course name"
+              maxLength={70}
             />
           </div>
 
@@ -276,6 +277,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
               onChange={(e) => handleInputChange('courseDescription', e.target.value)}
               placeholder="Describe your course..."
               rows={4}
+              maxLength={250}
             />
           </div>
 
@@ -287,6 +289,8 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
               onChange={(e) => handleInputChange('authorMessage', e.target.value)}
               placeholder="Message from the author..."
               rows={3}
+              maxLength={150}
+              minLength={10}
             />
           </div>
 
