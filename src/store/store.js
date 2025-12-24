@@ -6,6 +6,7 @@ import onboardingReducer from './onboardingSlice.js';
 import scheduleReducer from './scheduleSlice.js';
 import courseReducer from './courseSlice.js';
 import notificationReducer from './notificationSlice.js';
+import bookReducer from './bookSlice.js';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     schedule: scheduleReducer,
     course: courseReducer,
     notifications: notificationReducer,
+    book: bookReducer,
   },
 });
 

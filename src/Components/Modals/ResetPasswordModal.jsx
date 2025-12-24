@@ -2,8 +2,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { Lock, Eye, EyeOff, X } from "lucide-react";
-import { resetPasswordUser } from "../store/authSlice.js";
-import "../assets/Styles/SignIn.scss";
+import { resetPasswordUser } from "../../store/authSlice.js";
+import "../../assets/Styles/SignIn.scss";
 
 export default function ResetPasswordModal({ isOpen, onClose, email, onSuccess }) {
   const [password, setPassword] = useState("");

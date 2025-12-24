@@ -129,7 +129,7 @@ const UserDetails = () => {
         </div>
         <div className="headline-item">
           <Library size={16} />
-          <span>Open Library</span>
+          <button onClick={() => navigate('/my-books')}>My Books</button>
         </div>
         <div className="headline-item">
           <Heart size={16} />

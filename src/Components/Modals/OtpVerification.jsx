@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { verifyOtpUser, clearError } from '../store/authSlice.js';
+import { verifyOtpUser, clearError } from '../../store/authSlice.js';
 
 const OtpVerification = ({ email, onClose }) => {
   const [otp, setOtp] = useState('');

@@ -1,0 +1,132 @@
+.book-details {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .back-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  &-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  &-image {
+    img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &-info {
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .author {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    .description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      color: #555;
+    }
+  }
+
+  .book-meta {
+    margin-bottom: 24px;
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 14px;
+
+      strong {
+        min-width: 80px;
+        margin-right: 12px;
+      }
+
+      .status {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-left: 8px;
+
+        &.pending {
+          background: #fff3cd;
+          color: #856404;
+        }
+
+        &.approved {
+          background: #d4edda;
+          color: #155724;
+        }
+
+        &.rejected {
+          background: #f8d7da;
+          color: #721c24;
+        }
+      }
+    }
+  }
+
+  .book-images {
+    h3 {
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+
+      img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  &-loading, &-error {
+    text-align: center;
+    padding: 40px;
+    font-size: 16px;
+  }
+
+  &-error {
+    color: #e74c3c;
+  }
+}

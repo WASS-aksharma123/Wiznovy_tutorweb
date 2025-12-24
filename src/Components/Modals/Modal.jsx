@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { X } from "lucide-react";
-import "../assets/Styles/Modal.scss";
+import "../../assets/Styles/Modal.scss";
 
 export default function Modal({ isOpen, onClose, image, heading, subheading, buttonText = "OK", onButtonClick, children }) {
   useEffect(() => {

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { Clock } from "lucide-react";
-import { verifyOtpUser, verifyOtpPassword, forgotPasswordUser } from "../store/authSlice.js";
-import "../assets/Styles/OtpModal.scss";
+import { verifyOtpUser, verifyOtpPassword, forgotPasswordUser } from "../../store/authSlice.js";
+import "../../assets/Styles/OtpModal.scss";
 
 export default function OtpModal({ email, onVerify, onResend, onClose, isPasswordReset = false }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);

@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Mail, Lock, User, Eye, EyeOff, Phone } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
-import "../assets/Styles/SignIn.scss";
-import Modal from "./Modal";
-import OtpModal from "./OtpModal";
-import TermsModal from "./TermsModal";
-import { signUpUser, clearError } from "../store/authSlice.js";
-import wlcm from "../assets/Images/wlcm.png";
-import invalidotp from "../assets/Images/invalidotp.png";
+import "../../assets/Styles/SignIn.scss";
+import Modal from "../Modals/Modal.jsx";
+import OtpModal from "../Modals/OtpModal.jsx";
+import TermsModal from "../TermsModal.jsx";
+import { signUpUser, clearError } from "../../store/authSlice.js";
+import wlcm from "../../assets/Images/wlcm.png";
+import invalidotp from "../../assets/Images/invalidotp.png";
 
 
 export default function SignUp() {

@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
-import "../assets/Styles/SignIn.scss";
+import "../../assets/Styles/SignIn.scss";
 import { useNavigate, Link } from "react-router-dom";
-import Modal from "./Modal";
-import OtpModal from "./OtpModal";
-import { signInUser, forgotPasswordUser, clearError } from "../store/authSlice.js";
-import ResetPasswordModal from "./ResetPasswordModal";
-import passwordicon from "../assets/Images/EmailPassword.png";
+import Modal from "../Modals/Modal.jsx";
+import OtpModal from "../Modals/OtpModal.jsx";
+import { signInUser, forgotPasswordUser, clearError } from "../../store/authSlice.js";
+import ResetPasswordModal from "../Modals/ResetPasswordModal.jsx";
+import passwordicon from "../../assets/Images/EmailPassword.png";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");

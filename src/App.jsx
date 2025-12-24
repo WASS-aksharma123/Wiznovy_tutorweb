@@ -10,9 +10,9 @@ import ProtectedRoute from './Components/ProtectedRoute'
 import Loader from './Components/Loader'
 import ErrorBoundary from './Components/ErrorBoundary'
 import PendingStatusPage from './Components/PendingStatusPage'
-import SignIn from './Components/SignIn'
-import SignUp from './Components/SignUp'
-import AuthRedirect from './Components/AuthRedirect'
+import SignIn from './Components/AuthPages/SignIn.jsx'
+import SignUp from './Components/AuthPages/SignUp.jsx'
+import AuthRedirect from './Components/AuthPages/AuthRedirect.jsx'
 import RouteLoader from './Components/RouteLoader'
 
 import Course from './pages/Course.jsx'
@@ -54,7 +54,12 @@ const Schedule = lazy(() =>
 const AllCourses = lazy(() =>
   import('./Components/AllCourses.jsx').catch(() => ({ default: () => <div>Error loading All Courses</div> }))
 )
-
+const MyBooks = lazy(() =>
+  import('./Components/Book/MyBooks.jsx').catch(() => ({ default: () => <div>Error loading My Books</div> }))
+)
+const BookDetails = lazy(() =>
+  import('./Components/Book/BookDetails.jsx').catch(() => ({ default: () => <div>Error loading Book Details</div> }))
+)
 
 const AuthGuard = memo(() => {
   const token = localStorage.getItem('token')
@@ -94,7 +99,8 @@ function App() {
               <Route path='/schedule' element={<ProtectedRoute><Schedule /></ProtectedRoute>} />
               <Route path='/all-courses' element={<ProtectedRoute><AllCourses /></ProtectedRoute>} />
               <Route path='/course' element={<Course />} />
-
+              <Route path='/my-books' element={<ProtectedRoute><MyBooks /></ProtectedRoute>} />
+              <Route path='/book-details/:bookId' element={<ProtectedRoute><BookDetails /></ProtectedRoute>} />
               <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

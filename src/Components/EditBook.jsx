@@ -3,28 +3,49 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
 import { fetchSubjectsAsync, fetchLanguagesAsync } from '../store/courseSlice';
-import { createBookBasicAsync, updateBookCoverImageAsync, updateBookImagesAsync, updateBookPdfAsync, updateBookAsync } from '../store/bookSlice';
+import { updateBookAsync, updateBookCoverImageAsync, updateBookImagesAsync, updateBookPdfAsync } from '../store/bookSlice';
 import '../assets/Styles/CreateBook.scss';
 
-const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
+const EditBook = ({ isOpen, onClose, book }) => {
   const dispatch = useDispatch();
   const { subjects, languages } = useSelector(state => state.course);
-  const { loading: bookLoading } = useSelector(state => state.book);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     authorName: '',
     subject: '',
     language: '',
-    // isbnNumber: '',
     numberOfPages: '',
     coverImage: null,
     bookImages: [],
     pdfFile: null
   });
   const [currentStep, setCurrentStep] = useState(1);
-  const [createdBookId, setCreatedBookId] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(fetchSubjectsAsync());
+      dispatch(fetchLanguagesAsync());
+    }
+  }, [dispatch, isOpen]);
+
+  useEffect(() => {
+    if (book && isOpen) {
+      setFormData({
+        title: book.name || '',
+        description: book.description || '',
+        authorName: book.authorName || '',
+        subject: book.subject?.name || book.subject || '',
+        language: book.language?.name || book.language || '',
+        numberOfPages: book.totalPages || '',
+        coverImage: null,
+        bookImages: [],
+        pdfFile: null
+      });
+      setCurrentStep(1);
+    }
+  }, [book, isOpen]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,47 +76,10 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
     }));
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      dispatch(fetchSubjectsAsync());
-      dispatch(fetchLanguagesAsync());
-      
-      // Populate form data if in edit mode
-      if (editMode && bookData) {
-        setFormData({
-          title: bookData.name || '',
-          description: bookData.description || '',
-          authorName: bookData.authorName || '',
-          subject: bookData.subject?.name || '',
-          language: bookData.language?.name || '',
-          numberOfPages: bookData.totalPages || '',
-          coverImage: null,
-          bookImages: [],
-          pdfFile: null
-        });
-        setCreatedBookId(bookData.id);
-      } else {
-        // Reset form for create mode
-        setFormData({
-          title: '',
-          description: '',
-          authorName: '',
-          subject: '',
-          language: '',
-          numberOfPages: '',
-          coverImage: null,
-          bookImages: [],
-          pdfFile: null
-        });
-        setCreatedBookId(null);
-        setCurrentStep(1);
-      }
-    }
-  }, [dispatch, isOpen, editMode, bookData]);
-
   const handleNext = async () => {
+    console.log('Current step:', currentStep);
+    
     if (currentStep === 1) {
-      // Validate step 1 fields
       const requiredFields = ['title', 'authorName', 'description', 'subject', 'language', 'numberOfPages'];
       const isValid = requiredFields.every(field => formData[field] && formData[field].toString().trim());
       
@@ -109,7 +93,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
         const selectedSubject = subjects.find(s => s.name === formData.subject);
         const selectedLanguage = languages.find(l => l.name === formData.language);
         
-        const bookBasicData = {
+        const bookData = {
           name: formData.title,
           authorName: formData.authorName,
           description: formData.description,
@@ -118,45 +102,37 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
           languageId: selectedLanguage?.id
         };
 
-        if (editMode) {
-          // Update existing book
-          await dispatch(updateBookAsync({ bookId: createdBookId, bookData: bookBasicData })).unwrap();
-        } else {
-          // Create new book
-          const result = await dispatch(createBookBasicAsync(bookBasicData)).unwrap();
-          setCreatedBookId(result.id);
-        }
+        console.log('Updating book with data:', bookData);
+        await dispatch(updateBookAsync({ bookId: book.id, bookData })).unwrap();
+        console.log('Book updated successfully, moving to step 2');
         setCurrentStep(2);
       } catch (error) {
-        console.error('Error saving book:', error);
-        alert('Failed to save book. Please try again.');
+        console.error('Error updating book:', error);
+        alert('Failed to update book. Please try again.');
       } finally {
         setLoading(false);
       }
     } else if (currentStep === 2) {
-      // Validate step 2 fields (file uploads)
-      if (!formData.coverImage) {
-        alert('Please select a cover image');
-        return;
-      }
-      if (!formData.bookImages || formData.bookImages.length === 0) {
-        alert('Please select at least one book image');
-        return;
-      }
-
+      console.log('Processing step 2 - images');
       setLoading(true);
       try {
-        // Upload cover image and book images
-        await dispatch(updateBookCoverImageAsync({ 
-          bookId: createdBookId, 
-          coverImageFile: formData.coverImage 
-        })).unwrap();
+        if (formData.coverImage) {
+          console.log('Uploading cover image');
+          await dispatch(updateBookCoverImageAsync({ 
+            bookId: book.id, 
+            coverImageFile: formData.coverImage 
+          })).unwrap();
+        }
         
-        await dispatch(updateBookImagesAsync({ 
-          bookId: createdBookId, 
-          bookImagesFiles: formData.bookImages 
-        })).unwrap();
+        if (formData.bookImages.length > 0) {
+          console.log('Uploading book images');
+          await dispatch(updateBookImagesAsync({ 
+            bookId: book.id, 
+            bookImagesFiles: formData.bookImages 
+          })).unwrap();
+        }
         
+        console.log('Moving to step 3');
         setCurrentStep(3);
       } catch (error) {
         console.error('Error uploading images:', error);
@@ -169,37 +145,20 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate step 3
-    if (!formData.pdfFile) {
-      alert('Please select a PDF file');
-      return;
-    }
+    console.log('Submitting step 3 - PDF');
     
     setLoading(true);
-
     try {
-      // Upload PDF file
-      await dispatch(updateBookPdfAsync({ 
-        bookId: createdBookId, 
-        pdfFile: formData.pdfFile 
-      })).unwrap();
+      if (formData.pdfFile) {
+        console.log('Uploading PDF');
+        await dispatch(updateBookPdfAsync({ 
+          bookId: book.id, 
+          pdfFile: formData.pdfFile 
+        })).unwrap();
+      }
       
-      // Reset form and close modal
-      setFormData({
-        title: '',
-        description: '',
-        authorName: '',
-        subject: '',
-        language: '',
-        numberOfPages: '',
-        coverImage: null,
-        bookImages: [],
-        pdfFile: null
-      });
-      setCreatedBookId(null);
-      setCurrentStep(1);
-      onClose();
+      console.log('Edit complete, closing modal');
+      handleCancel();
     } catch (error) {
       console.error('Error uploading PDF:', error);
       alert('Failed to upload PDF. Please try again.');
@@ -220,7 +179,6 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
       bookImages: [],
       pdfFile: null
     });
-    setCreatedBookId(null);
     setCurrentStep(1);
     onClose();
   };
@@ -246,7 +204,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
     <div className="modal-overlay">
       <div className="modal-contenttt">
         <div className="modal-header">
-          <h3>{editMode ? 'Edit Book' : 'Create New Book'}</h3>
+          <h3>Edit Book - Step {currentStep}</h3>
           <button className="close-btn" onClick={handleCancel}>
             <X size={20} />
           </button>
@@ -296,7 +254,6 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   rows="4"
                   required
                   maxLength={200}
-
                 />
               </div>
 
@@ -336,8 +293,6 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                 </select>
               </div>
 
-              
-
               <div className="form-group">
                 <label htmlFor="numberOfPages">Number of Pages</label>
                 <input
@@ -357,7 +312,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
           {currentStep === 2 && (
             <>
               <div className="form-group">
-                <label htmlFor="coverImage">Cover Image</label>
+                <label htmlFor="coverImage">Cover Image (Optional)</label>
                 <div className="file-upload">
                   <input
                     type="file"
@@ -366,7 +321,6 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                     accept="image/*"
                     onChange={handleFileChange}
                     className="file-input"
-                    required
                   />
                   <label htmlFor="coverImage" className="file-label">
                     <Upload size={20} />
@@ -376,7 +330,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="bookImages">Book Images (Max 3)</label>
+                <label htmlFor="bookImages">Book Images (Max 3, Optional)</label>
                 <div className="file-upload">
                   <input
                     type="file"
@@ -386,7 +340,6 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                     multiple
                     onChange={handleMultipleFileChange}
                     className="file-input"
-                    required
                   />
                   <label htmlFor="bookImages" className="file-label">
                     <Upload size={20} />
@@ -399,7 +352,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
 
           {currentStep === 3 && (
             <div className="form-group">
-              <label htmlFor="pdfFile">Upload PDF</label>
+              <label htmlFor="pdfFile">Upload PDF (Optional)</label>
               <div className="file-upload">
                 <input
                   type="file"
@@ -408,7 +361,6 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   accept=".pdf"
                   onChange={handleFileChange}
                   className="file-input"
-                  required
                 />
                 <label htmlFor="pdfFile" className="file-label">
                   <Upload size={20} />
@@ -424,11 +376,11 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
             </button>
             {currentStep < 3 ? (
               <button type="button" className="submit-btn" onClick={handleNext} disabled={loading}>
-                {loading ? (currentStep === 1 ? 'Creating...' : 'Uploading...') : 'Continue'}
+                {loading ? (currentStep === 1 ? 'Updating...' : 'Uploading...') : 'Continue'}
               </button>
             ) : (
-              <button type="submit" className="submit-btn" disabled={loading || bookLoading}>
-                {loading || bookLoading ? 'Uploading PDF...' : 'Complete'}
+              <button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? 'Uploading PDF...' : 'Complete'}
               </button>
             )}
           </div>
@@ -438,11 +390,10 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
   );
 };
 
-CreateBook.propTypes = {
+EditBook.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  editMode: PropTypes.bool,
-  bookData: PropTypes.object
+  book: PropTypes.object
 };
 
-export default CreateBook;
+export default EditBook;
