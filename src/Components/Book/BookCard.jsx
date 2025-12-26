@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { getBookAsync } from "../../store/bookSlice";
-// import EditBook from "../EditBook";
-import CreateBook from "../CreateBook";
+import CreateBook from "../Book/CreateBook";
+import EditBook from "../Book/EditBook";
 import "../../assets/Styles/Book/Bookcard.scss";
+import defaultBookImage from "../../assets/Images/book 5.jpg";
 
 const BookCard = ({ bookId, book: bookProp, showAddButton = false }) => {
   const dispatch = useDispatch();
@@ -45,7 +47,7 @@ const BookCard = ({ bookId, book: bookProp, showAddButton = false }) => {
   if (loading) return <div className="book-card">Loading...</div>;
   if (!book) return <div className="book-card">Book not found</div>;
 
-  const coverImage = book.coverImage || (book.bookImages?.[0]?.image);
+  const coverImage = book.coverImage || (book.bookImages?.[0]?.image) || defaultBookImage;
 
   return (
     <div className="book-card">
@@ -56,8 +58,7 @@ const BookCard = ({ bookId, book: bookProp, showAddButton = false }) => {
         </div>
         <div className="book-actions">
           <button className="details-btn" onClick={handleDetailsClick}>Details</button>
-          <button className="edit-btn" onClick={handleEditClick}>Edit</button>
-          <button className="view-book-btn">View Book</button>
+          <button className="editt-btn" onClick={handleEditClick}>Edit</button>
           {showAddButton && <button className="add-btn" onClick={handleAddClick}>Add New Book</button>}
         </div>
       </div>
@@ -81,11 +82,10 @@ const BookCard = ({ bookId, book: bookProp, showAddButton = false }) => {
       </div>
       
       {createPortal(
-        <CreateBook 
+        <EditBook 
           isOpen={isEditModalOpen} 
           onClose={handleEditClose} 
-          editMode={true}
-          bookData={book}
+          book={book}
         />,
         document.body
       )}
@@ -99,6 +99,12 @@ const BookCard = ({ bookId, book: bookProp, showAddButton = false }) => {
       )}
     </div>
   );
+};
+
+BookCard.propTypes = {
+  bookId: PropTypes.string,
+  book: PropTypes.object,
+  showAddButton: PropTypes.bool
 };
 
 export default BookCard;

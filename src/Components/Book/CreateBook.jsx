@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
-import { fetchSubjectsAsync, fetchLanguagesAsync } from '../store/courseSlice';
-import { createBookBasicAsync, updateBookCoverImageAsync, updateBookImagesAsync, updateBookPdfAsync, updateBookAsync } from '../store/bookSlice';
-import '../assets/Styles/CreateBook.scss';
+import { fetchSubjectsAsync, fetchLanguagesAsync } from '../../store/courseSlice';
+import { createBookBasicAsync, updateBookCoverImageAsync, updateBookImagesAsync, updateBookPdfAsync, updateBookAsync } from '../../store/bookSlice';
+import '../../assets/Styles/CreateBook.scss';
 
 const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
   const dispatch = useDispatch();
@@ -97,7 +97,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
     if (currentStep === 1) {
       // Validate step 1 fields
       const requiredFields = ['title', 'authorName', 'description', 'subject', 'language', 'numberOfPages'];
-      const isValid = requiredFields.every(field => formData[field] && formData[field].toString().trim());
+      const isValid = requiredFields.every(field => formData[field]?.toString().trim());
       
       if (!isValid) {
         alert('Please fill in all required fields');
@@ -295,7 +295,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   placeholder="Enter book description (Max 200 characters)"
                   rows="4"
                   required
-                  maxLength={200}
+                  maxLength={300}
 
                 />
               </div>
@@ -424,7 +424,12 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
             </button>
             {currentStep < 3 ? (
               <button type="button" className="submit-btn" onClick={handleNext} disabled={loading}>
-                {loading ? (currentStep === 1 ? 'Creating...' : 'Uploading...') : 'Continue'}
+                {(() => {
+                  if (loading) {
+                    return currentStep === 1 ? 'Creating...' : 'Uploading...';
+                  }
+                  return 'Continue';
+                })()}
               </button>
             ) : (
               <button type="submit" className="submit-btn" disabled={loading || bookLoading}>

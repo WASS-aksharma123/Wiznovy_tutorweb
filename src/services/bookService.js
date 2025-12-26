@@ -29,7 +29,7 @@ export const updateBookPdf = async (bookId, pdfFile) => {
   try {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    formData.append('pdfFile', pdfFile);
+    formData.append('file', pdfFile);
     const response = await fetch(`${API_BASE_URL}/books/tutor/pdf/${bookId}`, {
       method: 'PUT',
       headers: {

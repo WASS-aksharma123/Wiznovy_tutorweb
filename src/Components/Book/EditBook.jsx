@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
-import { fetchSubjectsAsync, fetchLanguagesAsync } from '../store/courseSlice';
-import { updateBookAsync, updateBookCoverImageAsync, updateBookImagesAsync, updateBookPdfAsync } from '../store/bookSlice';
-import '../assets/Styles/CreateBook.scss';
+import { fetchSubjectsAsync, fetchLanguagesAsync } from '../../store/courseSlice';
+import { updateBookAsync, updateBookCoverImageAsync, updateBookImagesAsync, updateBookPdfAsync } from '../../store/bookSlice';
+import '../../assets/Styles/CreateBook.scss';
 
 const EditBook = ({ isOpen, onClose, book }) => {
   const dispatch = useDispatch();
@@ -22,6 +22,7 @@ const EditBook = ({ isOpen, onClose, book }) => {
   });
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const { loading: bookLoading } = useSelector(state => state.book);
 
   useEffect(() => {
     if (isOpen) {
@@ -76,12 +77,13 @@ const EditBook = ({ isOpen, onClose, book }) => {
     }));
   };
 
-  const handleNext = async () => {
-    console.log('Current step:', currentStep);
+  const handleNext = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     
     if (currentStep === 1) {
       const requiredFields = ['title', 'authorName', 'description', 'subject', 'language', 'numberOfPages'];
-      const isValid = requiredFields.every(field => formData[field] && formData[field].toString().trim());
+      const isValid = requiredFields.every(field => formData[field]?.toString().trim());
       
       if (!isValid) {
         alert('Please fill in all required fields');
@@ -102,9 +104,7 @@ const EditBook = ({ isOpen, onClose, book }) => {
           languageId: selectedLanguage?.id
         };
 
-        console.log('Updating book with data:', bookData);
         await dispatch(updateBookAsync({ bookId: book.id, bookData })).unwrap();
-        console.log('Book updated successfully, moving to step 2');
         setCurrentStep(2);
       } catch (error) {
         console.error('Error updating book:', error);
@@ -113,11 +113,9 @@ const EditBook = ({ isOpen, onClose, book }) => {
         setLoading(false);
       }
     } else if (currentStep === 2) {
-      console.log('Processing step 2 - images');
       setLoading(true);
       try {
         if (formData.coverImage) {
-          console.log('Uploading cover image');
           await dispatch(updateBookCoverImageAsync({ 
             bookId: book.id, 
             coverImageFile: formData.coverImage 
@@ -125,14 +123,12 @@ const EditBook = ({ isOpen, onClose, book }) => {
         }
         
         if (formData.bookImages.length > 0) {
-          console.log('Uploading book images');
           await dispatch(updateBookImagesAsync({ 
             bookId: book.id, 
             bookImagesFiles: formData.bookImages 
           })).unwrap();
         }
         
-        console.log('Moving to step 3');
         setCurrentStep(3);
       } catch (error) {
         console.error('Error uploading images:', error);
@@ -145,20 +141,30 @@ const EditBook = ({ isOpen, onClose, book }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting step 3 - PDF');
+    e.stopPropagation();
     
     setLoading(true);
     try {
       if (formData.pdfFile) {
-        console.log('Uploading PDF');
         await dispatch(updateBookPdfAsync({ 
           bookId: book.id, 
           pdfFile: formData.pdfFile 
         })).unwrap();
       }
       
-      console.log('Edit complete, closing modal');
-      handleCancel();
+      setFormData({
+        title: '',
+        description: '',
+        authorName: '',
+        subject: '',
+        language: '',
+        numberOfPages: '',
+        coverImage: null,
+        bookImages: [],
+        pdfFile: null
+      });
+      setCurrentStep(1);
+      onClose();
     } catch (error) {
       console.error('Error uploading PDF:', error);
       alert('Failed to upload PDF. Please try again.');
@@ -183,20 +189,18 @@ const EditBook = ({ isOpen, onClose, book }) => {
     onClose();
   };
 
-  const renderStepIndicator = () => {
-    return (
-      <div className="step-indicator">
-        {[1, 2, 3].map((step) => (
-          <React.Fragment key={step}>
-            <div className={`step ${currentStep >= step ? 'active' : ''}`}>
-              {step}
-            </div>
-            {step < 3 && <div className="step-line"></div>}
-          </React.Fragment>
-        ))}
-      </div>
-    );
-  };
+  const renderStepIndicator = () => (
+    <div className="step-indicator">
+      {[1, 2, 3].map((step) => (
+        <React.Fragment key={step}>
+          <div className={`step ${currentStep >= step ? 'active' : ''}`}>
+            {step}
+          </div>
+          {step < 3 && <div className="step-line"></div>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
 
   if (!isOpen) return null;
 
@@ -204,7 +208,7 @@ const EditBook = ({ isOpen, onClose, book }) => {
     <div className="modal-overlay">
       <div className="modal-contenttt">
         <div className="modal-header">
-          <h3>Edit Book - Step {currentStep}</h3>
+          <h3>Edit Book</h3>
           <button className="close-btn" onClick={handleCancel}>
             <X size={20} />
           </button>
@@ -370,17 +374,22 @@ const EditBook = ({ isOpen, onClose, book }) => {
             </div>
           )}
 
-          <div className="form-actions">
+           <div className="form-actions">
             <button type="button" className="cancel-btn" onClick={handleCancel}>
               Cancel
             </button>
             {currentStep < 3 ? (
               <button type="button" className="submit-btn" onClick={handleNext} disabled={loading}>
-                {loading ? (currentStep === 1 ? 'Updating...' : 'Uploading...') : 'Continue'}
+                {(() => {
+                  if (loading) {
+                    return currentStep === 1 ? 'Creating...' : 'Uploading...';
+                  }
+                  return 'Continue';
+                })()}
               </button>
             ) : (
-              <button type="submit" className="submit-btn" disabled={loading}>
-                {loading ? 'Uploading PDF...' : 'Complete'}
+              <button type="submit" className="submit-btn" disabled={loading || bookLoading}>
+                {loading || bookLoading ? 'Uploading PDF...' : 'Complete'}
               </button>
             )}
           </div>

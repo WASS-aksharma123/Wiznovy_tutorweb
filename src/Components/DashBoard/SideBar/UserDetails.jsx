@@ -16,7 +16,7 @@ import verified from "../../../assets/Images/verified.png";
 import { getTutorProfile } from '../../../store/profileSlice.js';
 import ProfileUpdate from "../../ProfileUpdate";
 import NewCourse from "../../NewCourse";
-import CreateBook from "../../CreateBook";
+import CreateBook from "../../Book/CreateBook.jsx";
 import { API_BASE_URL } from "../../../config/api";
 
 const UserDetails = () => {

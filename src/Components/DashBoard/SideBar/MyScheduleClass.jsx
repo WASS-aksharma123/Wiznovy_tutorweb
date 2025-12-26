@@ -8,15 +8,15 @@ const MyScheduleClass = () => {
       <div className="profile-details">
         <div className="detail-item">
           <BookOpenText size={16} />
-          <span>My Class</span>
+          <button>My Class</button>
         </div>
         <div className="detail-item">
           <Calendar size={16} />
-          <span>Calender & Live Class</span>
+          <button>Calender & Live Class</button>
         </div>
         <div className="detail-item">
           <ScrollText size={16} />
-          <span>Transaction History</span>
+          <button>Transaction History</button>
         </div>
       </div>
     </div>
