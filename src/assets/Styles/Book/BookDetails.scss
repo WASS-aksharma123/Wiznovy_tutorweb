@@ -37,6 +37,8 @@
             box-shadow: 5px 10px 15px 5px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease;
             width: 100% !important;
+            padding: 1rem;
+            gap: 1rem;
 
             &:hover {
               transform: translateY(0);
@@ -46,7 +48,6 @@
               position: relative;
               height: 200px;
               overflow: hidden;
-              padding: 1.5rem !important;
 
               img {
                 width: 100%;
@@ -57,9 +58,6 @@
             }
 
             .details-section {
-              padding: 20px 18px;
-              padding-top: 0 !important;
-
               h3 {
                 font-size: 1.2rem;
                 font-weight: 600 !important;
@@ -133,6 +131,12 @@
             transform: translateY(-1px);
           }
         }
+
+        .ppp {
+          margin-top: 1rem;
+          padding: 0.5rem 1rem;
+          width: 100%;
+        }
       }
     }
 
@@ -153,11 +157,11 @@
         gap: 0.5rem;
         border-bottom: 2px solid #e5e7eb;
         position: relative;
-        
+
         .sidebar-toggle {
           display: none;
         }
-        
+
         .tab {
           flex: 1;
           text-align: center;
@@ -167,33 +171,33 @@
           cursor: pointer;
           transition: all 0.3s ease;
           border-bottom: 4px solid transparent;
-          
+
           h2 {
             margin: 0;
             font-size: 1.1rem;
             color: #666;
             transition: color 0.3s ease;
           }
-          
+
           &:hover {
             background-color: #e9ecef;
-            
+
             h2 {
               color: var(--green);
             }
           }
-          
+
           &.active {
             background-color: #F2FFFA;
             border-bottom-color: var(--green);
-            
+
             h2 {
               color: var(--green);
             }
           }
         }
       }
-      
+
       .contentarea {
         flex: 1;
         background: white;
@@ -201,14 +205,14 @@
         overflow-y: scroll;
         border: #00000050 1px solid;
         position: relative;
-        padding: 2rem;
-        
+        padding: 1rem;
+
         .tab-loader {
           display: flex;
           align-items: center;
           justify-content: center;
           height: 200px;
-          
+
           .circular-loader {
             width: 40px;
             height: 40px;
@@ -296,13 +300,35 @@
           .pdf-section {
             margin-top: 2rem;
 
-            h3 {
-              font-size: 1.5rem;
-              color: var(--green);
-              margin-bottom: 1rem;
+            .updatefield {
               border-bottom: 2px solid #e5e7eb;
-              padding-bottom: 0.5rem;
+              margin-bottom: 1rem;
+              display: flex;
+              justify-content: space-between;
+              h3 {
+                font-size: 1.5rem;
+                color: var(--green);
+                padding-bottom: 0.5rem;
+              }
+              .pdfup {
+                padding: 0.2rem 1rem;
+                background-color: var(--green);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+
+                &:hover {
+                  background-color: #2d6a4f;
+                  transform: translateY(-1px);
+                }
+              
+              }
             }
+
 
             .pdf-actions {
               display: flex;
@@ -347,6 +373,24 @@
         }
 
         .images-section {
+          .imgup {
+                padding: 0.5rem 1rem;
+                background-color: var(--green);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                margin-bottom: 1rem;
+
+                &:hover {
+                  background-color: #2d6a4f;
+                  transform: translateY(-1px);
+                }
+              
+              }
           .images-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -386,8 +430,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .book-details-error {
@@ -401,12 +450,12 @@
   .bookMain {
     width: 100%;
     overflow-x: hidden;
-    
+
     .bookScreen {
       display: flex;
       gap: 1rem;
       position: relative;
-      
+
       .sidebar {
         position: fixed;
         top: 0;
@@ -418,26 +467,26 @@
         transition: left 0.3s ease-in-out;
         padding: 3rem 1rem 3rem 1rem;
         overflow-y: auto;
-        
+
         &.sidebar-open {
           left: 0;
         }
-        
+
         .user {
           gap: 1rem;
         }
       }
-      
+
       .mainSection {
         margin: 1.5rem 0;
         width: 100%;
         display: flex;
         flex-direction: column;
         gap: 1.2rem;
-        
+
         .tabs {
           position: relative;
-          
+
           .sidebar-toggle {
             display: block;
             position: absolute;
@@ -453,9 +502,10 @@
             font-size: 1rem;
             z-index: 100;
           }
-          
+
           .tab {
             padding: 0.5rem 1rem;
+
             h2 {
               font-size: 0.755rem;
             }
@@ -474,12 +524,12 @@
   .bookMain {
     width: 100%;
     overflow-x: hidden;
-    
+
     .bookScreen {
       display: flex;
       gap: 1rem;
       position: relative;
-      
+
       .sidebar {
         position: fixed;
         top: 0;
@@ -491,22 +541,22 @@
         transition: left 0.3s ease-in-out;
         padding: 4rem 1rem 2rem;
         overflow-y: auto;
-        
+
         &.sidebar-open {
           left: 0;
         }
       }
-      
+
       .mainSection {
         margin: 1.5rem 0;
         width: 100%;
         display: flex;
         flex-direction: column;
         gap: 1.2rem;
-        
+
         .tabs {
           position: relative;
-          
+
           .sidebar-toggle {
             display: block;
             position: absolute;
@@ -522,7 +572,7 @@
             font-size: 1.2rem;
             z-index: 100;
           }
-          
+
           .tab {
             padding-left: 4rem;
           }
