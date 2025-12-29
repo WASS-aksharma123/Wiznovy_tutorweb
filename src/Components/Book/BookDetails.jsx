@@ -313,7 +313,7 @@ const BookDetails = () => {
                         <div className="images-grid">
                           {book.bookImages.map((img, index) => (
                             <div key={img.id || index} className="image-item">
-                              <img src={img.image} alt={`Book image ${index + 1}`} />
+                              <img src={img.image} alt={`${book.name} ${index + 1}`} />
                             </div>
                           ))}
                         </div>
@@ -457,7 +457,7 @@ const BookDetails = () => {
                 {selectedImages.length > 0 && (
                   <div className="selected-files">
                     {selectedImages.map((file, index) => (
-                      <div key={index} className="file-item">
+                      <div key={`${file.name}-${file.size}-${file.lastModified}`} className="file-item">
                         {file.name}
                       </div>
                     ))}

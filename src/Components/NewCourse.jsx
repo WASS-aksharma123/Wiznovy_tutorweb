@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
 import '../assets/Styles/NewCourse.scss';
-import { createCourseAsync, fetchSubjectsAsync, fetchLanguagesAsync } from '../store/courseSlice';
+import { fetchSubjectsAsync, fetchLanguagesAsync } from '../store/courseSlice';
 
 const NewCourse = ({ isOpen, onClose }) => {
   NewCourse.propTypes = {
@@ -130,9 +130,8 @@ const NewCourse = ({ isOpen, onClose }) => {
     formDataToSend.append('thumbnail', formData.thumbnail);
 
     try {
-      const result = await dispatch(createCourseAsync(formDataToSend)).unwrap();
       onClose();
-      window.location.reload();
+      globalThis.location.reload();
     } catch (error) {
       console.error('Failed to create course:', error);
     }
@@ -178,7 +177,7 @@ const NewCourse = ({ isOpen, onClose }) => {
               id="courseName"
               value={formData.courseName}
               onChange={(e) => handleInputChange('courseName', e.target.value)}
-              placeholder="Enter course name"
+              placeholder="Enter course name (Max 70 characters)"
               required
               maxLength={70}
               onInvalid={(e) => {
@@ -333,6 +332,7 @@ const NewCourse = ({ isOpen, onClose }) => {
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => handleInputChange('startDate', e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
                 required
                 onInvalid={(e) => {
                   e.preventDefault();
@@ -352,6 +352,7 @@ const NewCourse = ({ isOpen, onClose }) => {
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => handleInputChange('endDate', e.target.value)}
+                min={formData.startDate || new Date().toISOString().split('T')[0]}
                 required
                 onInvalid={(e) => {
                   e.preventDefault();
@@ -407,7 +408,7 @@ const NewCourse = ({ isOpen, onClose }) => {
             <textarea
               value={formData.courseDescription}
               onChange={(e) => handleInputChange('courseDescription', e.target.value)}
-              placeholder="Describe your course..."
+              placeholder="Describe your course... (Max 250 characters)"
               rows={4}
               required
               maxLength={250}
@@ -428,7 +429,7 @@ const NewCourse = ({ isOpen, onClose }) => {
             <textarea
               value={formData.authorMessage}
               onChange={(e) => handleInputChange('authorMessage', e.target.value)}
-              placeholder="Message from the author..."
+              placeholder="Message from the author... (Max 150 characters)"
               rows={3}
               required
               maxLength={150}
