@@ -1,0 +1,243 @@
+.wallet_container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px;
+  font-family: "Inter", sans-serif;
+}
+
+/* Balance Card */
+.balance_card {
+  background: #000;
+  color: #fff;
+  border-radius: 12px;
+  padding: 24px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.balance_left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bank_icon {
+  font-size: 32px;
+}
+
+.balance_title {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.balance_amount {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.mail_icon {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* Withdraw Button */
+.withdraw_btn {
+  width: 100%;
+  margin: 22px 0;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: var(--green);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background: #1a5c50;
+  }
+}
+
+/* Cards Grid */
+.card_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Individual Card */
+.info_card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  h4 {
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-size: 16px;
+    text-transform: capitalize;
+  }
+
+  p {
+    font-size: 13px;
+    color: #777;
+  }
+}
+
+.card_icon {
+  font-size: 22px;
+  color: var(--green);
+}
+
+.arrow {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  font-size: 14px;
+  color: #555;
+}
+
+
+/* =========================
+   LARGE DESKTOP (1400px+)
+========================= */
+@media (min-width: 1400px) {
+  .wallet_container {
+    max-width: 1200px;
+  }
+}
+
+/* =========================
+   LAPTOP / SMALL DESKTOP
+   (1024px – 1399px)
+========================= */
+@media (max-width: 1399px) {
+  .wallet_container {
+    max-width: 1000px;
+    padding: 24px;
+  }
+
+  .card_grid {
+    gap: 18px;
+  }
+}
+
+/* =========================
+   TABLETS (768px – 1023px)
+========================= */
+@media (max-width: 1023px) {
+  .balance_card {
+    padding: 20px;
+  }
+
+  .balance_amount {
+    font-size: 22px;
+  }
+
+  .withdraw_btn {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .card_grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* =========================
+   SMALL TABLETS / LARGE MOBILES
+   (600px – 767px)
+========================= */
+@media (max-width: 767px) {
+  .wallet_container {
+    padding: 20px;
+  }
+
+  .balance_card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .mail_icon {
+    align-self: flex-end;
+  }
+
+  .balance_amount {
+    font-size: 20px;
+  }
+
+  .card_grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info_card {
+    padding: 18px;
+  }
+}
+
+/* =========================
+   MOBILE PHONES (≤ 599px)
+========================= */
+@media (max-width: 599px) {
+  .wallet_container {
+    padding: 16px;
+  }
+
+  .bank_icon {
+    font-size: 26px;
+  }
+
+  .balance_title {
+    font-size: 13px;
+  }
+
+  .balance_amount {
+    font-size: 18px;
+  }
+
+  .withdraw_btn {
+    font-size: 14px;
+    padding: 11px;
+    border-radius: 6px;
+  }
+
+  .info_card h4 {
+    font-size: 15px;
+  }
+
+  .info_card p {
+    font-size: 12px;
+  }
+
+  .arrow {
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   VERY SMALL DEVICES (≤ 400px)
+========================= */
+@media (max-width: 400px) {
+  .balance_amount {
+    font-size: 16px;
+  }
+
+  .withdraw_btn {
+    font-size: 13px;
+  }
+
+  .info_card {
+    padding: 16px;
+  }
+}

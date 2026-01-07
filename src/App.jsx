@@ -46,7 +46,7 @@ const Details = lazy(() =>
   import('./Components/Search/Result/Details.jsx').catch(() => ({ default: () => <div>Error loading Details</div> }))
 )
 const Wallet = lazy(() =>
-  import('./Components/Wallet.jsx').catch(() => ({ default: () => <div>Error loading Wallet</div> }))
+  import('./Components/Wallet/Wallet.jsx').catch(() => ({ default: () => <div>Error loading Wallet</div> }))
 )
 const Schedule = lazy(() =>
   import('./Components/Schedule.jsx').catch(() => ({ default: () => <div>Error loading Schedule</div> }))
