@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "../../assets/Styles/Wallet/Wallet.scss";
 import {
   FaUniversity,
@@ -12,6 +13,8 @@ import AddBankAc from "./AddBankAc";
 
 const Wallet = () => {
   const [showAddBankAc, setShowAddBankAc] = useState(false);
+  const dispatch = useDispatch();
+
 
   const handleWithdrawClick = () => {
     setShowAddBankAc(true);
@@ -20,6 +23,8 @@ const Wallet = () => {
   const handleCloseAddBankAc = () => {
     setShowAddBankAc(false);
   };
+
+
   return (
     <div className="wallet_container">
       {/* Top Balance Card */}
@@ -28,7 +33,7 @@ const Wallet = () => {
           <FaUniversity className="bank_icon" />
           <div>
             <p className="balance_title">Account Earning Balance</p>
-            <h2 className="balance_amount">$ 6,983.99</h2>
+            <h2 className="balance_amount">$ 6985</h2>
           </div>
         </div>
         <span className="mail_icon">✉</span>

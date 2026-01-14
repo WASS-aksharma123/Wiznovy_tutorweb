@@ -1,0 +1,151 @@
+.add_bank_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  font-family: 'SplineSans', sans-serif;
+
+  .modal_conten {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 75vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+   
+
+    .bank_form {
+      padding: 32px 24px 24px;
+
+      h2 {
+        margin: 0 0 24px 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--green);
+        text-align: center;
+        padding-right: 40px;
+      }
+
+      .form_group {
+        margin-bottom: 20px;
+
+        label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: var(--green);
+          font-size: 0.875rem;
+        }
+
+        input {
+          width: 100%;
+          padding: 12px 16px;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          font-family: inherit;
+          transition: all 0.3s;
+          background: white;
+
+          &:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(17, 61, 56, 0.1);
+          }
+
+          &::placeholder {
+            color: #9ca3af;
+          }
+
+          &:disabled {
+            background: #f9fafb;
+            color: #6b7280;
+            cursor: not-allowed;
+          }
+        }
+      }
+
+      .continue_btn {
+        width: 100%;
+        background: var(--green);
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 8px;
+
+        &:hover:not(:disabled) {
+          background: var(--hover);
+          transform: translateY(-1px);
+        }
+
+        &:disabled {
+          background: #9ca3af;
+          cursor: not-allowed;
+          transform: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .add_bank_modal {
+    padding: 16px;
+
+    .modal_content {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+
+      .bank_form {
+        padding: 24px 20px 20px;
+
+        h2 {
+          font-size: 1.25rem;
+          margin-bottom: 20px;
+        }
+
+        .form_group {
+          margin-bottom: 16px;
+
+          input {
+            padding: 10px 14px;
+          }
+        }
+
+        .continue_btn {
+          padding: 12px 20px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .add_bank_modal {
+    .modal_content {
+      .bank_form {
+        padding: 20px 16px 16px;
+
+        h2 {
+          font-size: 1.125rem;
+        }
+      }
+    }
+  }
+}

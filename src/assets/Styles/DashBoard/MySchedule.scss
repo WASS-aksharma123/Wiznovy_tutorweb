@@ -86,6 +86,8 @@
         border-radius: 8px;
         border-left: 4px solid;
         background: #f8f9fa;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        width:99%;
         
         &.live {
           border-left-color: #0fa44a;
@@ -135,11 +137,12 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    // align-items: center;
     overflow: hidden;
 
     h2 {
       font-size: 1.8rem;
+      font-weight: 600;
       margin-bottom: 1.5rem;
     }
 
@@ -327,6 +330,7 @@
         margin-top: 0;
         width: 100%;
         max-width: 100%;
+        align-items: center;
         
         h2 {
           font-size: 1.5rem;

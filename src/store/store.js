@@ -7,6 +7,8 @@ import scheduleReducer from './scheduleSlice.js';
 import courseReducer from './courseSlice.js';
 import notificationReducer from './notificationSlice.js';
 import bookReducer from './bookSlice.js';
+import bankReducer from './bankSlice.js';
+// import walletReducer from './walletSlice.js';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ export const store = configureStore({
     course: courseReducer,
     notifications: notificationReducer,
     book: bookReducer,
+    bank: bankReducer,
+    // wallet: walletReducer,
   },
 });
 

@@ -16,5 +16,11 @@ if (env === 'development' || env === 'dev') {
   API_BASE_URL = envUrls.prod;
 }
 
+// Fallback to default if no environment URL is set
+if (!API_BASE_URL) {
+  console.warn('No API URL configured for environment:', env);
+  API_BASE_URL = 'http://localhost:3000/api'; // Default fallback
+}
+
 export { API_BASE_URL };
 export default API_BASE_URL;

@@ -63,7 +63,7 @@ p {
   color:white;
   border: none;
   padding: 8px 16px;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
   position: absolute;
   top: 10px;
@@ -75,8 +75,10 @@ p {
 }
 
 .bank_details h2 {
-  color: #333;
-  margin-bottom: 1rem;
+  color: var(--green);
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
 }
 
 .bank_account {
@@ -85,11 +87,91 @@ p {
   margin-bottom: 1rem;
   border-radius: 5px;
   text-align: left;
+  position: relative;
+  .actionbtns{
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    .pp{
+      padding: 0.2rem;
+      border-radius: 5px;
+
+      
+    }
+    .deletebtn{
+      background-color: #ff4d4f;
+      border: none;
+      color: white;
+    }
+    .deletebtn:hover{
+      transform: translateY(-3px);
+    }
+    .editbttn{
+      background-color: var(--green);
+      border: none;
+      color: white;
+      padding: 0 0.4rem;
+    }
+    .editbttn:hover{
+      transform: translateY(-3px);
+    }
+  }
 }
 
 .bank_account p {
   margin: 0.5rem 0;
   color: #333;
+}
+
+.uploaded_documents {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+
+  .docx{
+    display: flex;
+    gap: 20%;
+    align-items: center;
+  }
+}
+
+.uploaded_documents h3 {
+  font-size: 1.2rem;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.uploaded_documents p {
+  margin: 0.3rem 0;
+  color: var(--blue);
+}
+
+.document_item {
+  margin: 1rem 0;
+  position: relative;
+  width: 30%;
+  .updateee{
+    position: absolute;
+    top: 6px;
+    right: 0;
+    
+
+  }
+}
+
+.document_preview {
+  max-width: 100px;
+  max-height: 100px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.document_preview:hover {
+  transform: scale(1.05);
 }
 // Multi-step form styles
 .bank_form {
@@ -205,5 +287,21 @@ p {
       line-height: 1.5;
       margin-bottom: 20px;
     }
+  }
+}
+
+.continueWithdraw{
+  width: 100%;
+  padding: 12px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+
+  &:hover {
+    background: var(--hover);
   }
 }
