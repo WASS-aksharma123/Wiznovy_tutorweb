@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, } from "react";
 import "../../assets/Styles/Wallet/Wallet.scss";
 import {
   FaUniversity,
@@ -13,7 +12,6 @@ import AddBankAc from "./AddBankAc";
 
 const Wallet = () => {
   const [showAddBankAc, setShowAddBankAc] = useState(false);
-  const dispatch = useDispatch();
 
 
   const handleWithdrawClick = () => {

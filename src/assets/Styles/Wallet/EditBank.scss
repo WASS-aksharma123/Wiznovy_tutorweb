@@ -11,18 +11,17 @@
   justify-content: center;
   z-index: 1000;
   font-family: 'SplineSans', sans-serif;
+  padding: 1rem;
 
   .modal_conten {
     background: #fff;
     border-radius: 12px;
-    width: 90%;
+    width: 100%;
     max-width: 500px;
     max-height: 75vh;
     overflow-y: auto;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     position: relative;
-
-   
 
     .bank_form {
       padding: 32px 24px 24px;
@@ -56,6 +55,7 @@
           font-family: inherit;
           transition: all 0.3s;
           background: white;
+          box-sizing: border-box;
 
           &:focus {
             outline: none;
@@ -103,49 +103,27 @@
   }
 }
 
-@media (max-width: 768px) {
-  .add_bank_modal {
-    padding: 16px;
+// Mobile optimizations
 
-    .modal_content {
-      width: 100%;
-      max-width: none;
-      margin: 0;
 
-      .bank_form {
-        padding: 24px 20px 20px;
+@media screen and (max-width: 741px) and (min-width: 250px) {
+.modal_conten{
+    padding: 0.5rem;
+    margin-top: 3rem;
 
-        h2 {
-          font-size: 1.25rem;
-          margin-bottom: 20px;
-        }
-
-        .form_group {
-          margin-bottom: 16px;
-
-          input {
-            padding: 10px 14px;
-          }
-        }
-
-        .continue_btn {
-          padding: 12px 20px;
-        }
+    .close_btn {
+      padding: 4px 8px;
+      font-size: 0.7rem;
+    }
+    .bank_form{
+      padding: 1rem !important;
+      h2{
+        padding-right: 0 !important;
       }
     }
-  }
+}
 }
 
-@media (max-width: 480px) {
-  .add_bank_modal {
-    .modal_content {
-      .bank_form {
-        padding: 20px 16px 16px;
+@media screen and (max-width: 1017px) and (min-width: 742px) {
 
-        h2 {
-          font-size: 1.125rem;
-        }
-      }
-    }
-  }
 }
