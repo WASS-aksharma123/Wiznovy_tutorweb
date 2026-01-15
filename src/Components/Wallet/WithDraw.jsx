@@ -1,0 +1,106 @@
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import '../../assets/Styles/Wallet/Withdraw.scss';
+
+const Withdraw = ({ account, onClose, availableBalance }) => {
+    const [amount, setAmount] = useState('');
+    const [withdrawAll, setWithdrawAll] = useState(false);
+
+    const handleAmountChange = (e) => {
+        const value = e.target.value.replaceAll(/\D/g, '');
+        setAmount(value);
+        if (value) setWithdrawAll(false);
+    };
+
+    const handleWithdrawAllChange = (e) => {
+        const checked = e.target.checked;
+        setWithdrawAll(checked);
+        if (checked) {
+            setAmount(availableBalance?.toString() || '');
+        } else {
+            setAmount('');
+        }
+    };
+
+    const handleWithdraw = () => {
+        if (!amount || Number.parseInt(amount, 10) <= 0) {
+            alert('Please enter a valid amount');
+            return;
+        }
+        console.log('Withdrawing amount:', amount);
+        // Add withdrawal API call here
+        onClose();
+    };
+
+    return (
+        <div className="withdraw_modal">
+            <div className="modal_content">
+                <button className="close_btn" onClick={onClose}>X</button>
+                <div className="withdraw_form">
+                    <h2>Withdraw Amount</h2>
+                    
+                    <div className="bank_details_section">
+                        <h3>Bank Account Details</h3>
+                        <div className="detail_item">
+                            <span className="label">Account Number:</span>
+                            <span className="value">{account.accountNo}</span>
+                        </div>
+                        <div className="detail_item">
+                            <span className="label">Bank Name:</span>
+                            <span className="value">{account.bankName}</span>
+                        </div>
+                        <div className="detail_item">
+                            <span className="label">Account Holder:</span>
+                            <span className="value">{account.accountHolderName}</span>
+                        </div>
+                        <div className="detail_item">
+                            <span className="label">IFSC Code:</span>
+                            <span className="value">{account.ifscCode}</span>
+                        </div>
+                        <div className="detail_item">
+                            <span className="label">SWIFT Code:</span>
+                            <span className="value">{account.swiftCode}</span>
+                        </div>
+                    </div>
+
+                    <div className="form_group">
+                        <label htmlFor="withdrawAmount">Enter Amount</label>
+                        <input
+                            id="withdrawAmount"
+                            type="text"
+                            placeholder="Enter amount to withdraw"
+                            value={amount}
+                            onChange={handleAmountChange}
+                            disabled={withdrawAll}
+                        />
+                    </div>
+
+                    <div className="checkbox_group">
+                        <input
+                            id="withdrawAll"
+                            type="checkbox"
+                            checked={withdrawAll}
+                            onChange={handleWithdrawAllChange}
+                        />
+                        <label htmlFor="withdrawAll">Withdraw All</label>
+                    </div>
+
+                    <button 
+                        className="continueWithdraw" 
+                        onClick={handleWithdraw}
+                    >
+                        Withdraw Amount
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+Withdraw.propTypes = {
+    account: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
+    availableBalance: PropTypes.number
+};
+
+export default Withdraw;

@@ -111,23 +111,24 @@
             color: #666;
             text-align: left;
           }
+
         }
         
-        .event-dot {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          
-          &.live {
+        .join {
+          background-color: #164e41;
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
             background-color: #0fa44a;
-          }
-          &.group {
-            background-color: #7a4b1a;
-          }
-          &.online {
-            background-color: #0d3d34;
-          }
-        }
+            transform: translateY(-1px);
+          }}
       }
     }
   }

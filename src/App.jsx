@@ -55,7 +55,7 @@ const Schedule = lazy(() =>
   import('./Components/Schedule.jsx').catch(() => ({ default: () => <div>Error loading Schedule</div> }))
 )
 const AllCourses = lazy(() =>
-  import('./Components/AllCourses.jsx').catch(() => ({ default: () => <div>Error loading All Courses</div> }))
+  import('./Components/Course/AllCourses.jsx').catch(() => ({ default: () => <div>Error loading All Courses</div> }))
 )
 const MyBooks = lazy(() =>
   import('./Components/Book/MyBooks.jsx').catch(() => ({ default: () => <div>Error loading My Books</div> }))

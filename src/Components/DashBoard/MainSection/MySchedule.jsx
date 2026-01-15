@@ -27,7 +27,7 @@ const MySchedule = ({ toggleSidebar }) => {
       dispatch(fetchTutorSessions({ date: selectedDate }));
       setHasSearched(true);
     }
-  }, [selectedDate]);
+  }, [selectedDate, dispatch]);
 
   useEffect(() => {
     const today = new Date();
@@ -45,7 +45,9 @@ const MySchedule = ({ toggleSidebar }) => {
     if (tab === "today") {
       const today = new Date();
       setSelectedDay(today.getDate());
-      dispatch(fetchTutorSessions({ date: formatDate(today) }));
+      const todayFormatted = formatDate(today);
+      setSelectedDate(todayFormatted);
+      dispatch(fetchTutorSessions({ date: todayFormatted }));
       setHasSearched(true);
     } else if (tab === "all") {
       setSelectedDay(null);
@@ -56,12 +58,24 @@ const MySchedule = ({ toggleSidebar }) => {
     }
   };
 
+  const handleJoinMeeting = (session) => {
+    const zoomUrl = session.zoomMeeting?.startUrl;
+    if (zoomUrl) {
+      window.open(zoomUrl, '_blank');
+    } else {
+      alert('Meeting link not available');
+    }
+  };
+
   const renderSessionCard = (session) => {
     if (activeTab === 'all') {
       console.log('Session object:', session);
     }
     
     const sessionDate = session.date || session.sessionDate || session.createdAt || session.scheduledDate;
+    const today = formatDate(new Date());
+    const isToday = sessionDate && formatDate(new Date(sessionDate)) === today;
+    const isScheduled = session.status?.toLowerCase() === 'scheduled';
     
     return (
       <div key={session.id} className="event-item live">
@@ -77,7 +91,9 @@ const MySchedule = ({ toggleSidebar }) => {
           <p>Amount: ${session.amount}</p>
           {session.notes && <p>Notes: {session.notes}</p>}
         </div>
-        <span className="event-dot live"></span>
+        {isScheduled && isToday && (
+          <button className="join" onClick={() => handleJoinMeeting(session)}>Join Now</button>
+        )}
       </div>
     );
   };

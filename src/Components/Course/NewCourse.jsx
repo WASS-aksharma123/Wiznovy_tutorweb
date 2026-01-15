@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
-import '../assets/Styles/NewCourse.scss';
-import { fetchSubjectsAsync, fetchLanguagesAsync } from '../store/courseSlice';
+import '../../assets/Styles/NewCourse.scss';
+import { fetchSubjectsAsync, fetchLanguagesAsync, createCourseAsync, fetchMyCoursesAsync } from '../../store/courseSlice';
 
 const NewCourse = ({ isOpen, onClose }) => {
   NewCourse.propTypes = {
@@ -130,8 +130,11 @@ const NewCourse = ({ isOpen, onClose }) => {
     formDataToSend.append('thumbnail', formData.thumbnail);
 
     try {
-      onClose();
-      globalThis.location.reload();
+      const result = await dispatch(createCourseAsync(formDataToSend));
+      if (createCourseAsync.fulfilled.match(result)) {
+        await dispatch(fetchMyCoursesAsync());
+        onClose();
+      }
     } catch (error) {
       console.error('Failed to create course:', error);
     }

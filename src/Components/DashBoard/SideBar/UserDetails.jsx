@@ -15,7 +15,7 @@ import "../../../assets/Styles/DashBoard/UserDetails.scss";
 import verified from "../../../assets/Images/verified.png";
 import { getTutorProfile } from '../../../store/profileSlice.js';
 import ProfileUpdate from "../../ProfileUpdate";
-import NewCourse from "../../NewCourse";
+import NewCourse from "../../Course/NewCourse.jsx";
 import CreateBook from "../../Book/CreateBook.jsx";
 import { API_BASE_URL } from "../../../config/api";
 

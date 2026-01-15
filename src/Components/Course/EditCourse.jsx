@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
-import '../assets/Styles/NewCourse.scss';
-import '../assets/Styles/EditCourse.scss';
-import { fetchSubjectsAsync, fetchLanguagesAsync, updateCourseAsync } from '../store/courseSlice';
+import '../../assets/Styles/NewCourse.scss';
+import '../../assets/Styles/EditCourse.scss';
+import { fetchSubjectsAsync, fetchLanguagesAsync, updateCourseAsync } from '../../store/courseSlice';
 
 const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
   const [formData, setFormData] = useState({

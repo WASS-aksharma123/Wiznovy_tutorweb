@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMyCoursesAsync } from "../store/courseSlice";
-import "../assets/Styles/AllCourse.scss";
+import { fetchMyCoursesAsync } from "../../store/courseSlice";
+import "../../assets/Styles/AllCourse.scss";
 import CourseCard from "./CourseCard";
 import EditCourse from "./EditCourse";
 

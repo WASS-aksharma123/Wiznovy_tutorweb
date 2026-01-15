@@ -15,6 +15,7 @@ import "../../assets/Styles/Wallet/AddBankAc.scss";
 import illu from '../../assets/Images/Illustration.png'
 import EditBank from './EditBank.jsx';
 import UpdateDoc from './UpdateDoc.jsx';
+import Withdraw from './WithDraw.jsx';
 
 const AddBankAc = ({ onClose }) => {
     const dispatch = useDispatch();
@@ -25,6 +26,8 @@ const AddBankAc = ({ onClose }) => {
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [showUpdateDoc, setShowUpdateDoc] = useState(false);
     const [updateDocData, setUpdateDocData] = useState({ accountId: null, docType: null });
+    const [showWithdraw, setShowWithdraw] = useState(false);
+    const [selectedWithdrawAccount, setSelectedWithdrawAccount] = useState(null);
     const [formData, setFormData] = useState({
         bankName: '',
         accountNumber: '',
@@ -199,6 +202,18 @@ const AddBankAc = ({ onClose }) => {
     const handleCloseUpdateDoc = () => {
         setShowUpdateDoc(false);
         setUpdateDocData({ accountId: null, docType: null });
+    };
+
+    const handleWithdrawClick = () => {
+        if (bankAccounts.length > 0) {
+            setSelectedWithdrawAccount(bankAccounts[0]);
+            setShowWithdraw(true);
+        }
+    };
+
+    const handleCloseWithdraw = () => {
+        setShowWithdraw(false);
+        setSelectedWithdrawAccount(null);
     };
 
     const renderStep1 = () => (
@@ -391,7 +406,7 @@ const AddBankAc = ({ onClose }) => {
                             </div>
                         );
                     })}
-                    <button className="continueWithdraw">Withdraw Amount</button>
+                    <button className="continueWithdraw" onClick={handleWithdrawClick}>Withdraw Amount</button>
                 </div>
             );
         }
@@ -438,6 +453,10 @@ const AddBankAc = ({ onClose }) => {
                     onClose={handleCloseUpdateDoc} 
                 />
             );
+        }
+
+        if (showWithdraw) {
+            return <Withdraw account={selectedWithdrawAccount} onClose={handleCloseWithdraw} availableBalance={5000} />;
         }
         
         return (

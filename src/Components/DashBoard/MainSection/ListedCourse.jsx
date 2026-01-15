@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyCoursesAsync } from "../../../store/courseSlice";
 import "../../../assets/Styles/DashBoard/PurchaseCourse.scss";
-import CourseCard from "../../CourseCard";
-import EditCourse from "../../EditCourse";
+import CourseCard from "../../Course/CourseCard";
+import EditCourse from "../../Course/EditCourse";
 import course from "../../../assets/Images/purchaseimage.png";
 
 const ListedCourse = () => {
