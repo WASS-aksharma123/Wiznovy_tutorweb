@@ -63,6 +63,9 @@ const MyBooks = lazy(() =>
 const BookDetails = lazy(() =>
   import('./Components/Book/BookDetails.jsx').catch(() => ({ default: () => <div>Error loading Book Details</div> }))
 )
+const Transactions = lazy(() =>
+  import('./Components/Wallet/Transactions.jsx').catch(() => ({ default: () => <div>Error loading Transactions</div> }))
+)
 
 const AuthGuard = memo(() => {
   const token = localStorage.getItem('token')
@@ -103,6 +106,7 @@ function App() {
               <Route path='/all-courses' element={<ProtectedRoute><AllCourses /></ProtectedRoute>} />
               <Route path='/course' element={<Course />} />
               <Route path='/my-books' element={<ProtectedRoute><MyBooks /></ProtectedRoute>} />
+              <Route path='/transactions' element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
               <Route path='/book-details/:bookId' element={<ProtectedRoute><BookDetails /></ProtectedRoute>} />
               <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>

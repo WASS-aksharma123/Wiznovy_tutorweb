@@ -1,5 +1,6 @@
 import React, { useState, } from "react";
 import "../../assets/Styles/Wallet/Wallet.scss";
+import { Link } from "react-router";
 import {
   FaUniversity,
   FaWallet,
@@ -23,6 +24,7 @@ const Wallet = () => {
   };
 
 
+
   return (
     <div className="wallet_container">
       {/* Top Balance Card */}
@@ -42,12 +44,14 @@ const Wallet = () => {
 
       {/* Cards Section */}
       <div className="card_grid">
-        <div className="info_card">
+        <Link to='/transactions'>
+          <div className="info_card" >
           <FaUniversity className="card_icon" />
-          <h4>Bank account</h4>
+          <h4>Transaction History</h4>
           <p>Lorem ipsum is simply dummy text.</p>
           <span className="arrow">↗</span>
         </div>
+        </Link>
 
         <div className="info_card">
           <FaWallet className="card_icon" />
