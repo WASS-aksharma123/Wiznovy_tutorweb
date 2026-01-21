@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPayout, clearError } from '../../store/walletSlice';
 import '../../assets/Styles/Wallet/Withdraw.scss';
 
 const Withdraw = ({ account, onClose, availableBalance }) => {
+    const dispatch = useDispatch();
+    const { payoutLoading, error } = useSelector(state => state.wallet);
     const [amount, setAmount] = useState('');
     const [withdrawAll, setWithdrawAll] = useState(false);
 
@@ -22,14 +26,24 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
         }
     };
 
-    const handleWithdraw = () => {
+    const handleWithdraw = async () => {
         if (!amount || Number.parseInt(amount, 10) <= 0) {
             alert('Please enter a valid amount');
             return;
         }
-        console.log('Withdrawing amount:', amount);
-        // Add withdrawal API call here
-        onClose();
+        
+        const payoutData = {
+            amount: Number.parseInt(amount, 10),
+            bankDetailId: account.id || 'bank-detail-id-here'
+        };
+        
+        try {
+            const result = await dispatch(createPayout(payoutData)).unwrap();
+            alert(`Payout request created successfully! Transaction ID: ${result.payout.id}`);
+            onClose();
+        } catch (error) {
+            alert(`Payout request failed: ${error}`);
+        }
     };
 
     return (
@@ -88,8 +102,9 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
                     <button 
                         className="continueWithdraw" 
                         onClick={handleWithdraw}
+                        disabled={payoutLoading}
                     >
-                        Withdraw Amount
+                        {payoutLoading ? 'Processing...' : 'Withdraw Amount'}
                     </button>
                 </div>
             </div>

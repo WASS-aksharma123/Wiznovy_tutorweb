@@ -93,11 +93,12 @@
 }
 
 .close_btn {
-  background-color: var(--green);
-  color: white;
+  
+  color: gray;
   border: none;
-  padding: 8px 16px;
-  border-radius: 50%;
+  padding: 0.15rem 0.6rem;
+  border-radius: 5px;
+  border: #666 solid 1px;
   cursor: pointer;
   position: absolute;
   top: 10px;
@@ -106,7 +107,8 @@
 }
 
 .close_btn:hover {
-  background-color: var(--hover);
+  background-color: var(--fade);
+  color: black;
 }
 
 .bank_details h2 {

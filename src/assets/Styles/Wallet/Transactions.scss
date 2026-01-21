@@ -131,6 +131,21 @@
     color: #ff4757;
     font-size: 16px;
   }
+
+  .pending_icon {
+    color: #ffa502;
+    font-size: 16px;
+  }
+
+  .approved_icon {
+    color: var(--green);
+    font-size: 16px;
+  }
+
+  .rejected_icon {
+    color: #ff4757;
+    font-size: 16px;
+  }
 }
 
 .transaction_details {
@@ -146,6 +161,18 @@
   .transaction_date {
     font-size: 13px;
     color: #777;
+  }
+
+  .transaction_notes {
+    font-size: 12px;
+    color: #999;
+    margin-top: 2px;
+  }
+
+  .transaction_id {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 2px;
   }
 }
 
@@ -182,7 +209,28 @@
       background: #fff3cd;
       color: #856404;
     }
+
+    &.approved {
+      background: #e8f5e8;
+      color: var(--green);
+    }
+
+    &.rejected {
+      background: #f8d7da;
+      color: #721c24;
+    }
   }
+}
+
+.loading_state, .error_state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #777;
+  font-size: 16px;
+}
+
+.error_state {
+  color: #ff4757;
 }
 
 .no_transactions {
