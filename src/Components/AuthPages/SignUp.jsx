@@ -11,6 +11,7 @@ import TermsModal from "../TermsModal.jsx";
 import { signUpUser, clearError } from "../../store/authSlice.js";
 import wlcm from "../../assets/Images/wlcm.png";
 import invalidotp from "../../assets/Images/invalidotp.png";
+import { GoogleLogin } from "@react-oauth/google";
 
 
 export default function SignUp() {
@@ -340,7 +341,7 @@ export default function SignUp() {
           {/* Social Login Buttons */}
           <div className="social-buttons">
             <button className="social-button">
-              <FcGoogle size={18} /> Sign up with Google
+              <GoogleLogin/>
             </button>
             <button className="social-button">
               <FaApple size={18} /> Sign up with Apple

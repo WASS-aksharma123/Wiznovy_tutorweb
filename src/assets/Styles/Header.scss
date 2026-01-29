@@ -69,6 +69,10 @@
         }
       }
 
+      .mobile-notification{
+        display: none;
+      }
+
       .dropdown-menu {
         position: absolute;
         top: 100%;
@@ -160,6 +164,10 @@
           display: flex;
           align-items: center;
 
+          &:hover {
+            color: white;
+          }
+
           .notification-badge {
             position: absolute;
             top: -8px;
@@ -176,90 +184,21 @@
             font-weight: 600;
           }
         }
-
-        .notification-dropdown {
-          position: absolute;
-          top: 100%;
-          right: 0;
-          background: white;
-          border-radius: 8px;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-          padding: 0;
-          z-index: 1000;
-          width: 660px;
-          max-height: 400px;
-          overflow-y: auto;
-
-          .notification-header {
-            padding: 1rem;
-            border-bottom: 1px solid #f0f0f0;
-
-            h4 {
-              margin: 0;
-              color: #333;
-              font-size: 1rem;
-              font-weight: 600;
-            }
-          }
-
-          .notification-list {
-            .notification-item {
-              padding: 1rem;
-              border-bottom: 1px solid #f0f0f0;
-              cursor: pointer;
-              transition: background-color 0.2s;
-
-              &:hover {
-                background-color: #f8f9fa;
-              }
-
-              &.unread {
-                background-color: rgba(255, 255, 255, 0.15) !important;
-                border-left: 3px solid var(--hover);
-              }
-
-              .notification-content {
-                h5 {
-                  margin: 0 0 0.5rem 0;
-                  color: #333;
-                  font-size: 0.9rem;
-                  font-weight: 600;
-                }
-
-                p {
-                  margin: 0 0 0.5rem 0;
-                  color: #666;
-                  font-size: 0.8rem;
-                  line-height: 1.4;
-                }
-
-                .notification-time {
-                  color: #999;
-                  font-size: 0.7rem;
-                }
-              }
-            }
-
-            .no-notifications {
-              padding: 2rem;
-              text-align: center;
-              color: #666;
-              font-size: 0.9rem;
-            }
-          }
-        }
       }
     }
   }
 
   .Sign_btns {
-    width: 240px;
+    width: 300px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
 
-    // gap: 1rem;
+    .desktop-notification {
+      display: block;
+    }
+
     button {
       padding: 0.5rem 1.5rem;
       border: 1px solid white;
@@ -330,6 +269,39 @@
           display: block !important;
         }
 
+        .mobile-notification {
+          width: 100%;
+          padding: 1rem 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          align-items: center;
+
+          .notification-container {
+            width: 100%;
+
+            .notification-bell {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 0.5rem;
+              padding: 0.5rem 0;
+              background: none;
+              border: none;
+              color: white;
+
+              &:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+              }
+
+              .notification-badge {
+                position: static;
+                margin-left: 0.5rem;
+              }
+            }
+          }
+        }
+
         li {
           width: 100%;
           padding: 1rem 0;
@@ -352,7 +324,6 @@
             }
 
             &:hover {
-              // background-color: var(--hover);
               padding-left: 1rem;
               margin-left: -1rem;
               margin-right: -1rem;
@@ -411,78 +382,16 @@
               }
             }
           }
-
-          &.notification-item {
-            position: relative;
-            flex-direction: column;
-            align-items: flex-start;
-
-            .notification-bell {
-              width: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: flex-start;
-              gap: 0.5rem;
-
-              .notification-badge {
-                position: static;
-                margin-left: 0.5rem;
-              }
-            }
-
-            .notification-dropdown {
-              position: static;
-              width: calc(100% + 2rem);
-              margin-left: -1rem;
-              margin-right: -1rem;
-              margin-top: 1rem;
-              background: rgba(255, 255, 255, 0.95);
-              border-radius: 8px;
-              max-height: 300px;
-
-              .notification-header {
-                h4 {
-                  color: #333;
-                }
-              }
-
-              .notification-list {
-                .notification-item {
-                  border-bottom: 1px solid #f0f0f0;
-
-                  &:hover {
-                    background-color: #f8f9fa;
-                    padding-left: 1rem;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding-right: 1rem;
-                  }
-
-                  .notification-content {
-
-                    h5,
-                    p {
-                      color: #333;
-                    }
-
-                    .notification-time {
-                      color: #666;
-                    }
-                  }
-                }
-
-                .no-notifications {
-                  color: #666;
-                }
-              }
-            }
-          }
         }
       }
     }
 
     .Sign_btns {
       width: 124px;
+
+      .desktop-notification {
+        display: none;
+      }
 
       button {
         padding: 0.5rem;
@@ -560,6 +469,39 @@
           display: block !important;
         }
 
+        .mobile-notification {
+          width: 100%;
+          padding: 1rem 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          align-items: center;
+
+          .notification-container {
+            width: 100%;
+
+            .notification-bell {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 0.5rem;
+              padding: 0.5rem 0;
+              background: none;
+              border: none;
+              color: white;
+
+              &:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+              }
+
+              .notification-badge {
+                position: static;
+                margin-left: 0.5rem;
+              }
+            }
+          }
+        }
+
         li {
           width: 100%;
           padding: 1rem 0;
@@ -585,7 +527,6 @@
             }
 
             &:hover {
-              // background-color: var(--hover);
               padding-left: 1rem;
               margin-left: -1rem;
               margin-right: -1rem;
@@ -644,78 +585,16 @@
               }
             }
           }
-
-          &.notification-item {
-            position: relative;
-            flex-direction: column;
-            align-items: flex-start;
-
-            .notification-bell {
-              width: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: flex-start;
-              gap: 0.5rem;
-
-              .notification-badge {
-                position: static;
-                margin-left: 0.5rem;
-              }
-            }
-
-            .notification-dropdown {
-              position: static;
-              width: calc(100% + 2rem);
-              margin-left: -1rem;
-              margin-right: -1rem;
-              margin-top: 1rem;
-              background: rgba(255, 255, 255, 0.95);
-              border-radius: 8px;
-              max-height: 300px;
-
-              .notification-header {
-                h4 {
-                  color: #333;
-                }
-              }
-
-              .notification-list {
-                .notification-item {
-                  border-bottom: 1px solid #f0f0f0;
-
-                  &:hover {
-                    background-color: #f8f9fa;
-                    padding-left: 1rem;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding-right: 1rem;
-                  }
-
-                  .notification-content {
-
-                    h5,
-                    p {
-                      color: #333;
-                    }
-
-                    .notification-time {
-                      color: #666;
-                    }
-                  }
-                }
-
-                .no-notifications {
-                  color: #666;
-                }
-              }
-            }
-          }
         }
       }
     }
 
     .Sign_btns {
       width: 170px;
+
+      .desktop-notification {
+        display: none;
+      }
 
       button {
         width: max-content;
@@ -749,17 +628,6 @@
 
 @media screen and (max-width: 1390px) and (min-width: 1018px) {
   .header {
-    width: 100vw;
-    height: auto;
-    background-color: var(--green);
-    border-radius: 0 0 8px 8px;
-    padding: 1rem 0;
-
-    .container {
-      display: flex;
-      justify-content: space-between;
-    }
-
     .Logo_section {
       padding: 0.5rem 0;
     }
@@ -776,8 +644,6 @@
         justify-content: space-between;
         color: white;
         cursor: pointer;
-
-
 
         li {
           display: flex;
@@ -798,13 +664,16 @@
     }
 
     .Sign_btns {
-      width: 240px;
+      width: 300px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       color: white;
 
-      // gap: 1rem;
+      .desktop-notification {
+        display: block;
+      }
+
       button {
         padding: 0.5rem 1.5rem;
         border: 1px solid white;

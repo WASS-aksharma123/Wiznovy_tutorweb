@@ -7,64 +7,42 @@ import { ImCross } from "react-icons/im";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { PiWalletBold } from "react-icons/pi";
-import { FaChalkboardTeacher, FaBriefcase, FaStore, FaGraduationCap, FaUsers, FaCertificate, FaBookOpen, FaLaptopCode, FaRocket, FaBell } from "react-icons/fa";
+import { FaChalkboardTeacher, FaBriefcase, FaStore, FaGraduationCap, FaUsers, FaCertificate, FaBookOpen, FaLaptopCode, FaRocket } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
 import { getTutorProfile } from '../store/profileSlice.js';
-import { fetchNotificationsAsync, markAsReadAsync } from '../store/notificationSlice.js';
+import { fetchNotificationsAsync } from '../store/notificationSlice.js';
+import Notification from './Notification.jsx';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { profile } = useSelector((state) => state.profile);
-  const { notifications, unreadCount } = useSelector((state) => state.notifications);
-  
+
   const isOnboarding = location.pathname === '/onboarding';
   const isPending = user?.status === 'PENDING' || profile?.status === 'PENDING';
-  
+
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(getTutorProfile());
       dispatch(fetchNotificationsAsync());
-    } else {
-      setUserProfile(null);
     }
   }, [dispatch, isAuthenticated]);
 
   useEffect(() => {
     if (user) {
-      setUserProfile(null);
       dispatch(getTutorProfile());
     }
   }, [user, dispatch]);
-  
-  const handleNotificationClick = (notification) => {
-    if (!notification.read) {
-      dispatch(markAsReadAsync(notification.id));
-    }
-    setShowNotifications(false);
-  };
 
-  const formatTimeAgo = (dateString) => {
-    const now = new Date();
-    const date = new Date(dateString);
-    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-    
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    return `${Math.floor(diffInHours / 24)}d ago`;
-  };
+
 
   const getUserInitials = () => {
     if (profile?.tutorDetail?.name) {
       return profile.tutorDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-    }
-    if (userProfile?.tutorDetail?.name) {
-      return userProfile.tutorDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
     }
     if (user?.userDetail?.name) {
       return user.userDetail.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
@@ -116,9 +94,9 @@ const Header = () => {
   return (
     <div className="header">
       <div className="container">
-        <button 
+        <button
           type="button"
-          className="Logo_section" 
+          className="Logo_section"
           onClick={() => navigate("/")}
           style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
         >
@@ -134,6 +112,11 @@ const Header = () => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             />
+            {isAuthenticated && (
+              <li className="mobile-notification">
+                <Notification />
+              </li>
+            )}
             <li className="dropdown-item">
               <p className="linksss">What's New <IoIosArrowDown /></p>
               <div className="dropdown-menu">
@@ -182,51 +165,16 @@ const Header = () => {
                 </div>
               </div>
             </li>
-            {isAuthenticated && (
-              <li className="notification-item">
-                <button 
-                  type="button"
-                  className="notification-bell" 
-                  onClick={() => setShowNotifications(!showNotifications)}
-                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                >
-                  <FaBell className="linksss" style={{ fontSize: "1.2rem" }} />
-                  {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
-                </button>
-                {showNotifications && (
-                  <div className="notification-dropdown">
-                    <div className="notification-header">
-                      <h4>Notifications</h4>
-                    </div>
-                    <div className="notification-list" >
-                      {notifications.length > 0 ? (
-                        notifications.slice(0, 5).map((notification) => (
-                          <button 
-                            key={notification.id} 
-                            type="button"
-                            className={`notification-item ${notification.read ? '' : 'unread'}`}
-                            onClick={() => handleNotificationClick(notification)}
-                            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left", width: "100%" }}
-                          >
-                            <div className="notification-content" style={{padding:'1rem'}}>
-                              <h5>{notification.title}</h5>
-                              <p>{notification.desc}</p>
-                              <span className="notification-time">{formatTimeAgo(notification.createdAt)}</span>
-                            </div>
-                          </button>
-                        ))
-                      ) : (
-                        <div className="no-notifications">No notifications</div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </li>
-            )}
           </ul>
         </div>
+
+
+
         {isAuthenticated ? (
           <div className="Sign_btns">
+            <div className="desktop-notification">
+              <Notification />
+            </div>
             {!isOnboarding && !isPending && (
               <Link to="/wallet">
                 <button

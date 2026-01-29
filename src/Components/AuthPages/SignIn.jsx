@@ -10,6 +10,7 @@ import OtpModal from "../Modals/OtpModal.jsx";
 import { signInUser, forgotPasswordUser, clearError } from "../../store/authSlice.js";
 import ResetPasswordModal from "../Modals/ResetPasswordModal.jsx";
 import passwordicon from "../../assets/Images/EmailPassword.png";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -192,7 +193,7 @@ export default function SignIn() {
           {/* Social Login Buttons */}
           <div className="social-buttons">
             <button className="social-button">
-              <FcGoogle size={18} /> Login with Google
+              <GoogleLogin/>
             </button>
             <button className="social-button">
               <FaApple size={18} /> Login with Apple

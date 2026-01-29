@@ -2,7 +2,7 @@
   height: max-content;
   display: flex;
   justify-content: center;
-  margin: 7rem 0 ;
+  margin: 3rem 0 ;
 }
 
 .auth-card {
@@ -163,7 +163,7 @@
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  border: 1px solid #d1d5db;
+  // border: 1px solid #d1d5db;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   border-radius: 5px;
@@ -173,7 +173,7 @@
   transition: background-color 0.15s ease-in-out;
 
   &:hover {
-    background-color: #f3f4f6;
+    // background-color: #f3f4f6;
   }
 }
 

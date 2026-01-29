@@ -88,7 +88,7 @@ function App() {
         <RouteLoader />
         <ScrollToTop />
         <Header />
-        <main style={{ minHeight: '100vh', paddingTop: '80px' }} className="main-content">
+        <main style={{ minHeight: 'calc(100vh - 160px)', paddingTop: '80px', paddingBottom: '20px' }} className="main-content">
           <Suspense fallback={<Loader fullScreen text="Loading page..." />}>
             <Routes>
               <Route path='/' element={<AuthGuard />} />
