@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import "../../assets/Styles/SignIn.scss";
 import { useNavigate, Link } from "react-router-dom";
@@ -10,7 +9,7 @@ import OtpModal from "../Modals/OtpModal.jsx";
 import { signInUser, forgotPasswordUser, clearError } from "../../store/authSlice.js";
 import ResetPasswordModal from "../Modals/ResetPasswordModal.jsx";
 import passwordicon from "../../assets/Images/EmailPassword.png";
-import { GoogleLogin } from "@react-oauth/google";
+import GoogleOauth from "../GoogleOauth/GoogleOauth.jsx";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -192,9 +191,7 @@ export default function SignIn() {
 
           {/* Social Login Buttons */}
           <div className="social-buttons">
-            <button className="social-button">
-              <GoogleLogin/>
-            </button>
+            <GoogleOauth />
             <button className="social-button">
               <FaApple size={18} /> Login with Apple
             </button>

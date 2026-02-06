@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { X, Upload } from 'lucide-react';
 import '../../assets/Styles/NewCourse.scss';
 import { fetchSubjectsAsync, fetchLanguagesAsync, createCourseAsync, fetchMyCoursesAsync } from '../../store/courseSlice';
+import Loader from '../Loader';
 
 const NewCourse = ({ isOpen, onClose }) => {
   NewCourse.propTypes = {
@@ -28,6 +29,7 @@ const NewCourse = ({ isOpen, onClose }) => {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+  const [isCreating, setIsCreating] = useState(false);
 
   const dispatch = useDispatch();
   const { subjects, languages } = useSelector((state) => state.course);
@@ -110,6 +112,8 @@ const NewCourse = ({ isOpen, onClose }) => {
       return;
     }
 
+    setIsCreating(true);
+
     const selectedSubject = subjects.find(s => s.name === formData.subject);
     const selectedLanguage = languages.find(l => l.name === formData.language);
     
@@ -137,6 +141,8 @@ const NewCourse = ({ isOpen, onClose }) => {
       }
     } catch (error) {
       console.error('Failed to create course:', error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -484,11 +490,12 @@ const NewCourse = ({ isOpen, onClose }) => {
             <button type="button" onClick={handleCancel} className="cancel-btn">
               Cancel
             </button>
-            <button type="submit" className="save-btn">
-              Create Course
+            <button type="submit" className="save-btn" disabled={isCreating}>
+              {isCreating ? 'Creating...' : 'Create Course'}
             </button>
           </div>
         </form>
+        {isCreating && <Loader fullScreen text="Creating course..." />}
       </div>
     </div>
   );

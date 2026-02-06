@@ -130,6 +130,11 @@ const authSlice = createSlice({
     setSignUpData: (state, action) => {
       state.signUpData = action.payload;
     },
+    setGoogleAuth: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -215,5 +220,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, logout, setSignUpData } = authSlice.actions;
+export const { clearError, logout, setSignUpData, setGoogleAuth } = authSlice.actions;
 export default authSlice.reducer;

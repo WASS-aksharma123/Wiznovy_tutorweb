@@ -23,7 +23,6 @@ export const updateTutorDetails = async (data) => {
     }
     throw new Error('Failed to update tutor details');
   } catch (error) {
-    console.error('Error updating tutor details:', error);
     throw error;
   }
 };
@@ -53,6 +52,7 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
     state: "",
     stateId: "",
     city: "",
+    cityId: "",
     pincode: "",
     documents: null,
     documentPath: "",
@@ -134,6 +134,8 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
         
         if (profileResponse.ok) {
           const data = await profileResponse.json();
+          
+          
           let profileImageUrl = null;
           if (data.tutorDetail?.profileImage) {
             if (data.tutorDetail.profileImage.startsWith('http')) {
@@ -143,21 +145,80 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
             }
           }
           
-          const qualificationName = qualificationsData.find(q => q.id === data.tutorDetail?.qualificationId)?.name || "";
-          const subjectName = subjectsData.find(s => s.id === data.tutorDetail?.subjectId)?.name || "";
-          const countryName = countriesData.find(c => c.id === data.tutorDetail?.countryId)?.name || "";
-          const languageName = languagesData.find(l => l.id === data.tutorDetail?.languageId)?.name || "";
+          // Check multiple possible locations for qualification ID
+          const qualificationId = data.tutorDetail?.qualificationId || data.qualificationId || data.tutorDetail?.qualification?.id;
+          
+          const selectedQualification = qualificationsData.find(q => 
+            q.id === qualificationId || 
+            q.id === String(qualificationId) ||
+            String(q.id) === String(qualificationId)
+          );
+          const qualificationName = selectedQualification?.name || "";
+          
+          // Check multiple possible locations for subject ID
+          const subjectId = data.tutorDetail?.subjectId || data.subjectId || data.tutorDetail?.subject?.id;
+         
+          const selectedSubject = subjectsData.find(s => 
+            s.id === subjectId || 
+            s.id === String(subjectId) ||
+            String(s.id) === String(subjectId)
+          );
+          const subjectName = selectedSubject?.name || "";
+          // Check multiple possible locations for country ID
+          const countryId = data.tutorDetail?.countryId || data.countryId || data.tutorDetail?.country?.id;
+      
+          
+          const selectedCountry = countriesData.find(c => 
+            c.id === countryId || 
+            c.id === String(countryId) ||
+            String(c.id) === String(countryId)
+          );
+          const countryName = selectedCountry?.name || "";
+          // Check multiple possible locations for language ID
+          const languageId = data.tutorDetail?.languageId || data.languageId || data.tutorDetail?.language?.id;
+        
+          
+          const selectedLanguage = languagesData.find(l => 
+            l.id === languageId || 
+            l.id === String(languageId) ||
+            String(l.id) === String(languageId)
+          );
+          const languageName = selectedLanguage?.name || "";
           
           let stateName = "";
-          if (data.tutorDetail?.countryId) {
-            const statesData = await fetchStates(data.tutorDetail.countryId);
-            stateName = statesData.find(s => s.id === data.tutorDetail?.stateId)?.name || "";
+          let stateId = "";
+          if (countryId) {
+            const statesData = await fetchStates(countryId);
+            stateId = data.tutorDetail?.stateId || data.stateId || data.tutorDetail?.state?.id || data.tutorDetail?.cityId;
+       
+            
+            const selectedState = statesData.find(s => 
+              s.id === stateId || 
+              s.id === String(stateId) ||
+              String(s.id) === String(stateId)
+            );
+            stateName = selectedState?.name || "";
+            
+            // Set states array so the dropdown is populated
+            setStates(statesData);
           }
           
           let cityName = "";
-          if (data.tutorDetail?.stateId) {
-            const citiesData = await fetchCities(data.tutorDetail.stateId);
-            cityName = citiesData.find(c => c.id === data.tutorDetail?.cityId)?.name || "";
+          let cityId = "";
+          if (stateId) {
+            const citiesData = await fetchCities(stateId);
+            cityId = data.tutorDetail?.cityId || data.cityId || data.tutorDetail?.city?.id;
+          
+            
+            const selectedCity = citiesData.find(c => 
+              c.id === cityId || 
+              c.id === String(cityId) ||
+              String(c.id) === String(cityId)
+            );
+            cityName = selectedCity?.name || "";
+            
+            // Set cities array so the dropdown is populated
+            setCities(citiesData);
           }
           
           setFormData({
@@ -169,20 +230,21 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
             qualifications: qualificationName,
             hourlyRate: data.tutorDetail?.hourlyRate || "",
             subjects: subjectName,
-            subjectId: data.tutorDetail?.subjectId || "",
+            subjectId: subjectId || "",
             address: data.tutorDetail?.address || "",
             country: countryName,
-            countryId: data.tutorDetail?.countryId || "",
+            countryId: countryId || "",
             state: stateName,
-            stateId: data.tutorDetail?.stateId || "",
+            stateId: stateId || "",
             city: cityName,
+            cityId: cityId || "",
             pincode: data.tutorDetail?.pincode || "",
             documents: null,
             documentPath: data.tutorDetail?.documentName || "",
             availableDays: data.tutorDetail?.availableDays || [],
             preferredLanguage: languageName,
-            languageId: data.tutorDetail?.languageId || "",
-            qualificationId: data.tutorDetail?.qualificationId || ""
+            languageId: languageId || "",
+            qualificationId: qualificationId || ""
           });
         }
       } catch (error) {
@@ -206,17 +268,21 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
     updates.countryId = country ? country.id : "";
     updates.state = "";
     updates.stateId = "";
+    updates.city = "";
+    updates.cityId = "";
     if (country) {
       fetchStates(country.id);
     } else {
       setStates([]);
     }
+    setCities([]);
   };
 
   const handleStateChange = (value, updates) => {
     const state = states.find(s => s.name === value);
     updates.stateId = state ? state.id : "";
     updates.city = "";
+    updates.cityId = "";
     if (state) {
       fetchCities(state.id);
     } else {
@@ -234,6 +300,11 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
     updates.qualificationId = qualification ? qualification.id : "";
   };
 
+  const handleCityChange = (value, updates) => {
+    const city = cities.find(c => c.name === value);
+    updates.cityId = city ? city.id : "";
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const updates = { [name]: value };
@@ -242,6 +313,7 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
       subjects: handleSubjectChange,
       country: handleCountryChange,
       state: handleStateChange,
+      city: handleCityChange,
       preferredLanguage: handleLanguageChange,
       qualifications: handleQualificationChange
     };
@@ -320,7 +392,6 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
         await fetchAvailabilityData();
       }
       
-      console.log(`Time slot saved for ${timeSlotPopup.selectedDay}: ${timeSlotPopup.fromTime} - ${timeSlotPopup.toTime}`);
       setTimeSlotPopup(prev => ({ ...prev, isOpen: false }));
     } catch (error) {
       console.error('Error saving availability:', error);
@@ -448,7 +519,6 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
             documents: file,
             documentPath: result.documentPath
           }));
-          console.log('Document uploaded successfully:', result);
         } else {
           console.error('Failed to upload document');
         }
@@ -484,7 +554,6 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
             ...prev,
             profileImage: imageUrl
           }));
-          console.log('Profile image uploaded successfully:', result);
         } else {
           console.error('Failed to upload profile image');
         }
@@ -506,35 +575,55 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
     
     try {
       const token = localStorage.getItem('token');
+      
+      // Prepare the payload with proper validation
+      const payload = {
+        name: formData.name,
+        bio: formData.bio,
+        hourlyRate: parseFloat(formData.hourlyRate) || 0
+      };
+      
+      // Only add IDs if they are valid (not empty strings)
+      if (formData.subjectId && formData.subjectId !== "") {
+        payload.subjectId = String(formData.subjectId);
+      }
+      if (formData.countryId && formData.countryId !== "") {
+        payload.countryId = String(formData.countryId);
+      }
+      if (formData.stateId && formData.stateId !== "") {
+        payload.stateId = String(formData.stateId);
+      }
+      if (formData.cityId && formData.cityId !== "") {
+        payload.cityId = String(formData.cityId);
+      }
+      if (formData.languageId && formData.languageId !== "") {
+        payload.languageId = String(formData.languageId);
+      }
+      if (formData.qualificationId && formData.qualificationId !== "") {
+        payload.qualificationId = String(formData.qualificationId);
+      }
+      
+      
       const response = await fetch(`${API_BASE_URL}/tutor-details/update`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          name: formData.name,
-          bio: formData.bio,
-          hourlyRate: String(formData.hourlyRate) || "0",
-          ...(formData.subjectId && { subjectId: formData.subjectId }),
-          ...(formData.countryId && { countryId: formData.countryId }),
-          ...(formData.stateId && { stateId: formData.stateId }),
-          ...(formData.city && { city: formData.city }),
-          ...(formData.languageId && { languageId: formData.languageId }),
-          ...(formData.qualificationId && { qualificationId: formData.qualificationId })
-        })
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
         const updatedData = await response.json();
-        console.log('Profile updated successfully:', updatedData);
         onUpdate?.(updatedData);
         onClose();
       } else {
-        console.error('Failed to update profile');
+        const errorData = await response.json();
+        alert(`Failed to update profile: ${errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error updating profile:', error);
+      alert('Network error occurred while updating profile');
     }
   };
 
@@ -711,20 +800,6 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
               </select>
             </div>
 
-            {/* <div className="field-group">
-              <label>
-                <MapPin size={16} />
-                Address
-              </label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="Enter your full address"
-                rows="2"
-              />
-            </div> */}
-
             <div className="field-row">
               <div className="field-group">
                 <label>
@@ -773,7 +848,7 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
                   name="city"
                   value={formData.city}
                   onChange={handleInputChange}
-                  disabled={!formData.state}
+                  // disabled={!formData.state}
                 >
                   <option value="">Select City</option>
                   {cities.map(city => (
@@ -902,8 +977,8 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
       {/* View Availability Popup */}
       {viewPopup.isOpen && (
         <div className="time-slot-overlay">
-          <div className="time-slot-modal">
-            <div className="modal-header">
+          <div className="time-slot-modal" style={{padding:"15px"}}>
+            <div className="modal-header" style={{padding:"0"}}>
               <h3>{viewPopup.selectedDay} Availability</h3>
               <button className="close-btn" onClick={() => setViewPopup(prev => ({ ...prev, isOpen: false }))}>
                 <X size={16} />

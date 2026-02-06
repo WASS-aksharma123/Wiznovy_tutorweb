@@ -449,3 +449,38 @@ export const updateVideoThumbnail = async (videoLectureId, thumbnailFile) => {
     };
   }
 };
+
+export const updateVideoFile = async (videoLectureId, videoFile) => {
+  try {
+    const formData = new FormData();
+    formData.append('video', videoFile);
+    
+    const response = await fetch(`${API_BASE_URL}/video-lecture/video/${videoLectureId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: 'Video file updated successfully',
+        data: data,
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || 'Failed to update video file',
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: `Network error: ${error}`,
+    };
+  }
+};

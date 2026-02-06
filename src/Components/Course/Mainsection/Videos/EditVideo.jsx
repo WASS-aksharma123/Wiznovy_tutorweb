@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { X, Upload } from 'lucide-react';
+import { X, Upload, Video } from 'lucide-react';
 import './CreateVideo.scss';
-import { updateVideoLecture, updateVideoThumbnail } from '../../../../services/courseService';
+import { updateVideoLecture, updateVideoThumbnail, updateVideoFile } from '../../../../services/courseService';
 
 const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    videoUrl: '',
     duration: '',
     accessTypes: 'FREE'
   });
+  const [videoFile, setVideoFile] = useState(null);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -21,7 +21,6 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
       setFormData({
         title: video.title || '',
         description: video.description || '',
-        videoUrl: video.videoUrl || '',
         duration: video.duration || '',
         accessTypes: video.accessTypes || 'FREE'
       });
@@ -34,6 +33,13 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setVideoFile(file);
+    }
   };
 
   const handleThumbnailChange = (e) => {
@@ -53,6 +59,13 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
       
       if (!updateResult.success) {
         throw new Error(updateResult.message);
+      }
+
+      if (videoFile) {
+        const videoResult = await updateVideoFile(video.id, videoFile);
+        if (!videoResult.success) {
+          console.warn('Failed to update video file:', videoResult.message);
+        }
       }
 
       if (thumbnailFile) {
@@ -114,17 +127,6 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="videoUrl">Video URL</label>
-            <input
-              type="url"
-              id="videoUrl"
-              name="videoUrl"
-              value={formData.videoUrl}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="form-group">
             <label htmlFor="duration">Duration (minutes)</label>
             <input
               type="number"
@@ -134,6 +136,23 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
               onChange={handleInputChange}
               min="1"
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="video-upload">Update Video (Optional)</label>
+            <div className="file-upload">
+              <input
+                type="file"
+                accept="video/*"
+                onChange={handleVideoChange}
+                className="file-input"
+                id="video-upload"
+              />
+              <label htmlFor="video-upload" className="file-label">
+                <Video size={20} />
+                {videoFile ? videoFile.name : 'Choose new video file'}
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
@@ -174,7 +193,6 @@ EditVideo.propTypes = {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     title: PropTypes.string,
     description: PropTypes.string,
-    videoUrl: PropTypes.string,
     duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     accessTypes: PropTypes.string
   }),

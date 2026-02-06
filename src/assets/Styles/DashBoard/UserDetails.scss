@@ -99,6 +99,10 @@
       margin-top: 12px;
       font-weight: 600;
       color: #222;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
     }
 
     .verified {

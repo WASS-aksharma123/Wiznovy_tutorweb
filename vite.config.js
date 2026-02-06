@@ -4,12 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  
+
   return {
     plugins: [react(), tailwindcss()],
     envDir: './',
     define: {
-      __APP_ENV__: JSON.stringify(env.VITE_APP_ENV)
-    }
+      __APP_ENV__: JSON.stringify(env.VITE_APP_ENV),
+    },
+    
   }
 })
