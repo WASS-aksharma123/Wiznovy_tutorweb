@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaBell, FaTimes } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
-import { markAsReadAsync } from '../store/notificationSlice.js';
+import { markAsReadAsync, resetUnreadCount } from '../store/notificationSlice.js';
 import '../assets/Styles/notification.scss';
 
 const Notification = () => {
@@ -65,7 +65,12 @@ const Notification = () => {
         <button 
           type="button"
           className="notification-bell" 
-          onClick={() => setShowNotifications(!showNotifications)}
+          onClick={() => {
+            setShowNotifications(!showNotifications);
+            if (!showNotifications) {
+              dispatch(resetUnreadCount());
+            }
+          }}
         >
           {isMobile ? (
             <span className="linksss">Notifications</span>

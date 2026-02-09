@@ -33,7 +33,11 @@ const notificationSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    resetUnreadCount: (state) => {
+      state.unreadCount = 0;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchNotificationsAsync.pending, (state) => {
@@ -60,3 +64,4 @@ const notificationSlice = createSlice({
 });
 
 export default notificationSlice.reducer;
+export const { resetUnreadCount } = notificationSlice.actions;

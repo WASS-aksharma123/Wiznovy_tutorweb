@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPayout, clearError } from '../../store/walletSlice';
+import { createPayout } from '../../store/walletSlice';
+import Modal from '../Modals/Modal';
 import '../../assets/Styles/Wallet/Withdraw.scss';
 
 const Withdraw = ({ account, onClose, availableBalance }) => {
     const dispatch = useDispatch();
-    const { payoutLoading, error } = useSelector(state => state.wallet);
+    const { payoutLoading } = useSelector(state => state.wallet);
     const [amount, setAmount] = useState('');
     const [withdrawAll, setWithdrawAll] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [transactionId, setTransactionId] = useState('');
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replaceAll(/\D/g, '');
@@ -39,76 +42,89 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
         
         try {
             const result = await dispatch(createPayout(payoutData)).unwrap();
-            alert(`Payout request created successfully! Transaction ID: ${result.payout.id}`);
-            onClose();
+            setTransactionId(result.payout.id);
+            setShowSuccessModal(true);
         } catch (error) {
             alert(`Payout request failed: ${error}`);
         }
     };
 
     return (
-        <div className="withdraw_modal">
-            <div className="modal_content">
-                <button className="close_btn" onClick={onClose}>X</button>
-                <div className="withdraw_form">
-                    <h2>Withdraw Amount</h2>
-                    
-                    <div className="bank_details_section">
-                        <h3>Bank Account Details</h3>
-                        <div className="detail_item">
-                            <span className="label">Account Number:</span>
-                            <span className="value">{account.accountNo}</span>
+        <>
+            <div className="withdraw_modal">
+                <div className="modal_content">
+                    <button className="close_btn" onClick={onClose}>X</button>
+                    <div className="withdraw_form">
+                        <h2>Withdraw Amount</h2>
+                        
+                        <div className="bank_details_section">
+                            <h3>Bank Account Details</h3>
+                            <div className="detail_item">
+                                <span className="label">Account Number:</span>
+                                <span className="value">{account.accountNo}</span>
+                            </div>
+                            <div className="detail_item">
+                                <span className="label">Bank Name:</span>
+                                <span className="value">{account.bankName}</span>
+                            </div>
+                            <div className="detail_item">
+                                <span className="label">Account Holder:</span>
+                                <span className="value">{account.accountHolderName}</span>
+                            </div>
+                            <div className="detail_item">
+                                <span className="label">IFSC Code:</span>
+                                <span className="value">{account.ifscCode}</span>
+                            </div>
+                            <div className="detail_item">
+                                <span className="label">SWIFT Code:</span>
+                                <span className="value">{account.swiftCode}</span>
+                            </div>
                         </div>
-                        <div className="detail_item">
-                            <span className="label">Bank Name:</span>
-                            <span className="value">{account.bankName}</span>
-                        </div>
-                        <div className="detail_item">
-                            <span className="label">Account Holder:</span>
-                            <span className="value">{account.accountHolderName}</span>
-                        </div>
-                        <div className="detail_item">
-                            <span className="label">IFSC Code:</span>
-                            <span className="value">{account.ifscCode}</span>
-                        </div>
-                        <div className="detail_item">
-                            <span className="label">SWIFT Code:</span>
-                            <span className="value">{account.swiftCode}</span>
-                        </div>
-                    </div>
 
-                    <div className="form_group">
-                        <label htmlFor="withdrawAmount">Enter Amount</label>
-                        <input
-                            id="withdrawAmount"
-                            type="text"
-                            placeholder="Enter amount to withdraw"
-                            value={amount}
-                            onChange={handleAmountChange}
-                            disabled={withdrawAll}
-                        />
-                    </div>
+                        <div className="form_group">
+                            <label htmlFor="withdrawAmount">Enter Amount</label>
+                            <input
+                                id="withdrawAmount"
+                                type="text"
+                                placeholder="Enter amount to withdraw"
+                                value={amount}
+                                onChange={handleAmountChange}
+                                disabled={withdrawAll}
+                            />
+                        </div>
 
-                    <div className="checkbox_group">
-                        <input
-                            id="withdrawAll"
-                            type="checkbox"
-                            checked={withdrawAll}
-                            onChange={handleWithdrawAllChange}
-                        />
-                        <label htmlFor="withdrawAll">Withdraw All</label>
-                    </div>
+                        <div className="checkbox_group">
+                            <input
+                                id="withdrawAll"
+                                type="checkbox"
+                                checked={withdrawAll}
+                                onChange={handleWithdrawAllChange}
+                            />
+                            <label htmlFor="withdrawAll">Withdraw All</label>
+                        </div>
 
-                    <button 
-                        className="continueWithdraw" 
-                        onClick={handleWithdraw}
-                        disabled={payoutLoading}
-                    >
-                        {payoutLoading ? 'Processing...' : 'Withdraw Amount'}
-                    </button>
+                        <button 
+                            className="continueWithdraw" 
+                            onClick={handleWithdraw}
+                            disabled={payoutLoading}
+                        >
+                            {payoutLoading ? 'Processing...' : 'Withdraw Amount'}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+            
+            <Modal
+                isOpen={showSuccessModal}
+                onClose={() => {
+                    setShowSuccessModal(false);
+                    onClose();
+                }}
+                heading="Payout Request Created Successfully!"
+                subheading={`Transaction ID: ${transactionId}`}
+                buttonText="OK"
+            />
+        </>
     );
 };
 
