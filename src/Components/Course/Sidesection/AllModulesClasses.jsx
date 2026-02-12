@@ -81,7 +81,7 @@ const AllModulesClasses = ({ courseId, selectedUnit, onUnitSelect }) => {
                       setIsEditModalOpen(true);
                     }}
                   >
-                    <SquarePen size={14} />Edit
+                    <SquarePen size={14} />
                   </button>
                 </div>
                 <button className="unit-image-btn" >

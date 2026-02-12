@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import {
   Mail,
   Phone,
   Edit,
-  BookOpen,
-  Library,
-  Heart,
   CirclePlus,
   Camera,
 } from "lucide-react";
@@ -24,7 +20,6 @@ const UserDetails = () => {
   const [isNewCourseOpen, setIsNewCourseOpen] = useState(false);
   const [isCreateBookOpen, setIsCreateBookOpen] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { profile } = useSelector((state) => state.profile);
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -122,20 +117,12 @@ const UserDetails = () => {
         </div> */}
       </div>
 
-      <div className="headline">
-        <div className="headline-item">
-          <BookOpen size={16} />
-          <button onClick={() => navigate('/all-courses')}>Courses</button>
-        </div>
-        <div className="headline-item">
-          <Library size={16} />
-          <button onClick={() => navigate('/my-books')}>My Books</button>
-        </div>
+      {/* <div className="headline">
         <div className="headline-item">
           <Heart size={16} />
           <span>Wishlist profile</span>
         </div>
-      </div>
+      </div> */}
 
       <button className="add-btn" onClick={() => setIsNewCourseOpen(true)}>
         <CirclePlus /> Create New Course

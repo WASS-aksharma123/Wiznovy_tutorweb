@@ -192,9 +192,9 @@ export default function SignIn() {
           {/* Social Login Buttons */}
           <div className="social-buttons">
             <GoogleOauth />
-            <button className="social-button">
+            {/* <button className="social-button">
               <FaApple size={18} /> Login with Apple
-            </button>
+            </button> */}
           </div>
 
           {/* Signup Link */}
