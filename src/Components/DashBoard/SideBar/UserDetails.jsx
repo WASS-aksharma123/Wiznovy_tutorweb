@@ -6,27 +6,31 @@ import {
   Edit,
   CirclePlus,
   Camera,
+  Loader2,
 } from "lucide-react";
 import "../../../assets/Styles/DashBoard/UserDetails.scss";
 import verified from "../../../assets/Images/verified.png";
 import { getTutorProfile } from '../../../store/profileSlice.js';
+import { openProfileUpdate, closeProfileUpdate } from '../../../store/modalSlice.js';
 import ProfileUpdate from "../../ProfileUpdate";
 import NewCourse from "../../Course/NewCourse.jsx";
 import CreateBook from "../../Book/CreateBook.jsx";
 import { API_BASE_URL } from "../../../config/api";
 
 const UserDetails = () => {
-  const [isProfileUpdateOpen, setIsProfileUpdateOpen] = useState(false);
   const [isNewCourseOpen, setIsNewCourseOpen] = useState(false);
   const [isCreateBookOpen, setIsCreateBookOpen] = useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isProfileUpdateOpen, scrollToField } = useSelector((state) => state.modal);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    setIsImageUploading(true);
     const formData = new FormData();
     formData.append('file', file);
 
@@ -45,6 +49,8 @@ const UserDetails = () => {
       }
     } catch (error) {
       console.error('Error uploading image:', error);
+    } finally {
+      setIsImageUploading(false);
     }
   };
 
@@ -63,10 +69,14 @@ const UserDetails = () => {
       : ""
   };
 
+  const handleEditClick = () => {
+    dispatch(openProfileUpdate());
+  };
+
   return (
     <div className="user-card">
       <div className="edit-btn">
-        <button onClick={() => setIsProfileUpdateOpen(true)}>
+        <button onClick={handleEditClick}>
           <Edit size={14} /> Edit
         </button>
       </div>
@@ -82,7 +92,12 @@ const UserDetails = () => {
             backgroundPosition: 'center'
           }}
         >
-          <label htmlFor="imageUpload" className="image-upload-btn">
+          {isImageUploading && (
+            <div className="upload-loader">
+              <Loader2 size={20} className="spinning" />
+            </div>
+          )}
+          <label htmlFor="imageUpload" className={`image-upload-btn ${isImageUploading ? 'uploading' : ''}`}>
             <Camera size={16} />
           </label>
           <input
@@ -90,6 +105,7 @@ const UserDetails = () => {
             id="imageUpload"
             accept="image/*"
             onChange={handleImageUpload}
+            disabled={isImageUploading}
             hidden
           />
         </div>
@@ -134,9 +150,10 @@ const UserDetails = () => {
 
       <ProfileUpdate 
         isOpen={isProfileUpdateOpen}
-        onClose={() => setIsProfileUpdateOpen(false)}
+        onClose={() => dispatch(closeProfileUpdate())}
         userData={userData}
         onUpdate={() => dispatch(getTutorProfile())}
+        scrollToField={scrollToField}
       />
 
       <NewCourse 

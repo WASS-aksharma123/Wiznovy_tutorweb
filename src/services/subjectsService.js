@@ -17,3 +17,4 @@ export const subjectsService = {
     return response.json();
   }
 };
+

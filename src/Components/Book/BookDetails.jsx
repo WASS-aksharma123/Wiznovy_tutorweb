@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaBook, FaStar, FaLanguage } from 'react-icons/fa';
-import { X, Upload } from 'lucide-react';
-import { getBookAsync, updateBookCoverImageAsync, updateBookPdfAsync, updateBookImagesAsync } from '../../store/bookSlice';
+import { X } from 'lucide-react';
+import { getBookAsync } from '../../store/bookSlice';
 import '../../assets/Styles/Book/BookDetails.scss';
 import defaultBookImage from '../../assets/Images/book 5.jpg';
 
@@ -15,111 +15,24 @@ const BookDetails = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [tabLoading, setTabLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
-  const [isImagesModalOpen, setIsImagesModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedPdfFile, setSelectedPdfFile] = useState(null);
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [uploading, setUploading] = useState(false);
+  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
   const sidebarRef = useRef(null);
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
-  const handlePdfFileChange = (e) => {
-    setSelectedPdfFile(e.target.files[0]);
-  };
-
-  const handleImagesChange = (e) => {
-    setSelectedImages(Array.from(e.target.files));
-  };
-
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      alert('Please select a file');
-      return;
-    }
-
-    setUploading(true);
+  const handleDownloadPdf = async (e) => {
+    e.preventDefault();
     try {
-      await dispatch(updateBookCoverImageAsync({
-        bookId: book.id,
-        coverImageFile: selectedFile
-      })).unwrap();
-      
-      dispatch(getBookAsync(bookId));
-      setIsModalOpen(false);
-      setSelectedFile(null);
+      const response = await fetch(book.pdfFile);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${book.name}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error uploading cover image:', error);
-      alert('Failed to upload cover image. Please try again.');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handlePdfUpload = async () => {
-    if (!selectedPdfFile) {
-      alert('Please select a PDF file');
-      return;
-    }
-
-    setUploading(true);
-    try {
-      await dispatch(updateBookPdfAsync({
-        bookId: book.id,
-        pdfFile: selectedPdfFile
-      })).unwrap();
-      
-      dispatch(getBookAsync(bookId));
-      setIsPdfModalOpen(false);
-      setSelectedPdfFile(null);
-    } catch (error) {
-      console.error('Error uploading PDF:', error);
-      alert('Failed to upload PDF. Please try again.');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedFile(null);
-  };
-
-  const handlePdfModalClose = () => {
-    setIsPdfModalOpen(false);
-    setSelectedPdfFile(null);
-  };
-
-  const handleImagesModalClose = () => {
-    setIsImagesModalOpen(false);
-    setSelectedImages([]);
-  };
-
-  const handleImagesUpload = async () => {
-    if (selectedImages.length === 0) {
-      alert('Please select at least one image');
-      return;
-    }
-
-    setUploading(true);
-    try {
-      await dispatch(updateBookImagesAsync({
-        bookId: book.id,
-        bookImagesFiles: selectedImages
-      })).unwrap();
-      
-      dispatch(getBookAsync(bookId));
-      setIsImagesModalOpen(false);
-      setSelectedImages([]);
-    } catch (error) {
-      console.error('Error uploading images:', error);
-      alert('Failed to upload images. Please try again.');
-    } finally {
-      setUploading(false);
+      console.error('Download failed:', error);
     }
   };
 
@@ -193,7 +106,7 @@ const BookDetails = () => {
                         <span>{book.averageRating || '0.0'} ({book.totalRatings || 0})</span>
                       </div>
                     </div>
-                    <button className="back-button ppp" onClick={() => {console.log('Button clicked'); setIsModalOpen(true);}}>Update Cover Image</button>
+                    {/* Removed Update Cover Image button - now in EditBook.jsx */}
                   </div>
                 </div>
               </div>
@@ -282,24 +195,20 @@ const BookDetails = () => {
 
                       {book.pdfFile && (
                         <div className="pdf-section">
-                          <div className="updatefield"><h3>PDF Document</h3>
-                          <button className='pdfup' onClick={() => setIsPdfModalOpen(true)}>Update Pdf</button></div>
+                          <h3>PDF Document</h3>
                           <div className="pdf-actions">
-                            <a 
-                              href={book.pdfFile} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
+                            <button 
+                              onClick={() => setIsPdfViewerOpen(true)}
                               className="pdf-btn view-btn"
                             >
                               📄 View PDF
-                            </a>
-                            <a 
-                              href={book.pdfFile} 
-                              download={`${book.name}.pdf`}
+                            </button>
+                            <button 
+                              onClick={handleDownloadPdf}
                               className="pdf-btn download-btn"
                             >
                               ⬇️ Download PDF
-                            </a>
+                            </button>
                           </div>
                         </div>
                       )}
@@ -308,7 +217,7 @@ const BookDetails = () => {
                   
                   {activeTab === 'images' && (
                     <div className="images-section">
-                      <button className='imgup' onClick={() => setIsImagesModalOpen(true)}>Update Images</button>
+                      {/* Removed Update Images button - now in EditBook.jsx */}
                       {book.bookImages?.length > 0 ? (
                         <div className="images-grid">
                           {book.bookImages.map((img, index) => (
@@ -331,154 +240,24 @@ const BookDetails = () => {
         </div>
       </div>
       
-      {/* Cover Image Upload Modal */}
-      {console.log('isModalOpen:', isModalOpen)}
-      {isModalOpen && (
-        <div className="modal-overlay" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <div className="modal-contenttt" style={{backgroundColor: 'white', padding: '20px', borderRadius: '8px', maxWidth: '500px', width: '90%'}}>
-            <div className="modal-header">
-              <h3>Update Cover Image</h3>
-              <button className="close-btn" onClick={handleModalClose}>
-                <X size={20} />
+      {/* PDF Viewer Modal */}
+      {isPdfViewerOpen && (
+        <div className="modal-overlay" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <div style={{width: '90%', height: '90%', backgroundColor: 'white', borderRadius: '8px', overflow: 'hidden', position: 'relative'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', backgroundColor: '#f5f5f5', borderBottom: '1px solid #ddd'}}>
+              <h3 style={{margin: 0}}>{book.name}</h3>
+              <button 
+                onClick={() => setIsPdfViewerOpen(false)}
+                style={{background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px'}}
+              >
+                <X size={24} />
               </button>
             </div>
-            
-            <div className="modal-form">
-              <div className="form-group">
-                <label htmlFor="coverImage">Select Cover Image</label>
-                <div className="file-upload">
-                  <input
-                    type="file"
-                    id="coverImage"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="file-input"
-                  />
-                  <label htmlFor="coverImage" className="file-label">
-                    <Upload size={20} />
-                    {selectedFile ? selectedFile.name : "Choose cover image"}
-                  </label>
-                </div>
-              </div>
-              
-              <div className="form-actions">
-                <button type="button" className="cancel-btn" onClick={handleModalClose}>
-                  Cancel
-                </button>
-                <button 
-                  type="button" 
-                  className="submit-btn" 
-                  onClick={handleUpload}
-                  disabled={uploading || !selectedFile}
-                >
-                  {uploading ? 'Uploading...' : 'Update Cover Image'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* PDF Upload Modal */}
-      {isPdfModalOpen && (
-        <div className="modal-overlay" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <div className="modal-contenttt" style={{backgroundColor: 'white', padding: '20px', borderRadius: '8px', maxWidth: '500px', width: '90%'}}>
-            <div className="modal-header">
-              <h3>Update PDF</h3>
-              <button className="close-btn" onClick={handlePdfModalClose}>
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="modal-form">
-              <div className="form-group">
-                <label htmlFor="pdfFile">Select PDF File</label>
-                <div className="file-upload">
-                  <input
-                    type="file"
-                    id="pdfFile"
-                    accept=".pdf"
-                    onChange={handlePdfFileChange}
-                    className="file-input"
-                  />
-                  <label htmlFor="pdfFile" className="file-label">
-                    <Upload size={20} />
-                    {selectedPdfFile ? selectedPdfFile.name : "Choose PDF file"}
-                  </label>
-                </div>
-              </div>
-              
-              <div className="form-actions">
-                <button type="button" className="cancel-btn" onClick={handlePdfModalClose}>
-                  Cancel
-                </button>
-                <button 
-                  type="button" 
-                  className="submit-btn" 
-                  onClick={handlePdfUpload}
-                  disabled={uploading || !selectedPdfFile}
-                >
-                  {uploading ? 'Uploading...' : 'Update PDF'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Images Upload Modal */}
-      {isImagesModalOpen && (
-        <div className="modal-overlay" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <div className="modal-contenttt" style={{backgroundColor: 'white', padding: '20px', borderRadius: '8px', maxWidth: '500px', width: '90%'}}>
-            <div className="modal-header">
-              <h3>Update Book Images</h3>
-              <button className="close-btn" onClick={handleImagesModalClose}>
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="modal-form">
-              <div className="form-group">
-                <label htmlFor="bookImages">Select Images (Multiple)</label>
-                <div className="file-upload">
-                  <input
-                    type="file"
-                    id="bookImages"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImagesChange}
-                    className="file-input"
-                  />
-                  <label htmlFor="bookImages" className="file-label">
-                    <Upload size={20} />
-                    {selectedImages.length > 0 ? `${selectedImages.length} image(s) selected` : "Choose images"}
-                  </label>
-                </div>
-                {selectedImages.length > 0 && (
-                  <div className="selected-files">
-                    {selectedImages.map((file, index) => (
-                      <div key={`${file.name}-${file.size}-${file.lastModified}`} className="file-item">
-                        {file.name}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              
-              <div className="form-actions">
-                <button type="button" className="cancel-btn" onClick={handleImagesModalClose}>
-                  Cancel
-                </button>
-                <button 
-                  type="button" 
-                  className="submit-btn" 
-                  onClick={handleImagesUpload}
-                  disabled={uploading || selectedImages.length === 0}
-                >
-                  {uploading ? 'Uploading...' : 'Update Images'}
-                </button>
-              </div>
-            </div>
+            <iframe 
+              src={book.pdfFile}
+              style={{width: '100%', height: 'calc(100% - 60px)', border: 'none'}}
+              title="PDF Viewer"
+            />
           </div>
         </div>
       )}

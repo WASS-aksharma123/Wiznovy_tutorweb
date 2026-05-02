@@ -11,7 +11,8 @@ import TermsModal from "../TermsModal.jsx";
 import { signUpUser, clearError } from "../../store/authSlice.js";
 import wlcm from "../../assets/Images/wlcm.png";
 import invalidotp from "../../assets/Images/invalidotp.png";
-import { GoogleLogin } from "@react-oauth/google";
+import GoogleOauth from "../GoogleOauth/GoogleOauth.jsx";
+import AppleLoginButton from "../GoogleOauth/AppleLoginButton.jsx";
 
 
 export default function SignUp() {
@@ -49,6 +50,13 @@ export default function SignUp() {
             onSubmit={async (e) => {
               e.preventDefault();
 
+              // Email validation
+              const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+              if (!emailRegex.test(email)) {
+                setValidationErrors(prev => ({ ...prev, email: "Please enter a valid email address" }));
+                return;
+              }
+
               // Password validation
               if (password.length < 6) {
                 setPasswordError("Password must be at least 6 characters long");
@@ -60,6 +68,7 @@ export default function SignUp() {
               }
 
               setPasswordError("");
+              setValidationErrors(prev => ({ ...prev, email: "" }));
 
               try {
                 const result = await dispatch(signUpUser({
@@ -94,7 +103,7 @@ export default function SignUp() {
                   }}
                   placeholder="Enter your full name"
                   className="form-input"
-                  maxLength="20"
+                  maxLength="100"
                   required
                   onInvalid={(e) => {
                     e.preventDefault();
@@ -124,20 +133,28 @@ export default function SignUp() {
                   id="email"
                   value={email}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value.replace(/\s/g, "");
                     if (/^[a-zA-Z0-9@.]*$/.test(value)) {
                       setEmail(value);
                     }
-                  }} 
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") e.preventDefault();
+                  }}
                   placeholder="demo12@gmail.com"
                   className="form-input"
-                  maxLength="30"
+                  maxLength="254"
                   required
                   onInvalid={(e) => {
                     e.preventDefault();
-                    setValidationErrors(prev => ({ ...prev, email: e.target.validationMessage }));
+                    setValidationErrors(prev => ({
+                      ...prev,
+                      email: e.target.validationMessage
+                    }));
                   }}
-                  onInput={() => setValidationErrors(prev => ({ ...prev, email: '' }))}
+                  onInput={() =>
+                    setValidationErrors(prev => ({ ...prev, email: "" }))
+                  }
                 />
               </div>
               {validationErrors.email && (
@@ -168,7 +185,7 @@ export default function SignUp() {
                   required
                   onInvalid={(e) => {
                     e.preventDefault();
-                    setValidationErrors(prev => ({ ...prev, phone: e.target.validationMessage }));
+                    setValidationErrors(prev => ({ ...prev, phone: 'Please enter a 10-digit phone number' }));
                   }}
                   onInput={() => setValidationErrors(prev => ({ ...prev, phone: '' }))}
                 />
@@ -340,11 +357,11 @@ export default function SignUp() {
 
           {/* Social Login Buttons */}
           <div className="social-buttons">
-            <button className="social-button">
-              <GoogleLogin/>
+            <button className="">
+              <GoogleOauth />
             </button>
             <button className="social-button">
-              <FaApple size={18} /> Sign up with Apple
+              <FaApple/><AppleLoginButton/>
             </button>
           </div>
 
@@ -369,6 +386,7 @@ export default function SignUp() {
         {showOtpModal && (
           <OtpModal
             email={email}
+            name={name}
             onVerify={(otpValue, isValid) => {
               if (isValid) {
                 setShowOtpModal(false);
@@ -407,14 +425,14 @@ export default function SignUp() {
           image={invalidotp}
           heading="Code you entered is invalid"
           subheading="Ensure you enter the exact digits as provided to successfully verify your identity and proceed."
-          buttonText="Resend OTP"
+          buttonText="Retry"
           onButtonClick={() => {
             setShowInvalidOtpModal(false);
             setShowOtpModal(true);
           }}
         />
 
-       
+
 
         <TermsModal
           isOpen={showTermsModal}

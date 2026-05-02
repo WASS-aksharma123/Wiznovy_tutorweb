@@ -15,7 +15,7 @@
 
   .Logo_section {
     padding: 0.5rem 0;
-    width: 250px;
+    width: 200px;
     cursor: pointer;
 
     img {
@@ -31,7 +31,7 @@
     align-items: center;
 
     ul {
-      width: 600px;
+      width: 550px;
       height: auto;
       display: flex;
       align-items: center;
@@ -69,7 +69,7 @@
         }
       }
 
-      .mobile-notification{
+      .mobile-notification {
         display: none;
       }
 
@@ -189,14 +189,75 @@
   }
 
   .Sign_btns {
-    width: 300px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
+    gap: 1rem;
 
     .desktop-notification {
       display: block;
+    }
+
+    .user-dropdown-container {
+      position: relative;
+
+      .user-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        padding: 8px 0;
+        min-width: 160px;
+        z-index: 1000;
+        border: 1px solid #e0e0e0;
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          color: #333;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-size: 14px;
+          font-weight: 500;
+
+          &:hover {
+            background-color: #f8f9fa;
+            color: var(--green);
+
+            svg {
+              color: var(--green);
+            }
+          }
+
+          &.logout {
+            border-top: 1px solid #e0e0e0;
+            margin-top: 4px;
+
+            &:hover {
+              background-color: #fef2f2;
+              color: #dc2626;
+
+              svg {
+                color: #dc2626;
+              }
+            }
+          }
+
+          svg {
+            color: #666;
+            transition: color 0.2s ease;
+          }
+
+          span {
+            font-weight: 500;
+          }
+        }
+      }
     }
 
     button {
@@ -264,7 +325,7 @@
           position: absolute;
           top: 1.5rem;
           right: 2rem;
-          z-index: 3001;
+          z-index: 1;
           color: white;
           display: block !important;
         }
@@ -387,14 +448,75 @@
     }
 
     .Sign_btns {
-      width: 124px;
+      width: 135px;
+      gap: 0.4rem;
+      justify-content: flex-end;
 
       .desktop-notification {
         display: none;
       }
 
+      .user-dropdown-container {
+        position: relative;
+
+        .user-dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+          padding: 8px 0;
+          min-width: 140px;
+          z-index: 1000;
+          border: 1px solid #e0e0e0;
+
+          .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            font-weight: 500;
+
+            &:hover {
+              background-color: #f8f9fa;
+              color: var(--green);
+
+              svg {
+                color: var(--green);
+              }
+            }
+
+            &.logout {
+              border-top: 1px solid #e0e0e0;
+              margin-top: 4px;
+
+              &:hover {
+                background-color: #fef2f2;
+                color: #dc2626;
+
+                svg {
+                  color: #dc2626;
+                }
+              }
+            }
+
+            svg {
+              color: #666;
+              transition: color 0.2s ease;
+              width: 14px;
+              height: 14px;
+            }
+          }
+        }
+      }
+
       button {
-        padding: 0.5rem;
+        padding: 0.3rem;
         border: 1px solid white;
         border-radius: 5px;
         background-color: transparent;
@@ -590,10 +712,69 @@
     }
 
     .Sign_btns {
-      width: 170px;
+      width: 200px;
 
       .desktop-notification {
         display: none;
+      }
+
+      .user-dropdown-container {
+        position: relative;
+
+        .user-dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+          padding: 8px 0;
+          min-width: 150px;
+          z-index: 1000;
+          border: 1px solid #e0e0e0;
+
+          .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+            font-weight: 500;
+
+            &:hover {
+              background-color: #f8f9fa;
+              color: var(--green);
+
+              svg {
+                color: var(--green);
+              }
+            }
+
+            &.logout {
+              border-top: 1px solid #e0e0e0;
+              margin-top: 4px;
+
+              &:hover {
+                background-color: #fef2f2;
+                color: #dc2626;
+
+                svg {
+                  color: #dc2626;
+                }
+              }
+            }
+
+            svg {
+              color: #666;
+              transition: color 0.2s ease;
+              width: 15px;
+              height: 15px;
+            }
+          }
+        }
       }
 
       button {
@@ -637,7 +818,7 @@
       align-items: center;
 
       ul {
-        width: 465px;
+        width: 370px;
         height: auto;
         display: flex;
         align-items: center;
@@ -664,11 +845,11 @@
     }
 
     .Sign_btns {
-      width: 300px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       color: white;
+      gap: 1rem !important;
 
       .desktop-notification {
         display: block;

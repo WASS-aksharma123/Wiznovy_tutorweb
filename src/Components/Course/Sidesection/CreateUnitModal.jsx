@@ -13,6 +13,8 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
     description: "",
     image: null
   });
+  
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,6 +22,11 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleImageChange = (e) => {
@@ -28,6 +35,11 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
       ...prev,
       image: file
     }));
+    
+    // Clear validation error when user selects a file
+    if (validationErrors.image) {
+      setValidationErrors(prev => ({ ...prev, image: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -44,9 +56,15 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
     try {
       await dispatch(createUnitAsync(unitData)).unwrap();
       setFormData({ name: "", description: "", image: null });
+      setValidationErrors({});
       onClose();
     } catch (error) {
-      console.error('Failed to create unit:', error);
+      const errorMsg = error?.message || error;
+      if (errorMsg.includes('Unit with this name already exists')) {
+        setValidationErrors(prev => ({ ...prev, name: 'Unit with this name already exists in the course' }));
+      } else {
+        console.error('Failed to create unit:', errorMsg);
+      }
     }
   };
 
@@ -73,7 +91,16 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
               onChange={handleInputChange}
               required
               maxLength={40}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, name: 'Please enter the unit name' }));
+              }}
             />
+            {validationErrors.name && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.name}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -86,7 +113,16 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
               rows="4"
               required
               maxLength={300}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, description: 'Please enter the unit description' }));
+              }}
             />
+            {validationErrors.description && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.description}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -98,12 +134,22 @@ const CreateUnitModal = ({ isOpen, onClose, courseId }) => {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="file-input"
+                required
+                onInvalid={(e) => {
+                  e.preventDefault();
+                  setValidationErrors(prev => ({ ...prev, image: 'Please select an image' }));
+                }}
               />
               <label htmlFor="image" className="file-label">
                 <Upload size={20} />
                 {formData.image ? formData.image.name : "Choose an image"}
               </label>
             </div>
+            {validationErrors.image && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.image}
+              </div>
+            )}
           </div>
 
           <div className="form-actions">

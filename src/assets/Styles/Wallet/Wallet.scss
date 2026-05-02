@@ -52,9 +52,27 @@
   color: #fff;
   font-size: 16px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
 
   &:hover {
     background: #1a5c50;
+  }
+  
+  &.loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+    
+    .spinning {
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  &:disabled {
+    pointer-events: none;
   }
 }
 
@@ -113,6 +131,7 @@
 @media (min-width: 1400px) {
   .wallet_container {
     max-width: 1200px;
+    width: 100%;
   }
 }
 
@@ -192,6 +211,7 @@
 @media (max-width: 599px) {
   .wallet_container {
     padding: 16px;
+    width: 100%;
   }
 
   .bank_icon {
@@ -239,5 +259,13 @@
 
   .info_card {
     padding: 16px;
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

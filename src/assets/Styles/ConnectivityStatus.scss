@@ -1,0 +1,241 @@
+.connectivity-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.connectivity-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+.connectivity-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #374151;
+  }
+}
+
+.connectivity-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  .wifi-connected {
+    font-size: 4rem;
+    color: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  .wifi-disconnected {
+    font-size: 4rem;
+    color: #ef4444;
+    animation: shake 0.5s ease-in-out;
+  }
+
+  .server-disconnected {
+    font-size: 4rem;
+    color: #f59e0b;
+    animation: shake 0.5s ease-in-out;
+  }
+}
+
+.connectivity-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #374151;
+  
+  &.success {
+    color: var(--green);
+  }
+  
+  &.error {
+    color: #ef4444;
+  }
+}
+
+.connectivity-message {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.connectivity-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: var(--hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(17, 61, 56, 0.25);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.connectivity-success {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+
+  .success-indicator {
+    width: 40px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--green), var(--hover));
+    border-radius: 2px;
+    animation: successBar 2s ease-out;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes successBar {
+  from {
+    width: 0;
+  }
+  to {
+    width: 40px;
+  }
+}
+
+// Mobile responsiveness
+@media screen and (max-width: 741px) {
+  .connectivity-modal {
+    padding: 1.5rem;
+    margin: 1rem;
+    max-width: none;
+    width: calc(100% - 2rem);
+  }
+
+  .connectivity-icon {
+    .wifi-connected,
+    .wifi-disconnected {
+      font-size: 3rem;
+    }
+  }
+
+  .connectivity-heading {
+    font-size: 1.3rem;
+  }
+
+  .connectivity-message {
+    font-size: 0.9rem;
+  }
+
+  .retry-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media screen and (max-width: 1017px) and (min-width: 742px) {
+  .connectivity-modal {
+    padding: 1.8rem;
+    max-width: 400px;
+  }
+
+  .connectivity-icon {
+    .wifi-connected,
+    .wifi-disconnected {
+      font-size: 3.5rem;
+    }
+  }
+
+  .connectivity-heading {
+    font-size: 1.4rem;
+  }
+}

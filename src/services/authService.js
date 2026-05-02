@@ -224,3 +224,40 @@ export const resetPassword = async ({ email, password }) => {
     };
   }
 };
+
+export const resendOtp = async ({ email, name }) => {
+  try {
+    const formData = new URLSearchParams();
+    formData.append('email', email);
+    formData.append('name', name);
+    
+    const response = await fetch(`${API_BASE_URL}/auth/tutor/resend-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      },
+      body: formData.toString(),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: data.message || 'OTP sent successfully',
+        data: data,
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || 'Failed to resend OTP',
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: `Network error: ${error}`,
+    };
+  }
+};

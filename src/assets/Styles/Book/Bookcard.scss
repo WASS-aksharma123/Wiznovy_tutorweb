@@ -1,7 +1,7 @@
 
 
 .book-card {
-  display: flex;
+  
   width: 100%;
   max-width: 480px;
   min-height: 320px;
@@ -21,9 +21,11 @@
 
 /* Left side container */
 .book-left {
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  max-height: 350px;
+
 }
 
 /* Cover Image */
@@ -41,7 +43,7 @@
 
 /* Content */
 .book-content {
-  width: 50%;
+  width: 100%;
   padding: 20px;
   display: flex;
   flex-direction: column;

@@ -7,9 +7,11 @@ import { useNavigate, Link } from "react-router-dom";
 import Modal from "../Modals/Modal.jsx";
 import OtpModal from "../Modals/OtpModal.jsx";
 import { signInUser, forgotPasswordUser, clearError } from "../../store/authSlice.js";
+import { fetchCurrentStep } from "../../store/onboardingSlice.js";
 import ResetPasswordModal from "../Modals/ResetPasswordModal.jsx";
 import passwordicon from "../../assets/Images/EmailPassword.png";
 import GoogleOauth from "../GoogleOauth/GoogleOauth.jsx";
+import AppleLoginButton from "../GoogleOauth/AppleLoginButton.jsx";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -22,6 +24,7 @@ export default function SignIn() {
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+  const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
@@ -36,7 +39,21 @@ export default function SignIn() {
     try {
       const result = await dispatch(signInUser({ email, password })).unwrap();
       if (result.success) {
-        navigate("/dashboard");
+        // After successful login, check current step to determine redirect
+        try {
+          const currentStep = await dispatch(fetchCurrentStep()).unwrap();
+          if (currentStep === 12) {
+            // User has completed onboarding, redirect to dashboard
+            navigate("/dashboard");
+          } else {
+            // User needs to complete onboarding, redirect to onboarding
+            navigate("/onboarding");
+          }
+        } catch (stepError) {
+          console.warn('Could not fetch current step, redirecting to onboarding:', stepError);
+          // If step fetch fails, default to onboarding
+          navigate("/onboarding");
+        }
       }
     } catch (error) {
       console.error('Sign in failed:', error);
@@ -79,20 +96,28 @@ export default function SignIn() {
                   id="email"
                   value={email}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value.replace(/\s/g, "");
                     if (/^[a-zA-Z0-9@.]*$/.test(value)) {
                       setEmail(value);
                     }
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") e.preventDefault();
+                  }}
                   placeholder="demo12@gmail.com"
                   className="form-input"
                   required
-                  maxLength={40}
+                  maxLength={254}
                   onInvalid={(e) => {
                     e.preventDefault();
-                    setValidationErrors(prev => ({ ...prev, email: e.target.validationMessage }));
+                    setValidationErrors(prev => ({
+                      ...prev,
+                      email: e.target.validationMessage
+                    }));
                   }}
-                  onInput={() => setValidationErrors(prev => ({ ...prev, email: '' }))}
+                  onInput={() =>
+                    setValidationErrors(prev => ({ ...prev, email: "" }))
+                  }
                 />
               </div>
             </div>
@@ -192,9 +217,9 @@ export default function SignIn() {
           {/* Social Login Buttons */}
           <div className="social-buttons">
             <GoogleOauth />
-            {/* <button className="social-button">
-              <FaApple size={18} /> Login with Apple
-            </button> */}
+            <button className="social-button">
+              <FaApple/><AppleLoginButton/>
+            </button>
           </div>
 
           {/* Signup Link */}
@@ -206,7 +231,7 @@ export default function SignIn() {
           </p>
         </div>
 
-       
+
 
         <Modal
           isOpen={showForgotPasswordModal}
@@ -224,20 +249,33 @@ export default function SignIn() {
                   id="forgot-password-email"
                   value={forgotPasswordEmail}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value;
+
+                    // remove all spaces
+                    value = value.replace(/\s/g, "");
+
                     if (/^[a-zA-Z0-9@.]*$/.test(value)) {
                       setForgotPasswordEmail(value);
                     }
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") e.preventDefault(); // block space key
+                  }}
                   placeholder="Enter your email"
                   className="form-input"
                   required
-                  maxLength={50}
+                  maxLength={254}
                 />
               </div>
             </div>
-            <button type="submit" className="signin-button">
-              Reset my password
+            <button type="submit" className="signin-button" disabled={loading}>
+              {loading ? (
+                <>
+                  Sending reset email.....
+                </>
+              ) : (
+                'Reset my password'
+              )}
             </button>
           </form>
         </Modal>

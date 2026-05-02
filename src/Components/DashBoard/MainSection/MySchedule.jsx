@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTutorSessions, clearSessions } from "../../../store/scheduleSlice";
+import { cancelSession } from "../../../services/sessionService";
+import RescheduleModal from "../../Modals/RescheduleModal";
+import SuccessModal from "../../Modals/SuccessModal";
+import ConfirmModal from "../../Modals/ConfirmModal";
 import "../../../assets/Styles/DashBoard/MySchedule.scss";
 import { GoSidebarCollapse } from "react-icons/go";
+import { SlExclamation } from "react-icons/sl";
+
 
 const MySchedule = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
@@ -14,6 +20,14 @@ const MySchedule = ({ toggleSidebar }) => {
   const [hasSearched, setHasSearched] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState(new Date().getDate());
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [modalType, setModalType] = useState('success');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [sessionToCancel, setSessionToCancel] = useState(null);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -53,6 +67,14 @@ const MySchedule = ({ toggleSidebar }) => {
       setSelectedDay(null);
       dispatch(fetchTutorSessions({}));
       setHasSearched(true);
+    } else if (tab === "upcoming") {
+      setSelectedDay(null);
+      dispatch(fetchTutorSessions({}));
+      setHasSearched(true);
+    } else if (tab === "past") {
+      setSelectedDay(null);
+      dispatch(fetchTutorSessions({}));
+      setHasSearched(true);
     } else {
       setSelectedDay(null);
     }
@@ -67,16 +89,87 @@ const MySchedule = ({ toggleSidebar }) => {
     }
   };
 
+  const handleRescheduleSession = (session) => {
+    setSelectedSession(session);
+    setShowRescheduleModal(true);
+  };
+
+  const handleCancelSession = async (sessionId) => {
+    setSessionToCancel(sessionId);
+    setShowConfirmModal(true);
+  };
+
+  const confirmCancelSession = async () => {
+    if (!sessionToCancel) return;
+
+    setCancelLoading(true);
+    try {
+      const response = await cancelSession(sessionToCancel);
+      if (response.success) {
+        setSuccessMessage('Session cancelled successfully!');
+        setModalType('success');
+        setShowSuccessModal(true);
+        setShowConfirmModal(false);
+        // Refresh sessions
+        if (selectedDate) {
+          dispatch(fetchTutorSessions({ date: selectedDate }));
+        } else {
+          const today = new Date();
+          dispatch(fetchTutorSessions({ date: formatDate(today) }));
+        }
+      } else {
+        setSuccessMessage(response.message || 'Failed to cancel session');
+        setModalType('error');
+        setShowSuccessModal(true);
+        setShowConfirmModal(false);
+      }
+    } catch (error) {
+      setSuccessMessage('Error cancelling session');
+      setModalType('error');
+      setShowSuccessModal(true);
+      setShowConfirmModal(false);
+    } finally {
+      setCancelLoading(false);
+      setSessionToCancel(null);
+    }
+  };
+
+  const handleRescheduleSuccess = () => {
+    // Refresh sessions after successful reschedule
+    if (selectedDate) {
+      dispatch(fetchTutorSessions({ date: selectedDate }));
+    } else {
+      const today = new Date();
+      dispatch(fetchTutorSessions({ date: formatDate(today) }));
+    }
+  };
+
+  const canModifySession = (session) => {
+    // Only allow modification for scheduled sessions
+    return session.status === 'SCHEDULED';
+  };
+
   const renderSessionCard = (session) => {
     if (activeTab === 'all') {
       console.log('Session object:', session);
     }
-    
+
     const sessionDate = session.date || session.sessionDate || session.createdAt || session.scheduledDate;
     const today = formatDate(new Date());
     const isToday = sessionDate && formatDate(new Date(sessionDate)) === today;
     const isScheduled = session.status?.toLowerCase() === 'scheduled';
+
+    // Filter logic for upcoming and past tabs
+    if (activeTab === 'upcoming') {
+      const sessionDateTime = new Date(sessionDate);
+      if (sessionDateTime <= new Date()) return null;
+    }
     
+    if (activeTab === 'past') {
+      const sessionDateTime = new Date(sessionDate);
+      if (sessionDateTime >= new Date()) return null;
+    }
+
     return (
       <div key={session.id} className="event-item live">
         <div className="event-info">
@@ -91,9 +184,29 @@ const MySchedule = ({ toggleSidebar }) => {
           <p>Amount: ${session.amount}</p>
           {session.notes && <p>Notes: {session.notes}</p>}
         </div>
-        {isScheduled && isToday && (
-          <button className="join" onClick={() => handleJoinMeeting(session)}>Join Now</button>
-        )}
+        
+        <div className="session-buttons">
+          {isScheduled && isToday && (
+            <button className="join" onClick={() => handleJoinMeeting(session)}>Join Now</button>
+          )}
+          
+          {canModifySession(session) && (
+            <>
+              <button 
+                className="reschedule-btn"
+                onClick={() => handleRescheduleSession(session)}
+              >
+                Reschedule
+              </button>
+              <button 
+                className="cancel-btn"
+                onClick={() => handleCancelSession(session.id)}
+              >
+                Cancel
+              </button>
+            </>
+          )}
+        </div>
       </div>
     );
   };
@@ -127,7 +240,7 @@ const MySchedule = ({ toggleSidebar }) => {
     const clickedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     const today = new Date();
     const formattedDate = formatDate(clickedDate);
-    
+
     if (formatDate(clickedDate) === formatDate(today)) {
       setActiveTab('today');
     } else if (clickedDate > today) {
@@ -135,12 +248,12 @@ const MySchedule = ({ toggleSidebar }) => {
     } else {
       setActiveTab('past');
     }
-    
+
     setSelectedDate(formattedDate);
     setSelectedDay(day);
     dispatch(fetchTutorSessions({ date: formattedDate }));
     setHasSearched(true);
-    
+
     if (window.innerWidth <= 1024) {
       const scheduleSection = document.querySelector('.mySchedule');
       if (scheduleSection) {
@@ -160,9 +273,9 @@ const MySchedule = ({ toggleSidebar }) => {
 
     for (let day = 1; day <= daysInMonth; day++) {
       dates.push(
-        <button 
-          key={day} 
-          className="date clickable" 
+        <button
+          key={day}
+          className="date clickable"
           onClick={() => handleDateClick(day)}
           style={{
             backgroundColor: selectedDay === day ? '#F2FFFA' : 'transparent',
@@ -214,7 +327,7 @@ const MySchedule = ({ toggleSidebar }) => {
               })}
             </div>
           )}
-          
+
 
           {/* Session List */}
           <div className="events-list">
@@ -222,7 +335,10 @@ const MySchedule = ({ toggleSidebar }) => {
             {error && <div className="error">Error: {error}</div>}
 
             {!loading && !error && hasSearched && sessions?.length === 0 && (
-              <div className="no-sessions">No sessions found.</div>
+              <div className="no-sessions">
+                <SlExclamation size={50}/>
+                No sessions found.
+              </div>
             )}
 
             {sessions?.length > 0 && sessions.map(renderSessionCard)}
@@ -237,7 +353,7 @@ const MySchedule = ({ toggleSidebar }) => {
               <span>
                 {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
               </span>
-              <div className="calendar-nav">
+              <div className="calendar-navvv">
                 <button className="arrow" onClick={() => navigateMonth(-1)}>‹</button>
                 <button className="arrow" onClick={() => navigateMonth(1)}>›</button>
               </div>
@@ -259,6 +375,35 @@ const MySchedule = ({ toggleSidebar }) => {
           </div>
         </div>
       </div>
+      
+      <RescheduleModal
+        isOpen={showRescheduleModal}
+        onClose={() => setShowRescheduleModal(false)}
+        session={selectedSession}
+        onRescheduleSuccess={handleRescheduleSuccess}
+      />
+      
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title={modalType === 'success' ? 'Success!' : 'Error'}
+        message={successMessage}
+        type={modalType}
+      />
+      
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        onClose={() => {
+          setShowConfirmModal(false);
+          setSessionToCancel(null);
+        }}
+        onConfirm={confirmCancelSession}
+        title="Cancel Session"
+        message="Are you sure you want to cancel this session? This action cannot be undone."
+        confirmText="Yes, Cancel Session"
+        cancelText="Keep Session"
+        loading={cancelLoading}
+      />
     </div>
   );
 };

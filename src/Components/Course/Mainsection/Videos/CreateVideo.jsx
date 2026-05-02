@@ -14,13 +14,25 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Limit duration field to 5 digits maximum
+    if (name === 'duration' && value.length > 5) {
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -29,6 +41,11 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
       ...prev,
       [name]: files[0]
     }));
+    
+    // Clear validation error when user selects a file
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -61,6 +78,7 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
           videoFile: null,
           thumbnailFile: null
         });
+        setValidationErrors({});
         onClose();
       } else {
         setError(result.message);
@@ -98,7 +116,16 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
               onChange={handleInputChange}
               required
               maxLength={50}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, title: 'Please enter the video title' }));
+              }}
             />
+            {validationErrors.title && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.title}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -111,7 +138,16 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
               rows="4"
               required
               maxLength={300}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, description: 'Please enter the video description' }));
+              }}
             />
+            {validationErrors.description && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.description}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -125,7 +161,17 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
               onKeyDown={(e) => e.key === '-' && e.preventDefault()}
               required
               min="1"
+              maxLength="5"
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, duration: 'Please enter the video duration' }));
+              }}
             />
+            {validationErrors.duration && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.duration}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -138,12 +184,22 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
                 accept="video/*"
                 onChange={handleFileChange}
                 className="file-input"
+                required
+                onInvalid={(e) => {
+                  e.preventDefault();
+                  setValidationErrors(prev => ({ ...prev, videoFile: 'Please select a video file' }));
+                }}
               />
               <label htmlFor="videoFile" className="file-label">
                 <Video size={20} />
                 {formData.videoFile ? formData.videoFile.name : "Choose a video file"}
               </label>
             </div>
+            {validationErrors.videoFile && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.videoFile}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -156,12 +212,22 @@ const CreateVideo = ({ isOpen, onClose, unitId, onVideoCreated }) => {
                 accept="image/*"
                 onChange={handleFileChange}
                 className="file-input"
+                required
+                onInvalid={(e) => {
+                  e.preventDefault();
+                  setValidationErrors(prev => ({ ...prev, thumbnailFile: 'Please select a thumbnail image' }));
+                }}
               />
               <label htmlFor="thumbnailFile" className="file-label">
                 <Upload size={20} />
                 {formData.thumbnailFile ? formData.thumbnailFile.name : "Choose a thumbnail"}
               </label>
             </div>
+            {validationErrors.thumbnailFile && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.thumbnailFile}
+              </div>
+            )}
           </div>
 
           <div className="form-actions">

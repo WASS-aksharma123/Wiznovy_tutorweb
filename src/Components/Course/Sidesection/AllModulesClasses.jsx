@@ -85,7 +85,7 @@ const AllModulesClasses = ({ courseId, selectedUnit, onUnitSelect }) => {
                   </button>
                 </div>
                 <button className="unit-image-btn" >
-                  <img src={unit.imgUrl} alt={unit.name} />
+                  <img src={unit.imgUrl ? unit.imgUrl : "/src/assets/Images/Group 291.svg"} alt={unit.name} />
                 </button>
                 <div className="unit-info">
                   <h4>{unit.name}</h4>

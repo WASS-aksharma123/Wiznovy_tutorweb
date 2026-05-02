@@ -1,63 +1,43 @@
-import React, { useState, memo } from 'react'
-import PropTypes from 'prop-types'
-import Loader from './Loader'
+import { useState, useCallback } from 'react';
 
-const OptimizedImage = memo(({ 
+const OptimizedImage = ({ 
   src, 
   alt, 
   className = '', 
-  placeholder = '/api/placeholder/400/300',
   loading = 'lazy',
+  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PC9zdmc+',
   ...props 
 }) => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  const handleLoad = () => {
-    setIsLoading(false)
-  }
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
 
-  const handleError = () => {
-    setIsLoading(false)
-    setHasError(true)
-  }
+  const handleError = useCallback(() => {
+    setHasError(true);
+  }, []);
 
   if (hasError) {
     return (
-      <div className={`image-placeholder ${className}`} {...props}>
-        <span>Image not available</span>
+      <div className={`${className} bg-gray-200 flex items-center justify-center`}>
+        <span className="text-gray-500 text-sm">Image unavailable</span>
       </div>
-    )
+    );
   }
 
   return (
-    <div className={`image-container ${className}`} {...props}>
-      {isLoading && (
-        <div className="image-loader">
-          <Loader size="small" text="" />
-        </div>
-      )}
-      <img
-        src={src}
-        alt={alt}
-        loading={loading}
-        onLoad={handleLoad}
-        onError={handleError}
-        style={{ display: isLoading ? 'none' : 'block' }}
-        className={className}
-      />
-    </div>
-  )
-})
+    <img
+      src={isLoaded ? src : placeholder}
+      alt={alt}
+      className={className}
+      loading={loading}
+      onLoad={handleLoad}
+      onError={handleError}
+      {...props}
+    />
+  );
+};
 
-OptimizedImage.displayName = 'OptimizedImage'
-
-OptimizedImage.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  placeholder: PropTypes.string,
-  loading: PropTypes.oneOf(['lazy', 'eager'])
-}
-
-export default OptimizedImage
+export default OptimizedImage;

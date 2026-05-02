@@ -4,6 +4,7 @@ import { fetchMyCoursesAsync } from "../../store/courseSlice";
 import "../../assets/Styles/AllCourse.scss";
 import CourseCard from "./CourseCard";
 import EditCourse from "./EditCourse";
+import { SlExclamation } from "react-icons/sl";
 
 const loaderStyles = `
   @keyframes spin {
@@ -38,6 +39,29 @@ const AllCourses = () => {
     dispatch(fetchMyCoursesAsync());
   };
 
+  const renderCourseContent = () => {
+    if (loading) {
+      return (
+        <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+          <div style={{ width: '40px', height: '40px', border: '4px solid #f3f3f3', borderTop: '4px solid #113D38', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+        </div>
+      );
+    }
+    
+    if (myCourses.length === 0) {
+      return (
+        <div className="no-sessions" style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '400px', gap: '10px' }}>
+          <SlExclamation size={50} />
+          No course found. Create your first course!
+        </div>
+      );
+    }
+    
+    return myCourses.map((courseItem) => (
+      <CourseCard key={courseItem.id} course={courseItem} onEdit={handleEditCourse} />
+    ));
+  };
+
   return (
     <div className="purchaseCoursess">
       <div className="purchaseCourse-containerr">
@@ -46,15 +70,7 @@ const AllCourses = () => {
         </div>
 
         <div className="course-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-          {loading ? (
-            <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-              <div style={{ width: '40px', height: '40px', border: '4px solid #f3f3f3', borderTop: '4px solid #113D38', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-            </div>
-          ) : (
-            myCourses.map((courseItem) => (
-              <CourseCard key={courseItem.id} course={courseItem} onEdit={handleEditCourse} />
-            ))
-          )}
+          {renderCourseContent()}
         </div>
       </div>
       

@@ -13,6 +13,7 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,11 +21,21 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
+    
+    // Clear validation error when user selects a file
+    if (validationErrors.file) {
+      setValidationErrors(prev => ({ ...prev, file: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,6 +64,7 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
           unitId: unitId || '',
         });
         setFile(null);
+        setValidationErrors({});
       } else {
         setError(result.message);
       }
@@ -89,7 +101,16 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
               onChange={handleInputChange}
               required
               maxLength={100}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, title: 'Please enter the study material title' }));
+              }}
             />
+            {validationErrors.title && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.title}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -102,11 +123,20 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
               rows="4"
               required
               maxLength={500}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, description: 'Please enter the study material description' }));
+              }}
             />
+            {validationErrors.description && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.description}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
-            <label htmlFor="file">PDF File (Optional)</label>
+            <label htmlFor="file">PDF File</label>
             <div className="file-upload">
               <input
                 type="file"
@@ -115,12 +145,22 @@ const CreateStudyMaterial = ({ isOpen, onClose, unitId, onSuccess }) => {
                 className="file-input"
                 onChange={handleFileChange}
                 accept=".pdf"
+                required
+                onInvalid={(e) => {
+                  e.preventDefault();
+                  setValidationErrors(prev => ({ ...prev, file: 'Please select a PDF file' }));
+                }}
               />
               <label htmlFor="file" className="file-label">
                 <FileText size={20} />
                 {file ? file.name : 'Choose a PDF file to upload'}
               </label>
             </div>
+            {validationErrors.file && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.file}
+              </div>
+            )}
           </div>
 
           <div className="form-actions">

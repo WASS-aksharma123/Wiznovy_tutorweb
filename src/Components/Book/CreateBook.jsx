@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { X, Upload } from 'lucide-react';
 import { fetchSubjectsAsync, fetchLanguagesAsync } from '../../store/courseSlice';
 import { createBookBasicAsync, updateBookCoverImageAsync, updateBookImagesAsync, updateBookPdfAsync, updateBookAsync } from '../../store/bookSlice';
@@ -8,6 +9,7 @@ import '../../assets/Styles/CreateBook.scss';
 
 const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { subjects, languages } = useSelector(state => state.course);
   const { loading: bookLoading } = useSelector(state => state.book);
   const [formData, setFormData] = useState({
@@ -25,6 +27,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [createdBookId, setCreatedBookId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,6 +35,11 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -41,18 +49,28 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
       ...prev,
       [name]: file
     }));
+    
+    // Clear validation error when user selects a file
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleMultipleFileChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 3) {
-      alert('Maximum 3 images allowed');
+      setValidationErrors(prev => ({ ...prev, bookImages: 'Maximum 3 images allowed' }));
       return;
     }
     setFormData(prev => ({
       ...prev,
       bookImages: files
     }));
+    
+    // Clear validation error when user selects files
+    if (validationErrors.bookImages) {
+      setValidationErrors(prev => ({ ...prev, bookImages: '' }));
+    }
   };
 
   useEffect(() => {
@@ -95,12 +113,30 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
 
   const handleNext = async () => {
     if (currentStep === 1) {
-      // Validate step 1 fields
-      const requiredFields = ['title', 'authorName', 'description', 'subject', 'language', 'numberOfPages'];
-      const isValid = requiredFields.every(field => formData[field]?.toString().trim());
+      // Validate step 1 fields individually
+      const errors = {};
       
-      if (!isValid) {
-        alert('Please fill in all required fields');
+      if (!formData.title?.trim()) {
+        errors.title = 'Please enter the book title';
+      }
+      if (!formData.authorName?.trim()) {
+        errors.authorName = 'Please enter the author name';
+      }
+      if (!formData.description?.trim()) {
+        errors.description = 'Please enter the book description';
+      }
+      if (!formData.subject) {
+        errors.subject = 'Please select a subject';
+      }
+      if (!formData.language) {
+        errors.language = 'Please select a language';
+      }
+      if (!formData.numberOfPages || formData.numberOfPages <= 0) {
+        errors.numberOfPages = 'Please enter a valid number of pages';
+      }
+      
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
         return;
       }
 
@@ -126,21 +162,27 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
           const result = await dispatch(createBookBasicAsync(bookBasicData)).unwrap();
           setCreatedBookId(result.id);
         }
+        setValidationErrors({});
         setCurrentStep(2);
       } catch (error) {
         console.error('Error saving book:', error);
-        alert('Failed to save book. Please try again.');
+        setValidationErrors(prev => ({ ...prev, general: 'Failed to save book. Please try again.' }));
       } finally {
         setLoading(false);
       }
     } else if (currentStep === 2) {
-      // Validate step 2 fields (file uploads)
+      // Validate step 2 fields individually
+      const errors = {};
+      
       if (!formData.coverImage) {
-        alert('Please select a cover image');
-        return;
+        errors.coverImage = 'Please select a cover image';
       }
       if (!formData.bookImages || formData.bookImages.length === 0) {
-        alert('Please select at least one book image');
+        errors.bookImages = 'Please select at least one book image';
+      }
+      
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
         return;
       }
 
@@ -157,10 +199,11 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
           bookImagesFiles: formData.bookImages 
         })).unwrap();
         
+        setValidationErrors({});
         setCurrentStep(3);
       } catch (error) {
         console.error('Error uploading images:', error);
-        alert('Failed to upload images. Please try again.');
+        setValidationErrors(prev => ({ ...prev, general: 'Failed to upload images. Please try again.' }));
       } finally {
         setLoading(false);
       }
@@ -170,9 +213,15 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate step 3
+    // Validate step 3 individually
+    const errors = {};
+    
     if (!formData.pdfFile) {
-      alert('Please select a PDF file');
+      errors.pdfFile = 'Please select a PDF file';
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
       return;
     }
     
@@ -199,10 +248,14 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
       });
       setCreatedBookId(null);
       setCurrentStep(1);
+      setValidationErrors({});
       onClose();
+      
+      // Redirect to my-books page
+      navigate('/my-books');
     } catch (error) {
       console.error('Error uploading PDF:', error);
-      alert('Failed to upload PDF. Please try again.');
+      setValidationErrors({ pdfFile: 'Failed to upload PDF. Please try again.' });
     } finally {
       setLoading(false);
     }
@@ -222,6 +275,7 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
     });
     setCreatedBookId(null);
     setCurrentStep(1);
+    setValidationErrors({});
     onClose();
   };
 
@@ -268,7 +322,16 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   placeholder="Enter book title (Max 100 characters)"
                   required
                   maxLength={100}
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setValidationErrors(prev => ({ ...prev, title: 'Please enter the book title' }));
+                  }}
                 />
+                {validationErrors.title && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.title}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -282,7 +345,16 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   placeholder="Enter author name"
                   required
                   maxLength={60}
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setValidationErrors(prev => ({ ...prev, authorName: 'Please enter the author name' }));
+                  }}
                 />
+                {validationErrors.authorName && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.authorName}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -296,8 +368,16 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   rows="4"
                   required
                   maxLength={300}
-
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setValidationErrors(prev => ({ ...prev, description: 'Please enter the book description' }));
+                  }}
                 />
+                {validationErrors.description && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.description}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -308,6 +388,10 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   value={formData.subject}
                   onChange={handleInputChange}
                   required
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setValidationErrors(prev => ({ ...prev, subject: 'Please select a subject' }));
+                  }}
                 >
                   <option value="">Select a subject</option>
                   {subjects.map((subject) => (
@@ -316,6 +400,11 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                     </option>
                   ))}
                 </select>
+                {validationErrors.subject && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.subject}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -326,6 +415,10 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   value={formData.language}
                   onChange={handleInputChange}
                   required
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setValidationErrors(prev => ({ ...prev, language: 'Please select a language' }));
+                  }}
                 >
                   <option value="">Select a language</option>
                   {languages.map((language) => (
@@ -334,9 +427,12 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                     </option>
                   ))}
                 </select>
+                {validationErrors.language && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.language}
+                  </div>
+                )}
               </div>
-
-              
 
               <div className="form-group">
                 <label htmlFor="numberOfPages">Number of Pages</label>
@@ -349,7 +445,22 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   placeholder="Enter number of pages"
                   required
                   min="1"
+                  max="99999"
+                  onInput={(e) => {
+                    if (e.target.value.length > 5) {
+                      e.target.value = e.target.value.slice(0, 5);
+                    }
+                  }}
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setValidationErrors(prev => ({ ...prev, numberOfPages: 'Please enter the number of pages' }));
+                  }}
                 />
+                {validationErrors.numberOfPages && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.numberOfPages}
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -367,12 +478,21 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                     onChange={handleFileChange}
                     className="file-input"
                     required
+                    onInvalid={(e) => {
+                      e.preventDefault();
+                      setValidationErrors(prev => ({ ...prev, coverImage: 'Please select a cover image' }));
+                    }}
                   />
                   <label htmlFor="coverImage" className="file-label">
                     <Upload size={20} />
                     {formData.coverImage ? formData.coverImage.name : "Choose cover image"}
                   </label>
                 </div>
+                {validationErrors.coverImage && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.coverImage}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -387,12 +507,21 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                     onChange={handleMultipleFileChange}
                     className="file-input"
                     required
+                    onInvalid={(e) => {
+                      e.preventDefault();
+                      setValidationErrors(prev => ({ ...prev, bookImages: 'Please select at least one book image' }));
+                    }}
                   />
                   <label htmlFor="bookImages" className="file-label">
                     <Upload size={20} />
                     {formData.bookImages.length > 0 ? `${formData.bookImages.length} image(s) selected` : "Choose book images"}
                   </label>
                 </div>
+                {validationErrors.bookImages && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                    {validationErrors.bookImages}
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -409,12 +538,21 @@ const CreateBook = ({ isOpen, onClose, editMode = false, bookData = null }) => {
                   onChange={handleFileChange}
                   className="file-input"
                   required
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setValidationErrors(prev => ({ ...prev, pdfFile: 'Please select a PDF file' }));
+                  }}
                 />
                 <label htmlFor="pdfFile" className="file-label">
                   <Upload size={20} />
                   {formData.pdfFile ? formData.pdfFile.name : "Choose PDF file"}
                 </label>
               </div>
+              {validationErrors.pdfFile && (
+                <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                  {validationErrors.pdfFile}
+                </div>
+              )}
             </div>
           )}
 

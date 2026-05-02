@@ -42,8 +42,8 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
         totalDuration: courseData.totalDuration || '',
         totalLectures: courseData.totalLectures || '',
         validityDays: courseData.validityDays || '',
-        startDate: courseData.startDate || '',
-        endDate: courseData.endDate || '',
+        startDate: courseData.startDate ? new Date(courseData.startDate).toISOString().split('T')[0] : '',
+        endDate: courseData.endDate ? new Date(courseData.endDate).toISOString().split('T')[0] : '',
         price: courseData.price || '',
         discountedPrice: courseData.discountPrice || '',
         courseDescription: courseData.description || '',
@@ -123,7 +123,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
           </button>
         </div>
 
-        <form className="course-form">
+        <form className="course-form" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
           <div className="form-group">
             <label htmlFor='course_input'>Course Name</label>
             <input
@@ -133,6 +133,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
               onChange={(e) => handleInputChange('courseName', e.target.value)}
               placeholder="Enter course name"
               maxLength={70}
+              required
             />
           </div>
 
@@ -163,6 +164,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 id="subject-select"
                 value={formData.subject}
                 onChange={(e) => handleInputChange('subject', e.target.value)}
+                required
               >
                 <option value="">Select Subject</option>
                 {subjects.map(subject => (
@@ -177,6 +179,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 id="language-select"
                 value={formData.language}
                 onChange={(e) => handleInputChange('language', e.target.value)}
+                required
               >
                 <option value="">Select Language</option>
                 {languages.map(language => (
@@ -195,6 +198,8 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 value={formData.totalDuration}
                 onChange={(e) => handleInputChange('totalDuration', e.target.value)}
                 placeholder="0"
+                required
+                min="0"
               />
             </div>
 
@@ -206,6 +211,8 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 value={formData.totalLectures}
                 onChange={(e) => handleInputChange('totalLectures', e.target.value)}
                 placeholder="0"
+                required
+                min="0"
               />
             </div>
 
@@ -217,6 +224,8 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 value={formData.validityDays}
                 onChange={(e) => handleInputChange('validityDays', e.target.value)}
                 placeholder="0"
+                required
+                min="0"
               />
             </div>
           </div>
@@ -229,6 +238,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => handleInputChange('startDate', e.target.value)}
+                required
               />
             </div>
 
@@ -239,6 +249,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => handleInputChange('endDate', e.target.value)}
+                required
               />
             </div>
           </div>
@@ -253,6 +264,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                   value={formData.price}
                   onChange={(e) => handleInputChange('price', e.target.value)}
                   placeholder="0.00"
+                  required
+                  min="0"
+                  step="0.01"
                 />
               </div>
 
@@ -264,6 +278,9 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
                   value={formData.discountedPrice}
                   onChange={(e) => handleInputChange('discountedPrice', e.target.value)}
                   placeholder="0.00"
+                  min="0"
+                  max={formData.price || undefined}
+                  step="0.01"
                 />
               </div>
             </div>
@@ -278,6 +295,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
               placeholder="Describe your course..."
               rows={4}
               maxLength={250}
+              required
             />
           </div>
 
@@ -291,6 +309,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
               rows={3}
               maxLength={150}
               minLength={10}
+              required
             />
           </div>
 
@@ -319,7 +338,7 @@ const EditCourse = ({ isOpen, onClose, courseData, onSave }) => {
             <button type="button" onClick={handleCancel} className="cancel-btn">
               Cancel
             </button>
-            <button type="button" onClick={handleSave} className="save-btn">
+            <button type="submit" className="save-btn">
               Update Course
             </button>
           </div>

@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPayout } from '../../store/walletSlice';
+import { createPayout, fetchBalance } from '../../store/walletSlice';
 import Modal from '../Modals/Modal';
 import '../../assets/Styles/Wallet/Withdraw.scss';
 
-const Withdraw = ({ account, onClose, availableBalance }) => {
+const Withdraw = ({ account, onClose }) => {
     const dispatch = useDispatch();
-    const { payoutLoading } = useSelector(state => state.wallet);
+    const { payoutLoading, balance } = useSelector(state => state.wallet);
     const [amount, setAmount] = useState('');
     const [withdrawAll, setWithdrawAll] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
     const [transactionId, setTransactionId] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    useEffect(() => {
+        dispatch(fetchBalance());
+    }, [dispatch]);
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replaceAll(/\D/g, '');
@@ -23,29 +29,60 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
         const checked = e.target.checked;
         setWithdrawAll(checked);
         if (checked) {
-            setAmount(availableBalance?.toString() || '');
+            if (balance <= 0) {
+                alert('Insufficient balance to withdraw');
+                setWithdrawAll(false);
+                return;
+            }
+            setAmount(balance.toString());
         } else {
             setAmount('');
         }
     };
 
     const handleWithdraw = async () => {
-        if (!amount || Number.parseInt(amount, 10) <= 0) {
+        const withdrawAmount = Number.parseInt(amount, 10);
+
+        if (!amount || withdrawAmount <= 0) {
             alert('Please enter a valid amount');
             return;
         }
-        
+
+        if (withdrawAmount > balance) {
+            setErrorMessage(`Available: $${balance}`);
+            setShowErrorModal(true);
+            return;
+        }
+
         const payoutData = {
-            amount: Number.parseInt(amount, 10),
+            amount: withdrawAmount,
             bankDetailId: account.id || 'bank-detail-id-here'
         };
-        
+
         try {
             const result = await dispatch(createPayout(payoutData)).unwrap();
             setTransactionId(result.payout.id);
             setShowSuccessModal(true);
         } catch (error) {
-            alert(`Payout request failed: ${error}`);
+            const errorMsg = error?.message || error;
+
+            if (errorMsg.includes('API Error:')) {
+                const jsonMatch = errorMsg.match(/\{.*\}/);
+                if (jsonMatch) {
+                    try {
+                        const errorData = JSON.parse(jsonMatch[0]);
+                        setErrorMessage(errorData.message || errorMsg);
+                    } catch {
+                        setErrorMessage(errorMsg);
+                    }
+                } else {
+                    setErrorMessage(errorMsg);
+                }
+                setShowErrorModal(true);
+            } else {
+                setErrorMessage(errorMsg);
+                setShowErrorModal(true);
+            }
         }
     };
 
@@ -56,7 +93,7 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
                     <button className="close_btn" onClick={onClose}>X</button>
                     <div className="withdraw_form">
                         <h2>Withdraw Amount</h2>
-                        
+
                         <div className="bank_details_section">
                             <h3>Bank Account Details</h3>
                             <div className="detail_item">
@@ -90,6 +127,7 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
                                 value={amount}
                                 onChange={handleAmountChange}
                                 disabled={withdrawAll}
+                                maxLength={5}
                             />
                         </div>
 
@@ -103,8 +141,8 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
                             <label htmlFor="withdrawAll">Withdraw All</label>
                         </div>
 
-                        <button 
-                            className="continueWithdraw" 
+                        <button
+                            className="continueWithdraw"
                             onClick={handleWithdraw}
                             disabled={payoutLoading}
                         >
@@ -113,15 +151,39 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
                     </div>
                 </div>
             </div>
-            
+
             <Modal
                 isOpen={showSuccessModal}
                 onClose={() => {
                     setShowSuccessModal(false);
                     onClose();
                 }}
-                heading="Payout Request Created Successfully!"
+                heading="Payout Request Created"
                 subheading={`Transaction ID: ${transactionId}`}
+                buttonText="OK"
+            />
+
+            <Modal
+                isOpen={showErrorModal}
+                onClose={() => setShowErrorModal(false)}
+                heading="Payout Request Failed"
+                subheading={errorMessage}
+                buttonText="OK"
+            />
+
+            <Modal
+                isOpen={showErrorModal}
+                onClose={() => setShowErrorModal(false)}
+                heading="Insufficient wallet balance"
+                subheading={errorMessage}
+                buttonText="OK"
+            />
+
+            <Modal
+                isOpen={showErrorModal}
+                onClose={() => setShowErrorModal(false)}
+                heading=""
+                subheading={errorMessage}
                 buttonText="OK"
             />
         </>
@@ -130,8 +192,7 @@ const Withdraw = ({ account, onClose, availableBalance }) => {
 
 Withdraw.propTypes = {
     account: PropTypes.object.isRequired,
-    onClose: PropTypes.func.isRequired,
-    availableBalance: PropTypes.number
+    onClose: PropTypes.func.isRequired
 };
 
 export default Withdraw;

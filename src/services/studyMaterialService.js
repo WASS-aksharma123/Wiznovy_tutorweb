@@ -250,6 +250,83 @@ export const updateStudyMaterialByTutorWithId = async (studyMaterialId, studyMat
   }
 };
 
+export const updateStudyMaterialByTutorWithPdf = async (studyMaterialId, title, description, pdfFile = null) => {
+  try {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    
+    if (pdfFile) {
+      formData.append('pdf', pdfFile);
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/study-material/tutor/${studyMaterialId}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: 'Study material updated successfully',
+        data: data,
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || 'Failed to update study material',
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: `Network error: ${error}`,
+    };
+  }
+};
+
+export const updateStudyMaterialPdf = async (studyMaterialId, pdfFile) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', pdfFile);
+    
+    const response = await fetch(`${API_BASE_URL}/study-material/pdf/${studyMaterialId}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: 'PDF updated successfully',
+        data: data,
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || 'Failed to update PDF',
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: `Network error: ${error}`,
+    };
+  }
+};
+
 export const deleteStudyMaterial = async (studyMaterialId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/study-material/${studyMaterialId}`, {

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { X, Upload, User, Mail, Phone, Users, Globe, DollarSign, BookOpen, MapPin, FileText, Clock, Languages } from "lucide-react";
 import "../assets/Styles/ProfileUpdate.scss";
 import { API_BASE_URL } from '../config/api';
@@ -27,8 +28,10 @@ export const updateTutorDetails = async (data) => {
   }
 };
 
-const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
+const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate, scrollToField }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const initialPathRef = useRef(null);
   const { loading: availabilityLoading } = useSelector(state => state.availability);
   const [subjects, setSubjects] = useState([]);
   const [languages, setLanguages] = useState([]);
@@ -258,6 +261,40 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
     }
   }, [isOpen]);
 
+  // Close modal when route changes
+  useEffect(() => {
+    if (isOpen && initialPathRef.current && location.pathname !== initialPathRef.current) {
+      onClose();
+    }
+  }, [location.pathname, isOpen, onClose]);
+
+  // Track initial path when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      initialPathRef.current = location.pathname;
+    } else {
+      initialPathRef.current = null;
+    }
+  }, [isOpen, location.pathname]);
+
+  // Auto-scroll to specific field when modal opens
+  useEffect(() => {
+    if (isOpen && scrollToField) {
+      const timer = setTimeout(() => {
+        const fieldElement = document.querySelector(`[name="${scrollToField}"]`);
+        if (fieldElement) {
+          fieldElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+          fieldElement.focus();
+        }
+      }, 300); // Wait for modal to fully render
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, scrollToField]);
+
   const handleSubjectChange = (value, updates) => {
     const subject = subjects.find(s => s.name === value);
     updates.subjectId = subject ? subject.id : "";
@@ -307,6 +344,12 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Restrict hourlyRate to 5 digits
+    if (name === 'hourlyRate') {
+      if (value.length > 5) return;
+    }
+    
     const updates = { [name]: value };
     
     const fieldHandlers = {
@@ -345,10 +388,47 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
   };
 
   const handleTimeSlotChange = (field, value) => {
-    setTimeSlotPopup(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    if (field === 'fromTime') {
+      const [fromHour, fromMinute] = value.split(':').map(Number);
+      const [toHour, toMinute] = timeSlotPopup.toTime.split(':').map(Number);
+      
+      // If the new from time is >= to time, adjust the to time
+      if (fromHour > toHour || (fromHour === toHour && fromMinute >= toMinute)) {
+        const newToMinute = fromMinute + 1;
+        if (newToMinute >= 60) {
+          const newToHour = fromHour + 1;
+          if (newToHour < 24) {
+            setTimeSlotPopup(prev => ({
+              ...prev,
+              fromTime: value,
+              toTime: `${newToHour.toString().padStart(2, '0')}:00`
+            }));
+          } else {
+            setTimeSlotPopup(prev => ({
+              ...prev,
+              fromTime: value,
+              toTime: '23:59'
+            }));
+          }
+        } else {
+          setTimeSlotPopup(prev => ({
+            ...prev,
+            fromTime: value,
+            toTime: `${fromHour.toString().padStart(2, '0')}:${newToMinute.toString().padStart(2, '0')}`
+          }));
+        }
+      } else {
+        setTimeSlotPopup(prev => ({
+          ...prev,
+          [field]: value
+        }));
+      }
+    } else {
+      setTimeSlotPopup(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
   };
 
   const getDayAvailability = (day) => {
@@ -630,8 +710,8 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="profile-update-overlay">
-      <div className="profile-update-modal">
+    <div className="profile-update-overlay" onClick={onClose}>
+      <div className="profile-update-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Update Profile</h2>
           <button className="close-btn" onClick={onClose}>
@@ -681,7 +761,7 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
                 onChange={handleInputChange}
                 placeholder="Enter your name"
                 required
-                maxLength={40}
+                maxLength={100}
               />
             </div>
 
@@ -749,14 +829,14 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
             <div className="field-group">
               <label>
                 <Users size={16} />
-                Qualifications
+                Education Level
               </label>
               <select
                 name="qualifications"
                 value={formData.qualifications}
                 onChange={handleInputChange}
               >
-                <option value="">Select Qualification</option>
+                <option value="">Select Education Level</option>
                 {qualifications.map(qualification => (
                   <option key={qualification.id} value={qualification.name}>
                     {qualification.name}
@@ -777,7 +857,8 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
                 onChange={handleInputChange}
                 placeholder="Enter your hourly rate"
                 min="0"
-                step="0.01"
+                max="99999"
+                step="0.5"
               />
             </div>
 
@@ -880,25 +961,46 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
               </div>
             </div>
 
-            <div className="field-group">
+            <div className="field-group" name="availableDays">
               <label>
                 <Clock size={16} />
                 Available Days
               </label>
               <div className="days-selector">
                 {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
-                  <div key={day} className="day-item">
+                  <div 
+                    key={day} 
+                    className={`day-item ${formData.availableDays.includes(day) ? 'selected' : ''}`}
+                  >
                     <label className="day-checkbox">
                       <input
                         type="checkbox"
                         checked={formData.availableDays.includes(day)}
                         onChange={() => handleDayChange(day)}
                       />
-                      <button type="button" onClick={() => handleDayClick(day)}>{day.slice(0, 3)}</button>
+                      <button 
+                        type="button" 
+                        className="day-toggle-btn" 
+                        onClick={() => handleDayClick(day)}
+                      >
+                        {day}
+                      </button>
                     </label>
                     <div className="day-actions">
-                      <button type="button" className="view-btn-small" onClick={() => handleViewTimeSlot(day)}>V</button>
-                      <button type="button" className="edit-btn-small" onClick={() => handleEditTimeSlot(day)}>E</button>
+                      <button 
+                        type="button" 
+                        className="availability-btn view-availability" 
+                        onClick={() => handleViewTimeSlot(day)}
+                      >
+                        View Availability
+                      </button>
+                      <button 
+                        type="button" 
+                        className="availability-btn edit-availability" 
+                        onClick={() => handleEditTimeSlot(day)}
+                      >
+                        Edit Availability
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -938,29 +1040,107 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
 
       {/* Time Slot Popup */}
       {timeSlotPopup.isOpen && (
-        <div className="time-slot-overlay">
-          <div className="time-slot-modal">
+        <div className="time-slot-overlay" onClick={handleTimeSlotCancel}>
+          <div className="time-slot-modal" onClick={(e) => e.stopPropagation()}>
             <h3>Add time slot for {timeSlotPopup.selectedDay}</h3>
             
             <div className="time-inputs">
               <div className="time-field">
                 <label htmlFor="fromTime">From</label>
-                <input
-                  id="fromTime"
-                  type="time"
-                  value={timeSlotPopup.fromTime}
-                  onChange={(e) => handleTimeSlotChange('fromTime', e.target.value)}
-                />
+                <div className="custom-time-input">
+                  <select 
+                    value={timeSlotPopup.fromTime.split(':')[0]} 
+                    onChange={(e) => {
+                      const minutes = timeSlotPopup.fromTime.split(':')[1] || '00';
+                      handleTimeSlotChange('fromTime', `${e.target.value}:${minutes}`);
+                    }}
+                    className="time-select"
+                  >
+                    {Array.from({length: 24}, (_, i) => (
+                      <option key={i} value={i.toString().padStart(2, '0')}>
+                        {i.toString().padStart(2, '0')}
+                      </option>
+                    ))}
+                  </select>
+                  <span>:</span>
+                  <select 
+                    value={timeSlotPopup.fromTime.split(':')[1] || '00'} 
+                    onChange={(e) => {
+                      const hours = timeSlotPopup.fromTime.split(':')[0];
+                      handleTimeSlotChange('fromTime', `${hours}:${e.target.value}`);
+                    }}
+                    className="time-select"
+                  >
+                    {Array.from({length: 60}, (_, i) => (
+                      <option key={i} value={i.toString().padStart(2, '0')}>
+                        {i.toString().padStart(2, '0')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               
               <div className="time-field">
                 <label htmlFor="toTime">To</label>
-                <input
-                  id="toTime"
-                  type="time"
-                  value={timeSlotPopup.toTime}
-                  onChange={(e) => handleTimeSlotChange('toTime', e.target.value)}
-                />
+                <div className="custom-time-input">
+                  <select 
+                    value={timeSlotPopup.toTime.split(':')[0]} 
+                    onChange={(e) => {
+                      const minutes = timeSlotPopup.toTime.split(':')[1] || '00';
+                      handleTimeSlotChange('toTime', `${e.target.value}:${minutes}`);
+                    }}
+                    className="time-select"
+                  >
+                    {Array.from({length: 24}, (_, i) => {
+                      const fromHour = parseInt(timeSlotPopup.fromTime.split(':')[0]);
+                      const fromMinute = parseInt(timeSlotPopup.fromTime.split(':')[1]);
+                      const currentHour = i;
+                      
+                      // Disable hours that are before the from time
+                      const isDisabled = currentHour < fromHour || 
+                        (currentHour === fromHour && fromMinute >= 59);
+                      
+                      return (
+                        <option 
+                          key={i} 
+                          value={i.toString().padStart(2, '0')}
+                          disabled={isDisabled}
+                        >
+                          {i.toString().padStart(2, '0')}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  <span>:</span>
+                  <select 
+                    value={timeSlotPopup.toTime.split(':')[1] || '00'} 
+                    onChange={(e) => {
+                      const hours = timeSlotPopup.toTime.split(':')[0];
+                      handleTimeSlotChange('toTime', `${hours}:${e.target.value}`);
+                    }}
+                    className="time-select"
+                  >
+                    {Array.from({length: 60}, (_, i) => {
+                      const fromHour = parseInt(timeSlotPopup.fromTime.split(':')[0]);
+                      const fromMinute = parseInt(timeSlotPopup.fromTime.split(':')[1]);
+                      const toHour = parseInt(timeSlotPopup.toTime.split(':')[0]);
+                      const currentMinute = i;
+                      
+                      // Disable minutes that would make the to time <= from time
+                      const isDisabled = toHour === fromHour && currentMinute <= fromMinute;
+                      
+                      return (
+                        <option 
+                          key={i} 
+                          value={i.toString().padStart(2, '0')}
+                          disabled={isDisabled}
+                        >
+                          {i.toString().padStart(2, '0')}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
             </div>
             
@@ -976,8 +1156,8 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
 
       {/* View Availability Popup */}
       {viewPopup.isOpen && (
-        <div className="time-slot-overlay">
-          <div className="time-slot-modal" style={{padding:"15px"}}>
+        <div className="time-slot-overlay" onClick={() => setViewPopup(prev => ({ ...prev, isOpen: false }))}>
+          <div className="time-slot-modal" style={{padding:"15px"}} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header" style={{padding:"0"}}>
               <h3>{viewPopup.selectedDay} Availability</h3>
               <button className="close-btn" onClick={() => setViewPopup(prev => ({ ...prev, isOpen: false }))}>
@@ -987,19 +1167,20 @@ const ProfileUpdate = ({ isOpen, onClose, userData, onUpdate }) => {
             
             <div className="availability-info">
               {viewPopup.availability ? (
-                <>
+                <div style={{display:"flex", gap:"0.5rem", marginTop:"1rem"}}>
                   <div className="info-item">
                     <strong>Start Time:</strong> {viewPopup.availability.startTime}
                   </div>
+                  <p>To</p>
                   <div className="info-item">
                     <strong>End Time:</strong> {viewPopup.availability.endTime}
                   </div>
-                  <div className="info-item">
+                  {/* <div className="info-item">
                     <strong>Status:</strong> {viewPopup.availability.status}
-                  </div>
-                </>
+                  </div> */}
+                </div>
               ) : (
-                <div className="no-availability">
+                <div className="no-availability" style={{marginTop:"1rem"}}>
                   No availability set for {viewPopup.selectedDay}
                 </div>
               )}

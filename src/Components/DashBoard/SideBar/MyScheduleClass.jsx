@@ -19,6 +19,10 @@ const MyScheduleClass = () => {
           <button onClick={() => navigate('/my-books')}>My Books</button>
         </div>
         <div className="detail-item">
+          <Library size={16} />
+          <button onClick={() => navigate('/my-sessions')}>My Sessions</button>
+        </div>
+        <div className="detail-item">
           <ScrollText size={16} />
           <button onClick={() => navigate('/transactions')}>Transaction History</button>
         </div>

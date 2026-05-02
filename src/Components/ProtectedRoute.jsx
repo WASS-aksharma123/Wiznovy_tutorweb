@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Loader from './Loader'
 import PendingStatusPage from './PendingStatusPage'
+import OnboardingGuard from './OnboardingGuard'
 
 const ProtectedRoute = ({ children, requiredRole = null, fallbackPath = '/' }) => {
   const { isAuthenticated, user, loading } = useSelector((state) => state.auth)
@@ -59,7 +60,11 @@ const ProtectedRoute = ({ children, requiredRole = null, fallbackPath = '/' }) =
     return <Navigate to="/dashboard" replace />
   }
 
-  return children
+  return (
+    <OnboardingGuard>
+      {children}
+    </OnboardingGuard>
+  )
 }
 
 ProtectedRoute.propTypes = {

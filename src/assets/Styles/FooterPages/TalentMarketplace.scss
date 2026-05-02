@@ -1,0 +1,803 @@
+$primary-green: #1a4d3e;
+$dark-green: #0d3028;
+$light-green: #2a6050;
+$accent-gold: #c9a959;
+$text-dark: #1a1a1a;
+$text-light: #666;
+$white: #ffffff;
+$gray-light: #f5f5f5;
+$magenta: #d946ef;
+$orange: #fb923c;
+$cyan: #06b6d4;
+$blue: #3b82f6;
+$purple: #8b5cf6;
+
+.talent-marketplace {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: $text-dark;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+}
+
+// Hero Section
+.talent-hero-section {
+  background: linear-gradient(135deg, $primary-green 0%, $dark-green 100%);
+  padding: 6rem 2rem 4rem;
+  color: $white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .hero-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-text {
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      animation: slideInLeft 1s ease-out;
+
+      .highlight {
+        background: linear-gradient(135deg, $accent-gold, #fbbf24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      animation: slideInLeft 1s ease-out 0.2s both;
+    }
+  }
+
+  .hero-search {
+    animation: slideInLeft 1s ease-out 0.4s both;
+
+    .search-container {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 0.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .search-icon {
+        color: $text-light;
+        margin-left: 1rem;
+      }
+
+      input {
+        flex: 1;
+        padding: 1rem;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        color: $text-dark;
+        background: transparent;
+
+        &::placeholder {
+          color: $text-light;
+        }
+      }
+
+      .search-btn {
+        background: $primary-green;
+        color: $white;
+        border: none;
+        padding: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          background: $dark-green;
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+
+  .hero-visual {
+    position: relative;
+    animation: slideInRight 1s ease-out 0.6s both;
+
+    .floating-cards {
+      position: relative;
+      height: 400px;
+
+      .talent-card {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        animation: floatCard 3s ease-in-out infinite;
+
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .card-info {
+          .name {
+            font-weight: 600;
+            color: $text-dark;
+            font-size: 0.9rem;
+          }
+
+          .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: $accent-gold;
+            font-size: 0.8rem;
+          }
+        }
+
+        &.card-1 {
+          top: 20%;
+          left: 10%;
+          animation-delay: 0s;
+        }
+
+        &.card-2 {
+          top: 50%;
+          right: 20%;
+          animation-delay: 1s;
+        }
+
+        &.card-3 {
+          bottom: 20%;
+          left: 30%;
+          animation-delay: 2s;
+        }
+      }
+    }
+  }
+}
+
+// Stats Section
+.stats-section {
+  padding: 4rem 0;
+  background: $gray-light;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    .stat-card {
+      background: $white;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      }
+
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, $primary-green, $light-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: $white;
+      }
+
+      h3 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $primary-green;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: $text-light;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Categories Section
+.categories-section {
+  padding: 4rem 0;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $primary-green;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: $text-light;
+    }
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+
+    .category-card {
+      background: $white;
+      border: 2px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        border-color: $primary-green;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(26, 77, 62, 0.15);
+      }
+
+      &.active {
+        background: $primary-green;
+        border-color: $primary-green;
+        color: $white;
+
+        .category-icon {
+          color: $white;
+        }
+      }
+
+      .category-icon {
+        font-size: 2rem;
+        color: $primary-green;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      span {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Talents Section
+.talents-section {
+  padding: 4rem 0;
+  background: $gray-light;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $primary-green;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: $text-light;
+      font-size: 1rem;
+    }
+
+    .filters {
+      .filter-btn {
+        background: $white;
+        border: 2px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+
+        &:hover {
+          border-color: $primary-green;
+          color: $primary-green;
+        }
+      }
+    }
+  }
+
+  .talents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+
+    .talent-card {
+      background: $white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      .talent-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+
+        .talent-avatar {
+          position: relative;
+
+          img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid $white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
+
+          .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 16px;
+            height: 16px;
+            background: #10b981;
+            border: 2px solid $white;
+            border-radius: 50%;
+          }
+        }
+
+        .talent-badge {
+          background: linear-gradient(135deg, $accent-gold, #fbbf24);
+          color: $white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+      }
+
+      .talent-info {
+        h3 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin-bottom: 0.25rem;
+        }
+
+        .talent-title {
+          color: $text-light;
+          margin-bottom: 1rem;
+        }
+
+        .talent-rating {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+
+          .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: $accent-gold;
+
+            .reviews {
+              color: $text-light;
+              font-size: 0.85rem;
+            }
+          }
+
+          .location {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: $text-light;
+            font-size: 0.85rem;
+          }
+        }
+
+        .talent-skills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+
+          .skill-tag {
+            background: $gray-light;
+            color: $text-dark;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+          }
+
+          .skill-more {
+            background: $primary-green;
+            color: $white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+          }
+        }
+
+        .talent-stats {
+          display: flex;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+
+          .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: $text-light;
+            font-size: 0.85rem;
+          }
+        }
+
+        .talent-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .hourly-rate {
+            .rate {
+              font-size: 1.25rem;
+              font-weight: 700;
+              color: $primary-green;
+            }
+          }
+
+          .contact-btn {
+            background: $primary-green;
+            color: $white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: $dark-green;
+              transform: translateX(4px);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .load-more {
+    text-align: center;
+
+    .load-more-btn {
+      background: $white;
+      color: $primary-green;
+      border: 2px solid $primary-green;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: $primary-green;
+        color: $white;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+// CTA Section
+.talent-cta-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, $primary-green 0%, $dark-green 100%);
+  color: $white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite reverse;
+  }
+
+  .cta-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+
+    .cta-text {
+      h2 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+      }
+
+      p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+
+        .cta-primary {
+          background: $white;
+          color: $primary-green;
+          border: none;
+          padding: 1rem 2rem;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+          }
+        }
+
+        .cta-secondary {
+          background: transparent;
+          color: $white;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          padding: 1rem 2rem;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: $white;
+          }
+        }
+      }
+    }
+
+    .cta-visual {
+      .success-metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .metric {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          padding: 1.5rem;
+          border-radius: 12px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+
+          .metric-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+          }
+
+          .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .hero-section .hero-content,
+  .cta-section .cta-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .stats-section .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .categories-section .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .talents-section .talents-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 4rem 1rem 2rem;
+
+    .hero-text .hero-title {
+      font-size: 2.5rem;
+    }
+  }
+
+  .stats-section .stats-grid,
+  .categories-section .categories-grid,
+  .talents-section .talents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .talents-section .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .cta-section .cta-text h2 {
+    font-size: 2rem;
+  }
+
+  .cta-section .cta-buttons {
+    flex-direction: column;
+  }
+}

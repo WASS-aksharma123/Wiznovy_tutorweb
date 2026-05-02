@@ -29,6 +29,12 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Limit duration field to 5 digits maximum
+    if (name === 'duration' && value.length > 5) {
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -135,6 +141,7 @@ const EditVideo = ({ isOpen, onClose, video, onVideoUpdated }) => {
               value={formData.duration}
               onChange={handleInputChange}
               min="1"
+              maxLength="5"
             />
           </div>
 

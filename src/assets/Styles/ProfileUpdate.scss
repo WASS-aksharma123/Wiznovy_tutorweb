@@ -190,85 +190,147 @@
         }
 
         .days-selector {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          gap: 16px;
+
+          @media (max-width: 768px) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
+
+          @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
 
           .day-item {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 4px;
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+
+            &:hover {
+              border-color: var(--green);
+              box-shadow: 0 2px 8px rgba(17, 61, 56, 0.1);
+            }
+
+            &.selected {
+              background: rgba(17, 61, 56, 0.05);
+              border-color: var(--green);
+            }
 
             .day-checkbox {
               display: flex;
               align-items: center;
               cursor: pointer;
               user-select: none;
+              margin-bottom: 12px;
 
               input[type="checkbox"] {
                 display: none;
               }
 
-              span {
-                padding: 8px 12px;
-                border: 1px solid #ddd;
+              .day-toggle-btn {
+                padding: 10px 16px;
+                border: 2px solid #ddd;
                 border-radius: 6px;
-                font-size: 12px;
-                font-weight: 500;
-                transition: all 0.3s;
+                font-size: 13px;
+                font-weight: 600;
+                transition: all 0.3s ease;
                 background: white;
                 color: #666;
                 cursor: pointer;
-                min-width: 40px;
+                width: 100%;
                 text-align: center;
+                letter-spacing: 0.5px;
+                outline: none;
+
+                &:hover {
+                  border-color: var(--green);
+                  transform: translateY(-1px);
+                }
               }
 
-              input[type="checkbox"]:checked+span {
+              input[type="checkbox"]:checked + .day-toggle-btn {
                 background: var(--green);
                 border-color: var(--green);
                 color: white;
-              }
-
-              &:hover span {
-                border-color: var(--green);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(17, 61, 56, 0.3);
               }
             }
 
             .day-actions {
               display: flex;
-              gap: 2px;
+              gap: 8px;
+              justify-content: space-between;
 
-              .view-btn-small,
-              .edit-btn-small {
-                padding: 4px 6px;
-                border-radius: 4px;
-                font-size: 10px;
-                font-weight: 500;
+              @media (max-width: 480px) {
+                gap: 6px;
+              }
+
+              .availability-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 8px 12px;
+                border-radius: 5px;
+                font-size: 11px;
+                font-weight: 600;
                 cursor: pointer;
-                transition: all 0.3s;
+                transition: all 0.3s ease;
                 border: 1px solid;
-                min-width: 18px;
+                flex: 1;
                 text-align: center;
-              }
+                min-height: 32px;
+                position: relative;
+                outline: none;
 
-              .view-btn-small {
-                background: #e3f2fd;
-                border-color: #2196f3;
-                color: #1976d2;
-
-                &:hover {
-                  background: #bbdefb;
+                @media (max-width: 768px) {
+                  padding: 6px 8px;
+                  font-size: 10px;
+                  min-height: 28px;
                 }
-              }
 
-              .edit-btn-small {
-                background: #fff3e0;
-                border-color: #ff9800;
-                color: #f57c00;
+                @media (max-width: 480px) {
+                  font-size: 9px;
+                  padding: 5px 6px;
+                }
 
                 &:hover {
-                  background: #ffe0b2;
+                  transform: translateY(-1px);
+                }
+
+                &:active {
+                  transform: translateY(0);
+                }
+
+                &.view-availability {
+                  background: #f0f8ff;
+                  border-color: #4a90e2;
+                  color: #2c5aa0;
+
+                  &:hover {
+                    background: #e1f0ff;
+                    box-shadow: 0 2px 6px rgba(74, 144, 226, 0.2);
+                  }
+                }
+
+                &.edit-availability {
+                  background: #fff8f0;
+                  border-color: #f39c12;
+                  color: #d68910;
+
+                  &:hover {
+                    background: #fef2e7;
+                    box-shadow: 0 2px 6px rgba(243, 156, 18, 0.2);
+                  }
                 }
               }
             }
@@ -376,10 +438,64 @@
         font-family: inherit;
         transition: border-color 0.3s;
         background: white;
+        
+        /* Force 24-hour format */
+        &::-webkit-datetime-edit-ampm-field {
+          display: none;
+        }
+        
+        &::-webkit-datetime-edit {
+          display: flex;
+        }
+        
+        &::-webkit-datetime-edit-hour-field,
+        &::-webkit-datetime-edit-minute-field {
+          padding: 0;
+        }
 
         &:focus {
           border-color: var(--green);
           outline: none;
+        }
+      }
+      
+      .custom-time-input {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: white;
+        transition: border-color 0.3s;
+        
+        &:focus-within {
+          border-color: var(--green);
+        }
+        
+        .time-select {
+          border: none;
+          background: transparent;
+          font-size: 14px;
+          font-family: inherit;
+          cursor: pointer;
+          padding: 0;
+          outline: none;
+          min-width: 40px;
+          
+          &:focus {
+            outline: none;
+          }
+          
+          option:disabled {
+            color: #ccc;
+            background-color: #f5f5f5;
+          }
+        }
+        
+        span {
+          font-weight: bold;
+          color: #666;
         }
       }
     }

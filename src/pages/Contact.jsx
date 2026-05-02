@@ -1,19 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, Mail, Phone, MessageSquare } from 'lucide-react';
 import contactus from '../assets/Images/contactus.jpg';
 import '../assets/Styles/SignIn.scss';
 import "../assets/Styles/Pages/Contact.scss"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { fetchContactCategories, submitContactForm } from '../services/contactService';
+import { getTutorPages } from '../services/pageservice';
 
 export default function Contact() {
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pages, setPages] = useState([]);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    concernType: '',
     message: '',
     agreeToPolicy: false
   });
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      const result = await fetchContactCategories();
+      if (result.success) {
+        setCategories(result.data);
+      }
+    };
+    const loadPages = async () => {
+      const result = await getTutorPages();
+      if (result.success) {
+        setPages(result.pages);
+      }
+    };
+    loadCategories();
+    loadPages();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -23,9 +47,37 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+    
+    const result = await submitContactForm(formData);
+    
+    if (result.success) {
+      alert('Message sent successfully!');
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        concernType: '',
+        message: '',
+        agreeToPolicy: false
+      });
+    } else {
+      alert(`Error: ${result.message}`);
+    }
+    
+    setIsSubmitting(false);
+  };
+
+  const handlePrivacyPolicyClick = (e) => {
+    e.preventDefault();
+    const privacyPage = pages.find(page => page.title.toLowerCase().includes('privacy'));
+    if (privacyPage) {
+      navigate('/general-backend', { state: { pageData: privacyPage } });
+      window.scrollTo(0, 0);
+    }
   };
 
   return (
@@ -34,8 +86,8 @@ export default function Contact() {
         <section className="hero">
         <div className="hero-content">
           <div className="hero-text">
-            <h1>Powering people's progress.</h1>
-            <p>Reference site about Lorem Ipsum, giving information</p>
+            <h1>Contact Us</h1>
+            <p>Have questions or need support? Reach out to the Wiznovy team for guidance, feedback, or any assistance. You’re just a message away</p>
             <button className="btn-try">Try Today</button>
           </div>
           <div className="hero-image">
@@ -122,6 +174,28 @@ export default function Contact() {
             </div>
 
             <div className="form-group">
+              <label className="form-label" htmlFor="concernType">Concern related to</label>
+              <div className="input-container">
+                <select
+                  id="concernType"
+                  name="concernType"
+                  value={formData.concernType}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  required
+                  style={{ paddingLeft: '0.75rem' }}
+                >
+                  <option value="">Please select the concern type</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group">
               <label htmlFor="message" className="form-label">Message</label>
               <div className="input-container">
                 <MessageSquare className="input-icon" size={18} style={{ top: '0.75rem' }} />
@@ -130,7 +204,7 @@ export default function Contact() {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  placeholder="Leave us a message..."
+                  placeholder="Leave us a message... (Max 500 characters)"
                   className="form-input"
                   rows={4}
                   style={{ paddingTop: '0.75rem', resize: 'vertical', minHeight: '100px' }}
@@ -151,16 +225,15 @@ export default function Contact() {
                 />
                 <span className='policyyyy'>
                   You agree to our friendly{' '}
-                  <Link to ="/term" className="terms">
+                  <Link to="#" onClick={handlePrivacyPolicyClick} className="terms">
                     privacy policy.
                   </Link>
-                  
                 </span>
               </label>
             </div>
 
-            <button type="submit" className="signin-button">
-              Send message
+            <button type="submit" className="signin-button" disabled={isSubmitting}>
+              {isSubmitting ? 'Sending...' : 'Send message'}
             </button>
           </form>
         </div>

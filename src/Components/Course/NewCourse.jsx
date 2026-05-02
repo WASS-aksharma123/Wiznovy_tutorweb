@@ -50,6 +50,9 @@ const NewCourse = ({ isOpen, onClose }) => {
     const file = e.target.files[0];
     if (file) {
       setFormData(prev => ({ ...prev, thumbnail: file }));
+      if (validationErrors.thumbnail) {
+        setValidationErrors(prev => ({ ...prev, thumbnail: '' }));
+      }
     }
   };
 
@@ -407,6 +410,9 @@ const NewCourse = ({ isOpen, onClose }) => {
                   value={formData.discountedPrice}
                   onChange={(e) => handleInputChange('discountedPrice', e.target.value)}
                   placeholder="0.00"
+                  min="0"
+                  max={formData.price || undefined}
+                  step="0.01"
                 />
               </div>
             </div>

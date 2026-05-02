@@ -158,7 +158,12 @@ const courseSlice = createSlice({
     videoLecturesLoading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearUnits: (state) => {
+      state.units = [];
+      state.videoLectures = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createCourseAsync.pending, (state) => {
@@ -295,5 +300,7 @@ const courseSlice = createSlice({
       });
   },
 });
+
+export const { clearUnits } = courseSlice.actions;
 
 export default courseSlice.reducer;

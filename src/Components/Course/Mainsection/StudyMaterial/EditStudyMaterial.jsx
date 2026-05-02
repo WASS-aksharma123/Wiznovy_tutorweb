@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { X } from 'lucide-react';
-import { updateStudyMaterialByTutorWithId } from '../../../../services/studyMaterialService';
+import { X, FileText } from 'lucide-react';
+import { updateStudyMaterialByTutorWithId, updateStudyMaterialPdf } from '../../../../services/studyMaterialService';
 import './CreateStudyMaterial.scss';
 
 const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
@@ -9,8 +9,10 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
     title: '',
     description: '',
   });
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     if (studyMaterial) {
@@ -27,6 +29,21 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    
+    // Clear validation error when user selects a file
+    if (validationErrors.file) {
+      setValidationErrors(prev => ({ ...prev, file: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,22 +52,33 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
     setError('');
 
     try {
-      const submitData = {
+      // First, update the text data using tutor endpoint
+      const textData = {
         title: formData.title,
         description: formData.description,
       };
-
-      const result = await updateStudyMaterialByTutorWithId(studyMaterial.id, submitData);
-
-      if (result.success) {
-        onSuccess?.(result.data);
-        onClose();
-      } else {
-        setError(result.message);
+      const updateResult = await updateStudyMaterialByTutorWithId(studyMaterial.id, textData);
+      
+      if (!updateResult.success) {
+        throw new Error(updateResult.message);
       }
+
+      // If PDF file is selected, update it separately
+      if (file) {
+        const pdfResult = await updateStudyMaterialPdf(studyMaterial.id, file);
+        if (!pdfResult.success) {
+          console.warn('Failed to update PDF file:', pdfResult.message);
+          // Don't throw error here, text update was successful
+        }
+      }
+
+      onSuccess?.(updateResult.data);
+      setValidationErrors({});
+      setFile(null); // Clear the selected file
+      onClose();
     } catch (err) {
       console.error('Error updating study material:', err);
-      setError('An unexpected error occurred');
+      setError(err.message || 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }
@@ -81,7 +109,16 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
               onChange={handleInputChange}
               required
               maxLength={100}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, title: 'Please enter the study material title' }));
+              }}
             />
+            {validationErrors.title && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.title}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -94,15 +131,62 @@ const EditStudyMaterial = ({ isOpen, onClose, studyMaterial, onSuccess }) => {
               rows="4"
               required
               maxLength={500}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setValidationErrors(prev => ({ ...prev, description: 'Please enter the study material description' }));
+              }}
             />
+            {validationErrors.description && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.description}
+              </div>
+            )}
           </div>
 
-          {studyMaterial.fileName && (
+          {(studyMaterial.fileName || studyMaterial.fileUrl) && (
             <div className="form-group">
-              <span>Current File</span>
-              <p className="current-file">📄 {studyMaterial.fileName}</p>
+              <label>Current File</label>
+              <div className="current-file-display">
+                <div className="file-info">
+                  <FileText size={16} />
+                  <span className="file-name">{studyMaterial.fileName || 'PDF File'}</span>
+                </div>
+                {studyMaterial.fileUrl && (
+                  <a 
+                    href={studyMaterial.fileUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="view-file-btn"
+                  >
+                    View PDF
+                  </a>
+                )}
+              </div>
             </div>
           )}
+
+          <div className="form-group">
+            <label htmlFor="file">Update PDF File (Optional)</label>
+            <div className="file-upload">
+              <input
+                type="file"
+                id="file"
+                name="file"
+                className="file-input"
+                onChange={handleFileChange}
+                accept=".pdf"
+              />
+              <label htmlFor="file" className="file-label">
+                <FileText size={20} />
+                {file ? file.name : 'Choose a new PDF file to upload'}
+              </label>
+            </div>
+            {validationErrors.file && (
+              <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+                {validationErrors.file}
+              </div>
+            )}
+          </div>
 
           <div className="form-actions">
             <button type="button" className="cancel-btn" onClick={onClose}>

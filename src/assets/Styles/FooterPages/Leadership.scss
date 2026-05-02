@@ -1,0 +1,721 @@
+$primary-green: #1a4d3e;
+$dark-green: #0d3028;
+$light-green: #2a6050;
+$accent-gold: #c9a959;
+$text-dark: #1a1a1a;
+$text-light: #666;
+$white: #ffffff;
+$gray-light: #f5f5f5;
+$magenta: #d946ef;
+$orange: #fb923c;
+$cyan: #06b6d4;
+$blue: #3b82f6;
+$purple: #8b5cf6;
+
+.leadership {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: $text-dark;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+}
+
+// Hero Section
+.leadership-hero-section {
+  background: linear-gradient(135deg, $primary-green 0%, $dark-green 100%);
+  padding: 6rem 2rem 4rem;
+  color: $white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .hero-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-text {
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      animation: slideInLeft 1s ease-out;
+
+      .highlight {
+        background: linear-gradient(135deg, $accent-gold, #fbbf24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      opacity: 0.9;
+      animation: slideInLeft 1s ease-out 0.2s both;
+    }
+  }
+
+  .hero-visual {
+    animation: slideInRight 1s ease-out 0.4s both;
+
+    .leadership-grid-preview {
+      position: relative;
+      height: 400px;
+
+      .preview-card {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        animation: floatCard 4s ease-in-out infinite;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-8px) scale(1.05);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid $white;
+        }
+
+        .preview-info {
+          text-align: center;
+
+          .name {
+            font-weight: 600;
+            color: $text-dark;
+            font-size: 0.9rem;
+            display: block;
+          }
+
+          .role {
+            color: $text-light;
+            font-size: 0.75rem;
+          }
+        }
+
+        &.card-1 {
+          top: 10%;
+          left: 20%;
+          animation-delay: 0s;
+        }
+
+        &.card-2 {
+          top: 30%;
+          right: 10%;
+          animation-delay: 1s;
+        }
+
+        &.card-3 {
+          bottom: 30%;
+          left: 10%;
+          animation-delay: 2s;
+        }
+
+        &.card-4 {
+          bottom: 10%;
+          right: 25%;
+          animation-delay: 3s;
+        }
+      }
+    }
+  }
+}
+
+// Stats Section
+.stats-section {
+  padding: 4rem 0;
+  background: $gray-light;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    .stat-card {
+      background: $white;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      .stat-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, $primary-green, $light-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: $white;
+      }
+
+      h3 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: $primary-green;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: $text-light;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Team Section
+.team-section {
+  padding: 6rem 0;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+
+    h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: $primary-green;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: $text-light;
+    }
+  }
+
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+
+    .leader-card {
+      background: $white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.15);
+      }
+
+      &.active {
+        .leader-details {
+          max-height: 400px;
+          opacity: 1;
+          padding: 2rem;
+        }
+
+        .expand-icon {
+          transform: rotate(90deg);
+        }
+      }
+
+      .leader-image {
+        position: relative;
+        height: 280px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: all 0.4s ease;
+        }
+
+        .image-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-end;
+          padding: 1rem;
+
+          .expand-icon {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            padding: 0.5rem;
+            color: $primary-green;
+            transition: all 0.3s ease;
+          }
+        }
+
+        &:hover img {
+          transform: scale(1.05);
+        }
+      }
+
+      .leader-info {
+        padding: 2rem;
+        text-align: center;
+
+        h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          color: $text-dark;
+        }
+
+        .position {
+          color: $primary-green;
+          font-weight: 600;
+          margin-bottom: 1.5rem;
+        }
+
+        .leader-social {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+
+          .social-link {
+            width: 40px;
+            height: 40px;
+            background: $gray-light;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $text-light;
+            transition: all 0.3s ease;
+            text-decoration: none;
+
+            &:hover {
+              background: $primary-green;
+              color: $white;
+              transform: translateY(-2px);
+            }
+          }
+        }
+      }
+
+      .leader-details {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        background: $gray-light;
+
+        .leader-quote {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+
+          .quote-icon {
+            color: $accent-gold;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+          }
+
+          p {
+            font-style: italic;
+            color: $primary-green;
+            font-weight: 500;
+            line-height: 1.5;
+          }
+        }
+
+        .leader-bio {
+          margin-bottom: 1.5rem;
+
+          p {
+            color: $text-dark;
+            line-height: 1.6;
+          }
+        }
+
+        .leader-achievements {
+          h4 {
+            color: $primary-green;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+          }
+
+          ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+              color: $text-light;
+              padding: 0.25rem 0;
+              position: relative;
+              padding-left: 1.5rem;
+
+              &::before {
+                content: '✓';
+                position: absolute;
+                left: 0;
+                color: $accent-gold;
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Values Section
+.values-section {
+  padding: 6rem 0;
+  background: $gray-light;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+
+    h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: $primary-green;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: $text-light;
+    }
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    .value-card {
+      background: $white;
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      .value-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, $primary-green, $light-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: $white;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $primary-green;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        color: $text-light;
+        line-height: 1.6;
+      }
+    }
+  }
+}
+
+// CTA Section
+.leadership-cta-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, $primary-green 0%, $dark-green 100%);
+  color: $white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    border-radius: 50%;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+
+  .cta-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+
+    .cta-text {
+      h2 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+
+      p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+
+        .cta-primary {
+          background: $white;
+          color: $primary-green;
+          border: none;
+          padding: 1rem 2rem;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+          }
+        }
+
+        .cta-secondary {
+          background: transparent;
+          color: $white;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          padding: 1rem 2rem;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: $white;
+          }
+        }
+      }
+    }
+
+    .cta-visual {
+      .mission-metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .metric {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          padding: 2rem;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+
+          .metric-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .metric-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: block;
+          }
+
+          .metric-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .leadership-hero-section .hero-content,
+  .leadership-cta-section .cta-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .stats-section .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .team-section .leaders-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .values-section .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .leadership-hero-section {
+    padding: 4rem 1rem 2rem;
+
+    .hero-text .hero-title {
+      font-size: 2.5rem;
+    }
+  }
+
+  .stats-section .stats-grid,
+  .team-section .leaders-grid,
+  .values-section .values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .leadership-cta-section .cta-text h2 {
+    font-size: 2rem;
+  }
+
+  .leadership-cta-section .cta-buttons {
+    flex-direction: column;
+  }
+
+  .team-section .section-header h2,
+  .values-section .section-header h2 {
+    font-size: 2rem;
+  }
+}

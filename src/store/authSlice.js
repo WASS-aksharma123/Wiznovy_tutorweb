@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { registerUser, loginUser, verifyRegistration, forgotPassword, verifyOtp, resetPassword } from '../services/authService.js';
+import { registerUser, loginUser, verifyRegistration, forgotPassword, verifyOtp, resetPassword, resendOtp } from '../services/authService.js';
 
 // Async thunks
 export const signUpUser = createAsyncThunk(
@@ -93,6 +93,22 @@ export const resetPasswordUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const result = await resetPassword(userData);
+      if (result.success) {
+        return result;
+      } else {
+        return rejectWithValue(result.message);
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const resendOtpUser = createAsyncThunk(
+  'auth/resendOtp',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const result = await resendOtp(userData);
       if (result.success) {
         return result;
       } else {
@@ -214,6 +230,18 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(resetPasswordUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Resend OTP
+      .addCase(resendOtpUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resendOtpUser.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(resendOtpUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

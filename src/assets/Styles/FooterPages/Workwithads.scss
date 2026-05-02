@@ -1,0 +1,821 @@
+$primary-green: #1a4d3e;
+$dark-green: #0d3028;
+$light-green: #2a6050;
+$accent-gold: #c9a959;
+$text-dark: #1a1a1a;
+$text-light: #666;
+$white: #ffffff;
+$gray-light: #f5f5f5;
+$success: #10b981;
+$info: #3b82f6;
+$warning: #f59e0b;
+$purple: #8b5cf6;
+
+.workwithads-page {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: $text-dark;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $primary-green;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: $text-light;
+    }
+  }
+}
+
+// Hero Section
+.ads-hero-section {
+  background: linear-gradient(135deg, $primary-green 0%, $dark-green 100%);
+  padding: 6rem 2rem 4rem;
+  color: $white;
+  position: relative;
+  overflow: hidden;
+
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+      animation: float 8s ease-in-out infinite;
+
+      &.element-1 {
+        width: 400px;
+        height: 400px;
+        top: -10%;
+        right: -5%;
+        animation-delay: 0s;
+      }
+
+      &.element-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -10%;
+        left: 10%;
+        animation-delay: 2s;
+      }
+
+      &.element-3 {
+        width: 200px;
+        height: 200px;
+        top: 50%;
+        left: -5%;
+        animation-delay: 4s;
+      }
+    }
+  }
+
+  .hero-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-text {
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      animation: slideInLeft 1s ease-out;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      animation: slideInLeft 1s ease-out 0.2s both;
+
+      .highlight {
+        background: linear-gradient(135deg, $accent-gold, #fbbf24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      animation: slideInLeft 1s ease-out 0.4s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      animation: slideInLeft 1s ease-out 0.6s both;
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: $white;
+        color: $primary-green;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: $white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: $white;
+        }
+      }
+    }
+  }
+
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: slideInRight 1s ease-out 0.8s both;
+
+    .earnings-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      color: $text-dark;
+      min-width: 320px;
+      animation: floatCard 3s ease-in-out infinite;
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: $text-light;
+
+        .trend-icon {
+          color: $success;
+        }
+      }
+
+      .card-amount {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $primary-green;
+        margin-bottom: 0.5rem;
+      }
+
+      .card-growth {
+        color: $success;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .mini-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+        height: 60px;
+
+        .bar {
+          flex: 1;
+          background: linear-gradient(to top, $primary-green, $light-green);
+          border-radius: 4px 4px 0 0;
+          animation: growBar 1.5s ease-out both;
+        }
+      }
+    }
+  }
+}
+
+// Stats Section
+.stats-section {
+  padding: 4rem 0;
+  background: $gray-light;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    .stat-card {
+      background: $white;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      }
+
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, $primary-green, $light-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: $white;
+      }
+
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $primary-green;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: $text-light;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Benefits Section
+.benefits-section {
+  padding: 5rem 0;
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    .benefit-card {
+      background: $white;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      }
+
+      .benefit-icon {
+        margin-bottom: 1.5rem;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: $text-dark;
+      }
+
+      p {
+        color: $text-light;
+        line-height: 1.6;
+      }
+    }
+  }
+}
+
+// Ad Formats Section
+.ad-formats-section {
+  padding: 5rem 0;
+  background: $gray-light;
+
+  .formats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    .format-card {
+      background: $white;
+      padding: 2rem;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      }
+
+      .format-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.8rem;
+        color: $text-dark;
+      }
+
+      p {
+        color: $text-light;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      .format-earnings {
+        background: linear-gradient(135deg, $primary-green, $light-green);
+        color: $white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+// How It Works Section
+.how-it-works-section {
+  padding: 5rem 0;
+
+  .steps-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    position: relative;
+
+    .step-card {
+      background: $white;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInUp 0.8s ease-out forwards;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      }
+
+      .step-number {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, $primary-green, $light-green);
+        color: $white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 16px rgba(26, 77, 62, 0.3);
+      }
+
+      .step-icon {
+        width: 60px;
+        height: 60px;
+        background: $gray-light;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2rem auto 1.5rem;
+        color: $primary-green;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: $text-dark;
+      }
+
+      p {
+        color: $text-light;
+        line-height: 1.6;
+      }
+
+      .step-connector {
+        position: absolute;
+        top: 50%;
+        right: -3rem;
+        width: 3rem;
+        height: 2px;
+        background: linear-gradient(to right, $primary-green, transparent);
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+// Features Section
+.features-section {
+  padding: 5rem 0;
+  background: $gray-light;
+
+  .features-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+
+    .features-text {
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: $primary-green;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: $text-light;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      .features-list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 1rem;
+          opacity: 0;
+          transform: translateX(-20px);
+          animation: slideInLeft 0.5s ease-out forwards;
+
+          .check-icon {
+            color: $success;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }
+
+    .features-visual {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      position: relative;
+
+      .visual-card {
+        background: $white;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        color: $primary-green;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        span {
+          font-weight: 600;
+          text-align: center;
+        }
+
+        &.card-1 {
+          animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        &.card-2 {
+          animation: slideInUp 0.8s ease-out 0.4s both;
+          margin-top: 2rem;
+        }
+
+        &.card-3 {
+          animation: slideInUp 0.8s ease-out 0.6s both;
+          grid-column: 1 / -1;
+        }
+      }
+    }
+  }
+}
+
+// CTA Section
+.ads-cta-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, $primary-green 0%, $dark-green 100%);
+  color: $white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+
+    .cta-icon {
+      margin-bottom: 1.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .cta-primary,
+      .cta-secondary {
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .cta-primary {
+        background: $white;
+        color: $primary-green;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .cta-secondary {
+        background: transparent;
+        color: $white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: $white;
+        }
+      }
+    }
+
+    .cta-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  }
+}
+
+// Animations
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes growBar {
+  from {
+    height: 0;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .ads-hero-section .hero-content,
+  .features-section .features-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .stats-section .stats-grid,
+  .benefits-section .benefits-grid,
+  .ad-formats-section .formats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .how-it-works-section .steps-container {
+    grid-template-columns: 1fr;
+
+    .step-card .step-connector {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .ads-hero-section {
+    padding: 4rem 1rem 2rem;
+
+    .hero-text .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+    }
+  }
+
+  .stats-section .stats-grid,
+  .benefits-section .benefits-grid,
+  .ad-formats-section .formats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .features-section .features-text .features-list {
+    grid-template-columns: 1fr;
+  }
+
+  .ads-cta-section {
+    padding: 4rem 1rem;
+
+    .cta-content h2 {
+      font-size: 2rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .ads-hero-section .hero-text .hero-title {
+    font-size: 2rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .ads-hero-section .hero-visual .earnings-card {
+    min-width: 280px;
+    padding: 1.5rem;
+
+    .card-amount {
+      font-size: 2rem;
+    }
+  }
+}

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTutorBooksAsync } from '../../store/bookSlice';
 import BookCard from './BookCard';
 import '../../assets/Styles/Book/MyBooks.scss';
+import { SlExclamation } from "react-icons/sl";
+
 
 const MyBooks = () => {
   const dispatch = useDispatch();
@@ -24,7 +26,10 @@ const MyBooks = () => {
         ))}
       </div>
       {books?.length === 0 && (
-        <div className="no-books">No books found. Create your first book!</div>
+        <div className="no-sessions">
+          <SlExclamation size={50} />
+          No books found. Create your first book!
+        </div>
       )}
     </div>
   );

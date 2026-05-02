@@ -5,7 +5,7 @@ import "../assets/Styles/Pages/Course.scss";
 import { FaClock, FaUsers, FaStar } from "react-icons/fa";
 import Share from "../Components/DashBoard/SideBar/Share";
 import AllModulesClasses from "../Components/Course/Sidesection/AllModulesClasses";
-import { fetchMyCoursesAsync } from "../store/courseSlice";
+import { fetchMyCoursesAsync, clearUnits } from "../store/courseSlice";
 import course from "../assets/Images/purchaseimage.png";
 import Videos from '../Components/Course/Mainsection/Videos/Videos';
 import StudyMaterialList from '../Components/Course/Mainsection/StudyMaterial/StudyMaterialList';
@@ -23,6 +23,14 @@ const Course = () => {
     const sidebarRef = useRef(null);
 
     const courseId = searchParams.get('id');
+
+    useEffect(() => {
+        if (courseId) {
+            dispatch(clearUnits());
+            setSelectedUnit(null);
+            setSelectedCourse(null);
+        }
+    }, [courseId, dispatch]);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);

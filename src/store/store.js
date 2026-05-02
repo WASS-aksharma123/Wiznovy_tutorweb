@@ -9,6 +9,8 @@ import notificationReducer from './notificationSlice.js';
 import bookReducer from './bookSlice.js';
 import bankReducer from './bankSlice.js';
 import walletReducer from './walletSlice.js';
+import faqReducer from './faqSlice.js';
+import modalReducer from './modalSlice.js';
 
 export const store = configureStore({
   reducer: {
@@ -22,7 +24,16 @@ export const store = configureStore({
     book: bookReducer,
     bank: bankReducer,
     wallet: walletReducer,
+    faq: faqReducer,
+    modal: modalReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export default store;

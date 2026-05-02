@@ -22,50 +22,38 @@ const handleResponse = async (response) => {
     return response.json();
 };
 
-// Fetch wallet balance - fallback to mock data if API fails
+// Fetch wallet balance
 export const fetchWalletBalance = async () => {
-    try {
-        const token = getAuthToken();
-        
-        if (!API_BASE_URL) {
-            throw new Error('API configuration not available');
-        }
-        
-        const response = await fetch(`${API_BASE_URL}/wallet/balance`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        return handleResponse(response);
-    } catch (error) {
-        // Fallback to mock data if wallet endpoint doesn't exist
-        console.warn('Wallet API not available, using mock data:', error.message);
-        return { balance: 6983.99 };
+    const token = getAuthToken();
+    
+    if (!API_BASE_URL) {
+        throw new Error('API configuration not available');
     }
+    
+    const response = await fetch(`${API_BASE_URL}/wallet/tutor`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return handleResponse(response);
 };
 
-// Fetch wallet transactions - fallback to mock data if API fails
+// Fetch wallet transactions
 export const fetchWalletTransactions = async () => {
-    try {
-        const token = getAuthToken();
-        
-        if (!API_BASE_URL) {
-            throw new Error('API configuration not available');
-        }
-        
-        const response = await fetch(`${API_BASE_URL}/wallet/transactions`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        return handleResponse(response);
-    } catch (error) {
-        // Fallback to mock data if wallet endpoint doesn't exist
-        console.warn('Wallet transactions API not available, using mock data:', error.message);
-        return { transactions: [] };
+    const token = getAuthToken();
+    
+    if (!API_BASE_URL) {
+        throw new Error('API configuration not available');
     }
+    
+    const response = await fetch(`${API_BASE_URL}/wallet/transactions`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return handleResponse(response);
 };
 
 // Fetch tutor payouts

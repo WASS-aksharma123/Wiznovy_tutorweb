@@ -225,10 +225,11 @@ const AddBankAc = ({ onClose }) => {
                     id="bankName"
                     type="text"
                     name="bankName"
-                    placeholder="Bank Name"
+                    placeholder="Bank Name (max 100 characters)"
                     value={formData.bankName}
                     onChange={handleInputChange}
                     maxLength={100}
+                    required
                 />
             </div>
             <div className="form_group">
@@ -241,6 +242,7 @@ const AddBankAc = ({ onClose }) => {
                     value={formData.accountNumber}
                     onChange={handleInputChange}
                     maxLength={18}
+                    required
                 />
             </div>
             <div className="form_group">
@@ -253,6 +255,7 @@ const AddBankAc = ({ onClose }) => {
                     value={formData.ifscCode}
                     onChange={handleInputChange}
                     maxLength={11}
+                    required
                 />
             </div>
             <div className="form_group">
@@ -265,6 +268,7 @@ const AddBankAc = ({ onClose }) => {
                     value={formData.swiftCode}
                     onChange={handleInputChange}
                     maxLength={11}
+                    required
                 />
             </div>
             <div className="form_group">
@@ -277,6 +281,7 @@ const AddBankAc = ({ onClose }) => {
                     value={formData.accountHolderName}
                     onChange={handleInputChange}
                     maxLength={100}
+                    required
 
                 />
             </div>
@@ -287,6 +292,7 @@ const AddBankAc = ({ onClose }) => {
                     name="termsAccepted"
                     checked={formData.termsAccepted}
                     onChange={handleInputChange}
+                    required
                 />
                 <label htmlFor="check">I accept the terms and conditions of an app</label>
             </div>
@@ -376,7 +382,7 @@ const AddBankAc = ({ onClose }) => {
                                 <p><strong>IFSC Code:</strong> {ifscCode}</p>
                                 <p><strong>SWIFT Code:</strong> {swiftCode}</p>
                                 <div className="actionbtns">
-                                    <button className="deletebtn pp" onClick={() => handleDelete(id)}><AiOutlineDelete size={27} /></button>
+                                    {/* <button className="deletebtn pp" onClick={() => handleDelete(id)}><AiOutlineDelete size={27} /></button> */}
                                     <button className="editbttn pp" onClick={() => handleEdit(account)}><BsPencilSquare size={22} /></button>
                                 </div>
                                 <div className="uploaded_documents">
@@ -456,7 +462,7 @@ const AddBankAc = ({ onClose }) => {
         }
 
         if (showWithdraw) {
-            return <Withdraw account={selectedWithdrawAccount} onClose={handleCloseWithdraw} availableBalance={5000} />;
+            return <Withdraw account={selectedWithdrawAccount} onClose={handleCloseWithdraw} />;
         }
         
         return (

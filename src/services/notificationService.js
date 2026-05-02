@@ -29,10 +29,39 @@ export const fetchNotifications = async () => {
   }
 };
 
-export const markNotificationAsRead = async (notificationId) => {
+export const fetchUnreadCount = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_BASE_URL}/notifications/${notificationId}/read`, {
+    const response = await fetch(`${API_BASE_URL}/notifications/unread-count`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch unread count');
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      count: data.unreadCount || data.count || 0
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+      count: 0
+    };
+  }
+};
+
+export const markAllNotificationsAsRead = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/notifications/mark-all-read`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -41,7 +70,7 @@ export const markNotificationAsRead = async (notificationId) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to mark notification as read');
+      throw new Error('Failed to mark all notifications as read');
     }
 
     return { success: true };
